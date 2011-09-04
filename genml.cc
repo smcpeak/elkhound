@@ -30,9 +30,11 @@ void emitMLFuncDecl(Grammar const &g, EmitCode &out, EmitCode &dcl,
                     char const *rettype, char const *params);
 void emitMLDDMInlines(Grammar const &g, EmitCode &out, EmitCode &dcl,
                       Symbol const &sym);
+
+template <class SYMBOL>
 void emitMLSwitchCode(Grammar const &g, EmitCode &out,
                       rostring signature, char const *switchVar,
-                      ObjList<Symbol> const &syms, int whichFunc,
+                      ObjList<SYMBOL> const &syms, int whichFunc,
                       char const *templateCode, char const *actUpon);
 
 
@@ -447,7 +449,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let duplicateNontermValueFunc (nontermId:int) (sval:tSemanticValue) : tSemanticValue",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     0 /*dupCode*/,
     "      (Obj.repr (dup_$symName ((Obj.obj sval) : $symType)))\n",
     NULL);
@@ -456,7 +458,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let deallocateNontermValueFunc (nontermId:int) (sval:tSemanticValue) : unit",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     1 /*delCode*/,
     "      (del_$symName ((Obj.obj sval) : $symType));\n",
     "deallocate nonterm");
@@ -467,7 +469,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
     "                               (right:tSemanticValue) : tSemanticValue",
     // SOURCELOC?
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     2 /*mergeCode*/,
     "      (Obj.repr (merge_$symName ((Obj.obj left) : $symType) ((Obj.obj right) : $symType)))\n",
     "merge nonterm");
@@ -476,7 +478,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let keepNontermValueFunc (nontermId:int) (sval:tSemanticValue) : bool",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     3 /*keepCode*/,
     "      (keep_$symName ((Obj.obj sval) : $symType))\n",
     NULL);
@@ -493,7 +495,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let duplicateTerminalValueFunc (termId:int) (sval:tSemanticValue) : tSemanticValue",
     "termId",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     0 /*dupCode*/,
     "      (Obj.repr (dup_$symName ((Obj.obj sval) : $symType)))\n",
     NULL);
@@ -502,7 +504,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let deallocateTerminalValueFunc (termId:int) (sval:tSemanticValue) : unit",
     "termId",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     1 /*delCode*/,
     "      (del_$symName ((Obj.obj sval) : $symType));\n",
     "deallocate terminal");
@@ -511,7 +513,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitMLSwitchCode(g, out,
     "let reclassifyTokenFunc (oldTokenType:int) (sval:tSemanticValue) : int",
     "oldTokenType",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     4 /*classifyCode*/,
     "      (classify_$symName ((Obj.obj sval) : $symType))\n",
     NULL);
@@ -576,9 +578,12 @@ void emitMLDDMInlines(Grammar const &g, EmitCode &out, EmitCode &dcl,
   }
 }
 
+// gcc doesn't like me casting ObjList<Terminal> and ObjList<Nonterminal>
+// to ObjList<Symbol>, so I'll make this a template to pacify it.
+template <class SYMBOL>
 void emitMLSwitchCode(Grammar const &g, EmitCode &out,
                       rostring signature, char const *switchVar,
-                      ObjList<Symbol> const &syms, int whichFunc,
+                      ObjList<SYMBOL> const &syms, int whichFunc,
                       char const *templateCode, char const *actUpon)
 {
   out << replace(signature, "$acn", string(g.actionClassName)) << " =\n"
@@ -586,14 +591,14 @@ void emitMLSwitchCode(Grammar const &g, EmitCode &out,
          "  match " << switchVar << " with\n"
          ;
 
-  FOREACH_OBJLIST(Symbol, syms, symIter) {
-    Symbol const &sym = *(symIter.data());
+  FOREACH_OBJLIST(SYMBOL, syms, symIter) {
+    SYMBOL const &sym = *(symIter.data());
 
-    if (whichFunc==0 && sym.dupCode ||
-        whichFunc==1 && sym.delCode ||
-        whichFunc==2 && sym.asNonterminalC().mergeCode ||
-        whichFunc==3 && sym.asNonterminalC().keepCode ||
-        whichFunc==4 && sym.asTerminalC().classifyCode) {
+    if ((whichFunc==0 && sym.dupCode) ||
+        (whichFunc==1 && sym.delCode) ||
+        (whichFunc==2 && sym.asNonterminalC().mergeCode) ||
+        (whichFunc==3 && sym.asNonterminalC().keepCode) ||
+        (whichFunc==4 && sym.asTerminalC().classifyCode)) {
       out << "  | " << sym.getTermOrNontermIndex() << " -> (\n";
       out << replace(replace(templateCode,
                "$symName", string(sym.name)),

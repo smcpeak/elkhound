@@ -9,7 +9,7 @@
 #include "srcloc.h"      // SourceLoc
 
 #include <assert.h>      // assert
-#include <iostream.h>    // cout
+#include "sm-iostream.h" // cout
 #include <stdlib.h>      // abort
 
 static char const *termNames[] = {

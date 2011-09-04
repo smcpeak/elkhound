@@ -10,7 +10,7 @@
 #include "trace.h"       // tracing system
 #include "nonport.h"     // getMilliseconds
 #include "crc.h"         // crc32
-#include "flatutil.h"    // Flatten, xfer helpers
+#include "eh-flatutil.h" // Flatten, xfer helpers
 #include "grampar.h"     // readGrammarFile
 #include "emitcode.h"    // EmitCode
 #include "strutil.h"     // replace
@@ -18,7 +18,7 @@
 #include "genml.h"       // emitMLActionCode
 #include "ofstreamts.h"  // ofstreamTS
 
-#include <fstream.h>     // ofstream
+#include "sm-fstream.h"  // ofstream
 #include <stdlib.h>      // getenv
 #include <stdio.h>       // printf
 
@@ -351,8 +351,8 @@ DottedProduction *getNthDottedProduction(Production *p, int n)
 
 void ItemSet::xfer(Flatten &flat)
 {
-  xferObjList(flat, kernelItems);
-  xferObjList(flat, nonkernelItems);
+  eh_xferObjList(flat, kernelItems);
+  eh_xferObjList(flat, nonkernelItems);
 
   flat.xferInt(terms);
   flat.xferInt(nonterms);
@@ -364,7 +364,7 @@ void ItemSet::xfer(Flatten &flat)
   flat.xferInt(numDotsAtEnd);
   flat.xferLong((long&)kernelItemsCRC);
 
-  flat.xferInt((int&)id);
+  xferEnum(flat, id);
 }
 
 
@@ -1007,7 +1007,7 @@ void GrammarAnalysis::xfer(Flatten &flat)
 
   flat.xferInt(nextItemSetId);
 
-  xferObjList(flat, itemSets);
+  eh_xferObjList(flat, itemSets);
   xferSerfPtrToList(flat, startState, itemSets);
 
   flat.xferBool(cyclic);
@@ -4161,9 +4161,11 @@ void emitFuncDecl(Grammar const &g, EmitCode &out, EmitCode &dcl,
                   char const *rettype, char const *params);
 void emitDDMInlines(Grammar const &g, EmitCode &out, EmitCode &dcl,
                     Symbol const &sym);
+
+template <class SYMBOL>
 void emitSwitchCode(Grammar const &g, EmitCode &out,
                     char const *signature, char const *switchVar,
-                    ObjList<Symbol> const &syms, int whichFunc,
+                    ObjList<SYMBOL> const &syms, int whichFunc,
                     char const *templateCode, char const *actUpon);
 
 
@@ -4271,7 +4273,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
   out << "#include \"srcloc.h\"      // SourceLoc\n";
   out << "\n";
   out << "#include <assert.h>      // assert\n";
-  out << "#include <iostream.h>    // cout\n";
+  out << "#include \"sm-iostream.h\" // cout\n";
   out << "#include <stdlib.h>      // abort\n";
   out << "\n";
 
@@ -4605,7 +4607,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "SemanticValue $acn::duplicateNontermValue(int nontermId, SemanticValue sval)",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     0 /*dupCode*/,
     "      return (SemanticValue)dup_$symName(($symType)sval);\n",
     NULL);
@@ -4614,7 +4616,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "void $acn::deallocateNontermValue(int nontermId, SemanticValue sval)",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     1 /*delCode*/,
     "      del_$symName(($symType)sval);\n"
     "      return;\n",
@@ -4627,7 +4629,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
     SOURCELOC(",  SourceLoc loc")
     ")",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     2 /*mergeCode*/,
     "      return (SemanticValue)merge_$symName(($symType)left, ($symType)right);\n",
     "merge nonterm");
@@ -4636,7 +4638,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "bool $acn::keepNontermValue(int nontermId, SemanticValue sval)",
     "nontermId",
-    (ObjList<Symbol> const&)g.nonterminals,
+    g.nonterminals,
     3 /*keepCode*/,
     "      return keep_$symName(($symType)sval);\n",
     NULL);
@@ -4653,7 +4655,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "SemanticValue $acn::duplicateTerminalValue(int termId, SemanticValue sval)",
     "termId",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     0 /*dupCode*/,
     "      return (SemanticValue)dup_$symName(($symType)sval);\n",
     NULL);
@@ -4662,7 +4664,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "void $acn::deallocateTerminalValue(int termId, SemanticValue sval)",
     "termId",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     1 /*delCode*/,
     "      del_$symName(($symType)sval);\n"
     "      return;\n",
@@ -4672,7 +4674,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
   emitSwitchCode(g, out,
     "/*static*/ int $acn::reclassifyToken($acn *ths, int oldTokenType, SemanticValue sval)",
     "oldTokenType",
-    (ObjList<Symbol> const&)g.terminals,
+    g.terminals,
     4 /*classifyCode*/,
     "      return ths->classify_$symName(($symType)sval);\n",
     NULL);
@@ -4750,23 +4752,26 @@ bool noDeclaredType(char const *type)
   return !type || (0==strcmp(type, "void"));
 }
 
+// gcc doesn't like me casting ObjList<Terminal> and ObjList<Nonterminal>
+// to ObjList<Symbol>, so I'll make this a template to pacify it.
+template <class SYMBOL>
 void emitSwitchCode(Grammar const &g, EmitCode &out,
                     char const *signature, char const *switchVar,
-                    ObjList<Symbol> const &syms, int whichFunc,
+                    ObjList<SYMBOL> const &syms, int whichFunc,
                     char const *templateCode, char const *actUpon)
 {
   out << replace(signature, "$acn", string(g.actionClassName)) << "\n"
          "{\n"
          "  switch (" << switchVar << ") {\n";
 
-  FOREACH_OBJLIST(Symbol, syms, symIter) {
-    Symbol const &sym = *(symIter.data());
+  FOREACH_OBJLIST(SYMBOL, syms, symIter) {
+    SYMBOL const &sym = *(symIter.data());
 
-    if (whichFunc==0 && sym.dupCode ||
-        whichFunc==1 && sym.delCode ||
-        whichFunc==2 && sym.asNonterminalC().mergeCode ||
-        whichFunc==3 && sym.asNonterminalC().keepCode ||
-        whichFunc==4 && sym.asTerminalC().classifyCode) {
+    if ((whichFunc==0 && sym.dupCode) ||
+        (whichFunc==1 && sym.delCode) ||
+        (whichFunc==2 && sym.asNonterminalC().mergeCode) ||
+        (whichFunc==3 && sym.asNonterminalC().keepCode) ||
+        (whichFunc==4 && sym.asTerminalC().classifyCode)) {
       out << "    case " << sym.getTermOrNontermIndex() << ":\n";
       out << replace(replace(templateCode,
                "$symName", string(sym.name)),

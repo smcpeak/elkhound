@@ -48,7 +48,7 @@
 #include "sobjlist.h"      // SObjList
 
 #include <stdio.h>         // FILE
-#include <iostream.h>      // ostream
+#include "sm-iostream.h"   // ostream
 
 
 // fwds from other files

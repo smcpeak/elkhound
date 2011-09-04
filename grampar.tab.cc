@@ -135,7 +135,7 @@
 #include "owner.h"          // Owner
 
 #include <stdlib.h>         // malloc, free
-#include <iostream.h>       // cout
+#include "sm-iostream.h"    // cout
 
 // enable debugging the parser
 #ifndef NDEBUG
@@ -224,7 +224,7 @@ typedef union YYSTYPE
   ASTList<RHSElt> *rhsList;
   RHSElt *rhsElt;
 }
-/* Line 193 of yacc.c.  */
+/* Line 187 of yacc.c.  */
 #line 229 "grampar.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

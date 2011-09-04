@@ -6,8 +6,8 @@
 #ifndef PTREENODE_H
 #define PTREENODE_H
 
-#include <stddef.h>     // NULL
-#include <iostream.h>   // ostream
+#include <stddef.h>          // NULL
+#include "sm-iostream.h"     // ostream
 
 // for storing counts of parse trees; I try to make the code work for
 // either 'int' or 'double' in this spot (e.g. I assign 0 to it

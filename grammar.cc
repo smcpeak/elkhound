@@ -8,7 +8,7 @@
 #include "exc.h"       // xBase
 #include "strutil.h"   // quoted, parseQuotedString
 #include "flatten.h"   // Flatten
-#include "flatutil.h"  // various xfer helpers
+#include "eh-flatutil.h"  // various xfer helpers
 
 #include <stdarg.h>    // variable-args stuff
 #include <stdio.h>     // FILE, etc.
@@ -166,7 +166,7 @@ void Terminal::xfer(Flatten &flat)
   alias.xfer(flat);
 
   flat.xferInt(precedence);
-  flat.xferInt((int&)associativity);
+  xferEnum(flat, associativity);
 
   flat.xferInt(termIndex);
 
@@ -399,7 +399,7 @@ unsigned char *TerminalSet::getByte(int id) const
 bool TerminalSet::contains(int id) const
 {
   unsigned char *p = getByte(id);
-  return (*p >> getBit(id)) & 1 == 1;
+  return ((*p >> getBit(id)) & 1) == 1;
 }
 
 
@@ -543,7 +543,7 @@ Production::Production(Flatten &flat)
 
 void Production::xfer(Flatten &flat)
 {
-  xferObjList(flat, right);
+  eh_xferObjList(flat, right);
   action.xfer(flat);
   flat.xferInt(precedence);
   xferNullableOwnerPtr(flat, forbid);
@@ -839,18 +839,18 @@ void Grammar::xfer(Flatten &flat)
 {
   // owners
   flat.checkpoint(0xC7AB4D86);
-  xferObjList(flat, nonterminals);
-  xferObjList(flat, terminals);
-  xferObjList(flat, productions);
+  eh_xferObjList(flat, nonterminals);
+  eh_xferObjList(flat, terminals);
+  eh_xferObjList(flat, productions);
 
   // emptyString is const
 
-  xferObjList(flat, verbatim);
+  eh_xferObjList(flat, verbatim);
 
   actionClassName.xfer(flat);
-  xferObjList(flat, actionClasses);
+  eh_xferObjList(flat, actionClasses);
 
-  xferObjList(flat, implVerbatim);
+  eh_xferObjList(flat, implVerbatim);
                                
   targetLang.xfer(flat);
   flat.xferBool(useGCDefaults);

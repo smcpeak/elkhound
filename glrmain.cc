@@ -3,7 +3,7 @@
 // grammars (this file is *not* required for general use of
 // the Elkhound parser)
 
-#include <iostream.h>     // cout
+#include "sm-iostream.h"  // cout
 #include <stdlib.h>       // exit
 
 #include "trace.h"        // traceAddSys

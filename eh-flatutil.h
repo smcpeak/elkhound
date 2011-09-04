@@ -1,12 +1,13 @@
-// flatutil.h            see license.txt for copyright and terms of use
+// eh-flatutil.h            see license.txt for copyright and terms of use
 // flatten helpers
 
-#ifndef FLATUTIL_H
-#define FLATUTIL_H
+#ifndef EH_FLATUTIL_H
+#define EH_FLATUTIL_H
 
 #include "flatten.h"     // Flatten
 #include "objlist.h"     // ObjList
 #include "sobjlist.h"    // SObjList
+#include "flatutil.h"    // make xferEnum available to clients
 
 
 // ------------- xfer of owners -----------------
@@ -60,8 +61,10 @@ void xferOwnerPtr_readObj(Flatten &flat, T *&ptr)
 }
 
 
+// There is a different 'xferObjList' in smbase/flatutil.h,
+// so I'm renaming this one ...
 template <class T>
-void xferObjList(Flatten &flat, ObjList <T> &list)
+void eh_xferObjList(Flatten &flat, ObjList <T> &list)
 {
   if (flat.writing()) {
     flat.writeInt(list.count());
@@ -360,4 +363,4 @@ void xferNullableSerfPtr(Flatten &flat, T *&serfPtr)
 }
 
 
-#endif // FLATUTIL_H
+#endif // EH_FLATUTIL_H
