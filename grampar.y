@@ -24,9 +24,9 @@
 // make it call my yylex
 #define yylex(lv, param) grampar_yylex(lv, param)
 
-// Bison calls yyerror(msg) on error; we need the extra
-// parameter too, so the macro shoehorns it in there
-#define yyerror(msg) grampar_yyerror(msg, YYPARSE_PARAM)
+// Bison calls yyerror(param, msg) on error, but (for historical
+// reasons) my error function accepts them in the opposite order.
+#define yyerror(param, msg) grampar_yyerror(msg, param)
 
 // rename the externally-visible parsing routine to make it
 // specific to this instance, so multiple bison-generated
@@ -58,8 +58,13 @@ AssocKind whichKind(LocString * /*owner*/ kind);
 
 
 /* ================== bison declarations =================== */
-// don't use globals
-%pure_parser
+// Don't use globals.
+%define api.pure full
+
+// Declare the additional parameter the is passed in to yyparse
+// and yylex.  (I am trying to achieve the same thing that
+// "%pure_parser", with an underscore, did in bison 1.x.)
+%param {ParseParams *parseParam}
 
 
 /* ===================== tokens ============================ */

@@ -19,6 +19,7 @@
 #include "ofstreamts.h"  // ofstreamTS
 
 #include "sm-fstream.h"  // ofstream
+#include "sm-stdint.h"   // intptr_t
 #include <stdlib.h>      // getenv
 #include <stdio.h>       // printf
 
@@ -2233,7 +2234,7 @@ STATICDEF ItemSet const *ItemSet::dataToKey(ItemSet *data)
 STATICDEF unsigned ItemSet::hash(ItemSet const *key)
 {
   unsigned crc = key->kernelItemsCRC;
-  return HashTable::lcprngHashFn((void*)crc);
+  return HashTable::lcprngHashFn((void*)(intptr_t)crc);
 }
 
 STATICDEF bool ItemSet::equalKey(ItemSet const *key1, ItemSet const *key2)
@@ -3294,6 +3295,12 @@ void GrammarAnalysis::computeParseTables(bool allowAmbig)
       // add this entry to the table
       tables->setActionEntry(state->id, termId, cellAction);
 
+      // The following code does not appear to do anything since it
+      // just sets a local variable that then goes out of scope.  I
+      // don't remember at all what I was doing here, but this is
+      // causing GCC to emit a warning, so I'm just disabling the
+      // entire block for now.
+    #if 0
       // based on the contents of 'reductions', decide whether this
       // state is delayed or not; to be delayed, the state must be
       // able to reduce by a production which:
@@ -3315,6 +3322,7 @@ void GrammarAnalysis::computeParseTables(bool allowAmbig)
           }
         }
       }
+    #endif // 0
     }
 
     // ---- fill in this row in the goto table ----

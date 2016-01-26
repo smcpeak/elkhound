@@ -40,7 +40,7 @@ public:
 // caller interface to Bison-generated parser; starts parsing
 // (whatever stream lexer is reading) and returns 0 for success and
 // 1 for error; the extra parameter is available to actions to use
-int grampar_yyparse(void *YYPARSE_PARAM);
+int grampar_yyparse(ParseParams *YYPARSE_PARAM);
 
 // when this is set to true, bison parser emits info about
 // actions as it's taking them (shared by all instances of
