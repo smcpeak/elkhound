@@ -149,13 +149,18 @@ support-set := \
 # relying on another pattern rule) because I want to control exactly
 # how the compilation happens (to ensure the Bison-parser is compiled
 # with flags to make it a fair performance test with my own stuff)
-%.tab.c %.tab.o %.tab.h: %.y
-	bison -d -v $*.y
-	mv $*.tab.c $*.tab.c.orig
-	sed -e 's/__attribute__ ((__unused__))//' \
-	  <$*.tab.c.orig >$*.tab.c
-	rm $*.tab.c.orig
-	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CCFLAGS)
+#
+# When enabled, this rule gets used to compile grampar.y, even though
+# I have a non-pattern rule below for that file.  There do not seem to
+# be any other .y files here currently, so I'm just disabling this
+# entire rule.
+#%.tab.c %.tab.o %.tab.h: %.y
+#	bison -d -v $*.y
+#	mv $*.tab.c $*.tab.c.orig
+#	sed -e 's/__attribute__ ((__unused__))//' \
+#	  <$*.tab.c.orig >$*.tab.c
+#	rm $*.tab.c.orig
+#	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CCFLAGS)
 
 # run the trivial-grammar helper
 .PRECIOUS: %.gr %.tree.gr
@@ -558,7 +563,7 @@ clean: gcom-clean
 	rm -f grampar.output grampar tlexer
 	rm -f gramlex.yy.cc
 	rm -f libelkhound.a
-	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c
+	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
 	rm -f examples/crash1.{cc,h}
 	cd cc2; rm -f $(CLEAN_PATTERNS)
 	cd triv; rm -f $(CLEAN_PATTERNS) *.y *.gr
@@ -568,7 +573,7 @@ clean: gcom-clean
 	$(MAKE) -C c clean
 
 distclean: clean
-	rm -f Makefile config.status config.summary glrconfig.h *.tmp
+	rm -f Makefile config.status config.summary glrconfig.h
 	cd triv; rm -rf sssx.in ssx.in eeb.in
 	$(MAKE) -C c distclean
 	rm -rf gendoc

@@ -252,6 +252,15 @@ if (! -f "$AST/asthelp.h") {
 }
 
 
+# Right now, Elkhound does not work properly when the GCC optimizer
+# is enabled.  I suspect that is due to breaking the strict aliasing
+# rules somewhere.  Therefore, require "-debug".
+if (!$main::debug) {
+  die("Currently Elkhound must be configured in debug mode to work properly.\n" .
+      "Please re-run configure with the \"-debug\" switch.\n");
+}
+
+
 $PERL = get_PERL_variable();
 
 
@@ -294,6 +303,7 @@ sed -e "s|\@GLR_SOURCELOC\@|$loc|g" \\
 if diff glrconfig.h glrconfig.h.tmp >/dev/null 2>&1; then
   # leave it
   echo "glrconfig.h is unchanged"
+  rm glrconfig.h.tmp
 else
   echo "creating glrconfig.h ..."
 
