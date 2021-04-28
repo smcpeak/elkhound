@@ -214,6 +214,14 @@ else {
   $compflags = "<none>";
 }
 
+# Relay some flags to the sub-configure.
+if ($main::target_platform) {
+  push @c_args, "-target=$main::target_platform";
+}
+
+if ($main::debug) {
+  push @c_args, "-debug";
+}
 
 
 # ------------------ needed components ---------------
