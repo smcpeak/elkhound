@@ -116,8 +116,8 @@ $summary = getStandardConfigSummary();
 
 $summary .= <<"OUTER_EOF";
 cat <<EOF
-  AST:         $AST
-  ELKHOUND:    $ELKHOUND
+  AST:             $AST
+  ELKHOUND:        $ELKHOUND
 EOF
 OUTER_EOF
 

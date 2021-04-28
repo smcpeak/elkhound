@@ -281,8 +281,8 @@ $summary = getStandardConfigSummary();
 
 $summary .= <<"OUTER_EOF";
 cat <<EOF
-  loc:         $loc
-  compression: $compflags
+  loc:             $loc
+  compression:     $compflags
 EOF
 OUTER_EOF
 
