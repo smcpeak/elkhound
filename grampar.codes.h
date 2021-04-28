@@ -1,5 +1,3 @@
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
   enum yytokentype
   {
     TOK_INTEGER = 258,
@@ -29,4 +27,3 @@
     TOK_REPLACE = 282,
     TOK_FORBID_NEXT = 283
   };
-#endif
