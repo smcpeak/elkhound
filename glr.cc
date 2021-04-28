@@ -343,10 +343,10 @@ inline void StackNode::deinit()
 {
   decrementAllocCounter();
 
-  if (!unwinding()) {
+  GENERIC_CATCH_BEGIN
     xassert(numStackNodesAllocd >= 0);
     xassert(referenceCount == 0);
-  }
+  GENERIC_CATCH_END
 
   deallocSemanticValues();
 
