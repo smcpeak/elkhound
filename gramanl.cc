@@ -4233,7 +4233,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
 
       dcl << "\n"
           << "// parser context class\n"
-          << "class ";
+          << "class";
       emitUserCode(dcl, *(iter.data()), false /*braces*/);
   }}
 
@@ -4835,7 +4835,7 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
 
     case 2: {  // unspecified merge: warn, but then use left (arbitrarily)
       char const *w = g.defaultMergeAborts? "error: " : "WARNING: ";
-      out << "      cout << toString(loc) \n"
+      out << "      cout << toString(loc)\n"
           << "           << \": " << w << "there is no action to merge nonterm \"\n"
           << "           << nontermNames[" << switchVar << "] << endl;\n";
       if (g.defaultMergeAborts) {

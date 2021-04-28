@@ -9,7 +9,7 @@
 
 
 // parser context class
-class 
+class
 #line 13 "ffollow.gr"
  Context : public UserActions {
 #line 16 "ffollow.h"

@@ -1089,26 +1089,29 @@ void emitTable(EmitCode &out, EltType const *table, int size, int rowLength,
   int row = 0;
   for (int i=0; i<size; i++) {
     if (i % rowLength == 0) {    // one row per state
-      out << stringf("\n    /""*%*d*""/ ", rowNumWidth, row++);
+      out << stringf("\n    /""*%*d*""/", rowNumWidth, row++);
     }
+
+    // One space precedes each table entry.
+    out << " ";
 
     if (needCast) {
       out << "(" << typeName << ")";
     }
 
     if (printHex) {
-      out << stringf("0x%02X, ", table[i]);
+      out << stringf("0x%02X,", table[i]);
     }
     else if (sizeof(table[i]) == 1) {
       // little bit of a hack to make sure 'unsigned char' gets
       // printed as an int; the casts are necessary because this
       // code gets compiled even when EltType is ProdInfo
-      out << (int)(*((unsigned char*)(table+i))) << ", ";
+      out << (int)(*((unsigned char*)(table+i))) << ",";
     }
     else {
       // print the other int-sized things, or ProdInfo using
       // the overloaded '<<' below
-      out << table[i] << ", ";
+      out << table[i] << ",";
     }
   }
   out << "\n"
