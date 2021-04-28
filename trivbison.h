@@ -18,7 +18,7 @@ int yylex();
 // Bison-parser entry
 int yyparse();
 extern int yydebug;
-       
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

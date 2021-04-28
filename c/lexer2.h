@@ -204,7 +204,7 @@ public:
   // throughout, with corresponding leak potential
   union {
     int intValue;                // for L2_INT_LITERALs
-    
+
     // this is an owner pointer.. I'll fix this when I overhaul L2
     float *floatValue;           // for L2_FLOAT_LITERALs
 
@@ -251,11 +251,11 @@ public:
 
   // for appending new tokens
   ObjListMutator<Lexer2Token> tokensMut;
-  
+
   // for reading the token stream
   ObjListIter<Lexer2Token> currentToken;
 
-private:            
+private:
   // copy from currentToken to LexerInterface fields
   void copyFields();
 
@@ -273,7 +273,7 @@ public:
     { tokensMut.append(tok); }
   void addEOFToken()
     { addToken(new Lexer2Token(L2_EOF, SL_UNKNOWN)); }
-               
+
   // reset the 'currentToken' so the parser can begin reading tokens
   void beginReading();
 

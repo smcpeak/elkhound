@@ -56,7 +56,7 @@ public:
     int productionId,             // production being used to reduce
     SemanticValue const *svals    // array of semantic values
     SOURCELOCARG( SourceLoc loc ) );
-                                                     
+
   // get the actual function; two-step to avoid virtual call in inner loop
   virtual ReductionActionFunc getReductionAction()=0;
 
@@ -178,7 +178,7 @@ public:
     int productionId, SemanticValue const *svals
     SOURCELOCARG( SourceLoc loc ) );
 
-  static int reclassifyToken(UserActions *ths, 
+  static int reclassifyToken(UserActions *ths,
     int oldTokenType, SemanticValue sval);
 };
 

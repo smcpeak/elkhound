@@ -102,7 +102,7 @@ void doit(int argc, char **argv)
     return;
   }
 
-                 
+
   // --------- declarations provided automatically -------
   Variable mem(HERE_SOURCELOC, strTable.add("mem"),
                new PointerType(PO_POINTER, CV_NONE,
@@ -123,7 +123,7 @@ void doit(int argc, char **argv)
 
     if (env.getErrors() != 0) {
       int n = env.getErrors();
-      cout << "there " << plural(n, "was") << " " << env.getErrors() 
+      cout << "there " << plural(n, "was") << " " << env.getErrors()
            << " typechecking " << plural(n, "error") << "\n";
       exit(4);
     }

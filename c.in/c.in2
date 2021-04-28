@@ -10,7 +10,7 @@ int foo (int z)
 void bar()
 {
   int x;
-  
+
   x = y - 7;
   y = foo(x);
 }

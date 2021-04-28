@@ -264,7 +264,7 @@ void GrammarAnalysis::initializeAuxData()
   }
   #endif
 
-  
+
   // map: nonterminal -> productions with that nonterm on LHS
   productionsByLHS = new SObjList<Production> [numNonterms];
   {
@@ -280,7 +280,7 @@ void GrammarAnalysis::initializeAuxData()
   // initialize the derivable relation
   initDerivableRelation();
 
-  
+
   // dotted productions
   MUTATE_EACH_PRODUCTION(productions, prod) {
     prod.data()->finished();
@@ -366,7 +366,7 @@ void GrammarAnalysis::computeWhatCanDeriveWhat()
 
             changes++;
 
-            trace("derivable") 
+            trace("derivable")
               << "discovered (by production): " << prod->left->name
               << " ->* " << rightNT.name << "\n";
           }
@@ -410,7 +410,7 @@ void GrammarAnalysis::computeWhatCanDeriveWhat()
           // add an edge (u,w), if there isn't one already
           if (addDerivable(u,w)) {
             changes++;
-            trace("derivable") 
+            trace("derivable")
               << "discovered (by closure step): "
               << indexedNonterms[u]->name << " ->* "
               << indexedNonterms[w]->name << "\n";
@@ -930,7 +930,7 @@ void GrammarAnalysis::findSLRConflicts() const
 {
   // for every item set..
   FOREACH_OBJLIST(ItemSet, itemSets, itemSet) {
-  
+
     // we want to print something special for the first conflict
     // in a state, so track which is first
     bool conflictAlready = false;
@@ -1001,7 +1001,7 @@ bool GrammarAnalysis::checkSLRConflicts(ItemSet const *state, Terminal const *sy
 
     return true;    // found conflict
   }
-  
+
   return false;     // no conflict
 }
 
@@ -1047,7 +1047,7 @@ void GrammarAnalysis::computeBFSTree()
       // transition on this symbol, we don't need to consider it
       // further
       if (target == NULL ||
-          done.contains(target) || 
+          done.contains(target) ||
           queue.contains(target)) {
         continue;
       }
@@ -1127,7 +1127,7 @@ string GrammarAnalysis::sampleInput(ItemSet const *state) const
   if (!rewriteAsTerminals(terminals, symbols)) {
     return string("(failed to reduce!!)");
   }
-  
+
   // convert to a string
   return terminalSequenceToString(terminals);
 }
@@ -1337,7 +1337,7 @@ void GrammarAnalysis::lrParse(char const *input)
 
       // move to new state
       state = gotoDest;
-                          
+
       // again, setting 'state' is what [ASU] accomplishes with
       // a push
 
@@ -1587,7 +1587,7 @@ void GrammarAnalysis::runAnalyses()
   if (tracingSys("derivable")) {
     derivable->print();
   }
-    
+
   // testing closure
   #if 0
   {

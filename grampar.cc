@@ -180,7 +180,7 @@ LocString extractActionClassName(LocString const &body)
   char const *p = start;
   while (isspace(*p)) p++;
   while (isalnum(*p) || *p=='_') p++;
-  
+
   // yield that, with the same source location
   return LocString(body.loc, grammarStringTable.add(
     substring(start, p-start).c_str()));
@@ -324,7 +324,7 @@ void astParseGrammar(Grammar &g, GrammarAST *ast)
           if (!nt->type.equals(env.nontermDecls.queryf(nt->name)->type)) {
             astParseError(nt->name, "continued nonterminal with different type");
           }
-          
+
           // just allow it; it seems the parser just iterates over
           // all the TF_nonterms, and will do the right thing
           continue;
@@ -428,7 +428,7 @@ void astParseTerminals(Environment &env, TF_terminals const &terms)
   }
 
   // type annotations
-  {                  
+  {
     FOREACH_ASTLIST(TermType, terms.types, iter) {
       TermType const &type = *(iter.data());
       trace("grampar") << "token type: name=" << type.name
@@ -628,7 +628,7 @@ void addDefaultTypesActions(Grammar &g, GrammarAST *ast)
       if (forceDefaults || pd->actionCode.isNull()) {
         pd->actionCode.str = defaultAction;
       }
-                          
+
       if (forceDefaults) {
         // clear RHSElt tags, since otherwise the lack of types
         // will provoke errors; and default actions don't refer to
@@ -641,7 +641,7 @@ void addDefaultTypesActions(Grammar &g, GrammarAST *ast)
 
             ASTNEXT(RH_string, s)
               s->tag.str = empty;
-            
+
             ASTENDCASED
           }
         }
@@ -711,8 +711,8 @@ void astParseNonterm(Environment &env, TF_nonterm const *nt)
 
   // parse dup/del/merge
   astParseDDM(env, nonterm, nt->funcs);
-  
-  // record subsets                       
+
+  // record subsets
   {
     FOREACH_ASTLIST(LocString, nt->subsets, iter) {
       LocString const *ls = iter.data();
@@ -960,12 +960,12 @@ void mergeContext(GrammarAST *base, TF_context * /*owner*/ ext)
 
 
 void mergeOption(GrammarAST *base, TF_option * /*owner*/ ext)
-{                    
+{
   // find option with the same name
   FOREACH_ASTLIST_NC(TopForm, base->forms, iter) {
     if (!iter.data()->isTF_option()) continue;
     TF_option *op = iter.data()->asTF_option();
-    
+
     if (op->name.str == ext->name.str) {
       // replace the old value
       op->value = ext->value;
@@ -984,23 +984,23 @@ void mergeTerminals(GrammarAST *base, TF_terminals * /*owner*/ ext)
   FOREACH_ASTLIST_NC(TopForm, base->forms, iter) {
     if (iter.data()->isTF_terminals()) {
       TF_terminals *t = iter.data()->asTF_terminals();
-      
+
       // there's no point to changing codes, so all the
       // TermDecls just get added (collisions are detected
       // later, during AST parsing)
       t->decls.concat(ext->decls);
-      
+
       // in fact, I'll do the same for the others, even though
       // it might make sense to do some replacement; my immediate
       // needs don't include replacement at this level
       t->types.concat(ext->types);
       t->prec.concat(ext->prec);
-      
+
       delete ext;
       return;
     }
   }
-  
+
   // no TF_terminals in 'base'.. unusual, but easy to handle
   base->forms.append(ext);
 }
@@ -1175,11 +1175,11 @@ void mergeGrammar(GrammarAST *base, GrammarAST *ext)
       ASTNEXT(TF_nonterm, n) {
         mergeNonterminal(base, n);
       }
-      
+
       ASTDEFAULT {
         xfailure("doh");
       }
-      
+
       ASTENDCASE
     }
   }
@@ -1211,12 +1211,12 @@ GrammarAST *parseGrammarFile(rostring origFname, bool useML)
     }
   }
 
-  // choose embedded language              
+  // choose embedded language
   EmbeddedLang *embed = NULL;
   if (useML) {
     embed = new MLSubstrate;
   }
-  
+
   // build lexer
   GrammarLexer lexer(isGramlexEmbed,
                      grammarStringTable,
@@ -1253,7 +1253,7 @@ GrammarAST *parseGrammarFile(rostring origFname, bool useML)
 void parseGrammarAST(Grammar &g, GrammarAST *treeTop)
 {
   setAnnotations(treeTop);
-  
+
   // look at TF_options before synthesizing start rule,
   // so we can know what language is the target
   astParseOptions(g, treeTop);

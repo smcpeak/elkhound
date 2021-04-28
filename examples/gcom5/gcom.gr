@@ -23,7 +23,7 @@ terminals {
   token(int) TOK_LITERAL;
   token(char*) TOK_IDENTIFIER;
 
-  precedence {           
+  precedence {
     // high precedence
     left  60 "*";
     left  50 "+" "-";
@@ -61,7 +61,7 @@ nonterm(int) AExp {
        }
      }
 }
-        
+
 
 nonterm(bool) BExp {
   -> "true"                     { return true; }
@@ -74,7 +74,7 @@ nonterm(bool) BExp {
   -> "(" b:BExp ")"             { return b; }
 }
 
-           
+
 nonterm Stmt {
   -> "skip" {
        // no-op
@@ -114,7 +114,7 @@ nonterm Stmt {
      }
 }
 
-                  
+
 // a guarded command returns true if it found an enabled guard, and
 // false otherwise
 nonterm(bool) GCom {
@@ -126,7 +126,7 @@ nonterm(bool) GCom {
        // least indicate whether the guard succeeded.
        return b;
      }
-     
+
   -> g1:GCom "#" g2:GCom {
        return g1 || g2;
      }

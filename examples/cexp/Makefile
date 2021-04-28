@@ -55,7 +55,7 @@ cexp3b.gr: cexp3.gr
 	grep -v PREC cexp3.gr >$@
 	chmod a-w $@
 
-cexp3: $(ELKHOUND)/glrmain.o cexp3.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o 
+cexp3: $(ELKHOUND)/glrmain.o cexp3.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o
 	g++ -g -o $@ $^ $(extras) $(LDFLAGS)
 	./$@ $(ELKHOUND)/in/cexp3.in1 | tee tmp.out
 	grep 'result: 7' tmp.out

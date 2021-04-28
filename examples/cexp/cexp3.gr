@@ -54,7 +54,7 @@ terminals {
     fun del()  []
     // no merge provided, it should never be needed
   }
-  
+
   // precedence and associativity
   // I mark with 'PREC' lines to be removed to yield a version
   // which disambiguates using 'merge'

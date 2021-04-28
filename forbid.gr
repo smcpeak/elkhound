@@ -30,7 +30,7 @@ nonterm TopA {
 
 nonterm A {
   // might have intermediate qualification
-  
+
   // by forbidding this reduction when "b" is in the lookahead, we
   // force any available b's to be consumed as early as possible
   -> "a"          forbid_next("b") ;

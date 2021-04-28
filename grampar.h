@@ -84,7 +84,7 @@ public:      // data
   // count of recoverable errors; only the one in the
   // topmost environment is used
   int errorCount;
-  
+
   // reference to the one we're really using
   int &errors;
 

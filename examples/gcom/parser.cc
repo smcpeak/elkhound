@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     // result is an AST node
     Stmt *top = (Stmt*)result;
-    
+
     if (printAST) {
       top->debugPrint(cout, 0);
     }
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     Env env;
     top->eval(env);
     printf("program terminated normally\n");
-               
+
     // recursively deallocate the tree
     delete top;
   }

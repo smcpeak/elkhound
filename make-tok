@@ -72,7 +72,7 @@ while (defined($line = <STDIN>)) {
 
   # emit the token for Elkhound
   printf("  %3d : %-30s %s;\n", $nextCode, $name, $alias);
-  
+
   # automatic increment, as in C
   $nextCode++;
 }

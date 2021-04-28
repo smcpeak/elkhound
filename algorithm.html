@@ -35,7 +35,7 @@ First, the primary goals of Elkhound:
     grammar is cyclic).
 <li>It should be competitive with Bison for LALR (fragements of)
     grammars, and degrade gracefully from there.  On the scale of
-    grammar nondeterminism, from none (LALR) to some to lots, "some" 
+    grammar nondeterminism, from none (LALR) to some to lots, "some"
     is the niche Elkhound is going after.
 </ol>
 
@@ -51,7 +51,7 @@ exiting systems inadequate.
 The approximate algorithm descendency sequence:
 <ul>
 <li>Bernard Lang is typically credited with the original GLR idea:
-    <blockquote>  
+    <blockquote>
       Deterministic Techniques for Efficient Non-deterministic Parsers.<br>
       Bernard Lang.<br>
       Automata, Languages and Programming, Springer, 1974.
@@ -76,14 +76,14 @@ The approximate algorithm descendency sequence:
     <a href="http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/MetaEnvironment">ASF+SDF</a>.
     Rekers added
     parse table construction to what was otherwise a recognizer.
-    His algorithm was what I based the original Elkhound 
+    His algorithm was what I based the original Elkhound
     implementation on.
     <blockquote>
       Parser Generation for Interactive Environments.<br>
       Jan Rekers.<br>
       PhD thesis, University of Amsterdam, 1992.
     </blockquote>
-<li>When straightforwardly modified to execute user actions, the Rekers 
+<li>When straightforwardly modified to execute user actions, the Rekers
     algorithm does not always do merges and reductions bottom-up, which makes
     using it in a parser much harder.  Further,
     it is slower than Bison (by about a factor of 10) even on LALR grammars.
@@ -137,13 +137,13 @@ characteristics here.
     nondeterminism near the stack top, LR can be used.  LR actions are
     much faster to execute, so this leads to a big performance win (a
     factor of 5 to 10) when the input and grammar are mostly deterministic.
-    
+
 <li><strong>User-defined Actions.</strong>  In addition to the usual
     reduction actions (such as with Bison), Elkhound exposes actions
     to create and destroy semantic values (dup and del), and an action
     to merge ambiguous regions (merge).  The user can then do whatever
     is desired in these actions, typically building an abstract syntax
-    tree.  In contrast, most other GLR implementations build a parse 
+    tree.  In contrast, most other GLR implementations build a parse
     tree, which is quite expensive.  (Parse trees tend to be at least
     10 times larger than abstract syntax trees.)
 
@@ -160,7 +160,7 @@ characteristics here.
     execution.  Elkhound reports cyclic grammars to the user, but then
     goes ahead and parses with them.)
 
-<li><strong>Reference-Counted GSS.</strong>  This is mostly a minor 
+<li><strong>Reference-Counted GSS.</strong>  This is mostly a minor
     detail, but using reference counting in the GSS produces much
     better locality than garbage collection alone (and manual
     deallocation is impossible due to the nature of the algorithm).

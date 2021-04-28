@@ -111,7 +111,7 @@ char const * const declFlagNames[NUM_DECLFLAGS] = {
 
 
 string toString(DeclFlags df)
-{ 
+{
   // make sure I haven't added a flag without adding a string for it
   xassert(declFlagNames[NUM_DECLFLAGS-1] != NULL);
 
@@ -276,7 +276,7 @@ char const * const uberModifierNames[UM_NUM_FLAGS] = {
 
   "const",
   "volatile",
-  
+
   "char",
   "wchar_t",
   "bool",

@@ -11,7 +11,7 @@ class Binding {
 public:
   string name;
   int value;
-  
+
 public:
   Binding(char const *n, int v)
     : name(n),

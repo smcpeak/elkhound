@@ -52,7 +52,7 @@ for my $fname (@ARGV) {
         # will always exist
         next;
       }
-      
+
       # is the dependee something the Makefile would already
       # know about?  for example, we don't need to explicitly
       # say that grampar.tab.o depends on grampar.tab.cc, because
@@ -107,9 +107,9 @@ sub isCheckedIn {
       return 1;
     }
   }
-  
+
   close(ENTRIES) or die;
-  
+
   # didn't find the file, it's not checked in
   return 0;
 }

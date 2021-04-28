@@ -85,10 +85,10 @@ void CFGEnv::addPendingGoto(StringRef name, S_goto *source)
 }
 
 void CFGEnv::resolveGotos()
-{                                     
+{
   // go over all the gotos and find their corresponding target
   for (StringSObjDict<S_goto>::Iter iter(gotos);
-       !iter.isDone(); iter.next()) {    
+       !iter.isDone(); iter.next()) {
     S_label *target = labels.queryif(iter.key().c_str());
     if (target) {
       iter.value()->next = makeNextPtr(target, false);
@@ -97,7 +97,7 @@ void CFGEnv::resolveGotos()
       err(stringc << "goto to undefined label: " << iter.key());
     }
   }
-  
+
   // empty both dictionaries
   labels.empty();
   gotos.empty();
@@ -143,10 +143,10 @@ void CFGEnv::verifyFunctionEnd()
 {
   xassert(pendingNexts.count() == 1);
   xassert(pendingNexts.top()->count() == 0);
-  
+
   xassert(breaks.count() == 1);
   xassert(breaks.top()->count() == 0);
-  
+
   xassert(labels.size() == 0);
   xassert(gotos.size() == 0);
 
@@ -294,7 +294,7 @@ void Env::addVariable(StringRef name, Variable *decl)
         // nobody gets to use the function before a precondition is
         // attached.  (may change this later, somehow)
         // update: now just checking..
-        if (!curFn->precondition != !prevFn->precondition  || 
+        if (!curFn->precondition != !prevFn->precondition  ||
             !curFn->postcondition != !prevFn->postcondition) {
           warn("pre/post-condition different after first introduction");
         }
@@ -329,7 +329,7 @@ Variable *Env::getVariable(StringRef name, bool innerOnly)
     if (iter.data()->variables.query(name, v)) {
       return v;
     }
-    
+
     if (innerOnly) {
       return NULL;    // don't look beyond the first
     }
@@ -341,7 +341,7 @@ Variable *Env::getVariable(StringRef name, bool innerOnly)
 
 // ------------------- typedef -------------------------
 void Env::addTypedef(StringRef name, Type const *type)
-{       
+{
   Type const *prev = getTypedef(name);
   if (prev) {
     // in C++, saying 'struct Foo { ... }' implicitly creates
@@ -618,7 +618,7 @@ FunctionType *Env::makeFunctionType_1arg(
   FunctionType *ret = makeFunctionType(retType/*, cv*/);
   ret->addParam(new Parameter(arg1Type, arg1Name));
   return ret;
-}    
+}
 #endif // 0
 
 

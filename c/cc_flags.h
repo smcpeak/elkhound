@@ -228,7 +228,7 @@ enum AccessKeyword {
   AK_PROTECTED,
   AK_PRIVATE,
   AK_UNSPECIFIED,      // not explicitly specified; typechecking changes it later
-  
+
   NUM_ACCESS_KEYWORDS
 };
 

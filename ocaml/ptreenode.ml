@@ -13,10 +13,10 @@ type tTreeCount = float
 
 (* a node in a parse tree *)
 (* (I tried making this a class, but OCaml kicked my ass instead) *)
-type tPTreeNode = {            
+type tPTreeNode = {
   (* symbol at this node *)
-  symbol: string;          
-  
+  symbol: string;
+
   (* list of ambiguous alternatives to this node *)
   mutable merged: tPTreeNode option;
 
@@ -138,10 +138,10 @@ begin
   (* indentation per level *)
   let cINDENT_INC:int = 2 in
 
-  (* for detecting cyclicity *)      
+  (* for detecting cyclicity *)
   let dummyNode: tPTreeNode = ((Obj.magic []) : tPTreeNode) in
   let path: tPTreeNode tArrayStack = (new tArrayStack dummyNode) in
-  
+
   (* turn this on to detect cyclicity; there is a performance penalty *)
   let checkForCycles: bool = true in
 
@@ -153,7 +153,7 @@ begin
     let lhs: string ref = ref "" in
     let symbol: string = self.symbol in
     let merged: tPTreeNode option = self.merged in
-      
+
     let cyclicSkip: bool = (
       if (checkForCycles) then (
         (* does 'self' appear in 'path'? *)
@@ -240,7 +240,7 @@ begin
                             !lhs);
         (flush out);
       );
-      
+
       if (checkForCycles) then (
         (* remove myself from the path *)
         (ignore (path#pop ()));

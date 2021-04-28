@@ -68,7 +68,7 @@
  *
  *   [GLR] calls this "for-shifter"
  *
- * 
+ *
  * Discussion of path re-examination, called do-limited-reductions by
  * [GLR]:
  *
@@ -294,10 +294,10 @@ void GLR::glrParse(char const *inputFname)
       cout << "Line " << currentToken->loc.line
            << ", col " << currentToken->loc.col
            << ": Parse error at " << currentToken->toString() << endl;
-           
-      if (lastToDie == NULL) {                     
+
+      if (lastToDie == NULL) {
         // I'm not entirely confident it has to be nonnull..
-        cout << "what the?  lastToDie is NULL??\n";         
+        cout << "what the?  lastToDie is NULL??\n";
       }
       else {
         // print out the context of that parser
@@ -358,10 +358,10 @@ void GLR::glrParse(char const *inputFname)
 int GLR::glrParseAction(StackNode *parser,
                         ObjList<PendingShift> &pendingShifts)
 {
-  int actions = 
+  int actions =
     postponeShift(parser, pendingShifts);
 
-  actions += 
+  actions +=
     doAllPossibleReductions(parser, NULL /*no link restrictions*/);
 
   return actions;
@@ -379,9 +379,9 @@ int GLR::postponeShift(StackNode *parser,
 
     // add (parser, shiftDest) to pending-shifts
     pendingShifts.append(new PendingShift(parser, shiftDest));
-    
+
     return 1;   // 1 action
-  }                        
+  }
   else {
     return 0;
   }
@@ -460,7 +460,7 @@ int GLR::doAllPossibleReductions(StackNode *parser,
       glrShiftNonterminal(rpath->finalState, transferOwnership(rpath->reduction));
     }
   }
-  
+
   return actions;
 }
 
@@ -752,7 +752,7 @@ NonterminalNode *GLR::makeNonterminalNode(AttrContext &actx)
 // ------------------ stuff for outputting raw graphs ------------------
 // name for graphs (can't have any spaces in the name)
 string stackNodeName(StackNode const *sn)
-{     
+{
   Symbol const *s = sn->getSymbolC();
   char const *symName = (s? s->name.pcharc() : "(null)");
   return stringb(sn->stackNodeId
@@ -767,7 +767,7 @@ string reductionName(StackNode const *sn, int ruleNo, Reduction const *red)
 {
   return stringb(sn->stackNodeId << "/" << ruleNo << ":"
               << replace(red->production->toString(), " ", "_"));
-}							     
+}
 
 
 // this prints the graph in my java graph applet format, where
@@ -882,7 +882,7 @@ string readFileIntoString(char const *fname)
 
   // allocate a sufficiently large buffer
   string ret(len);
-  
+
   // read the file into that buffer
   if (fread(ret.pchar(), 1, len, fp) < (size_t)len) {
     xsyserror("fread");

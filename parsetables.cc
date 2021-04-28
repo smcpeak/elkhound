@@ -15,7 +15,7 @@
 // array index code
 enum { UNASSIGNED = -1 };
 
-               
+
 // fwd
 template <class EltType>
 void printTable(EltType const *table, int size, int rowLength,
@@ -26,7 +26,7 @@ ParseTables::ParseTables(int t, int nt, int s, int p, StateId start, int final)
 {
   alloc(t, nt, s, p, start, final);
 }
-    
+
 template <class T>
 void allocInitArray(T *&arr, int size, T init)
 {
@@ -144,7 +144,7 @@ ParseTables::~ParseTables()
     if (firstWithNonterminal) {
       delete[] firstWithNonterminal;
     }
-    
+
     if (bigProductionList) {
       delete[] bigProductionList;
     }
@@ -227,15 +227,15 @@ ParseTables::ParseTables(bool o)
 
 #if ENABLE_CRS_COMPRESSION
 ActionEntry makeAE(ActionEntryKind k, int index)
-{                                      
+{
   // must fit into 6 bits for my encoding
   if ((unsigned)index <= AE_MAXINDEX) {
     // ok
   }
-  else {                     
+  else {
     xfailure(stringc << "index " << index << " truncated!");
   }
-  
+
   if (k == AE_ERROR) {
     xassert(index == 0);
   }
@@ -396,7 +396,7 @@ template <class T>
 void copyIndexPtrArray(int len, T **&dest, T *base, ArrayStack<int> const &src)
 {
   dest = new T* [len];
-  for (int i=0; i<len; i++) {          
+  for (int i=0; i<len; i++) {
     if (src[i] != UNASSIGNED) {
       dest[i] = base + src[i];
     }
@@ -431,11 +431,11 @@ void ParseTables::finishTables()
 
 // -------------------- table compression --------------------
 void ParseTables::computeErrorBits()
-{                     
+{
   traceProgress() << "computing errorBits[]\n";
 
   // should only be done once
-  xassert(!errorBits);       
+  xassert(!errorBits);
 
   // allocate and clear it
   int rowSize = ((numTerms+31) >> 5) * 4;
@@ -550,11 +550,11 @@ void ParseTables::mergeActionColumns()
       }
     }
   }
-  
+
   // color the graph
   Array<int> color(numTerms);      // terminal -> color
   int numColors = colorTheGraph(color, graph);
-  
+
   // build a new, compressed action table; the entries are initialized
   // to 'error', meaning every cell starts as don't-care
   ActionEntry *newTable;
@@ -652,7 +652,7 @@ void ParseTables::mergeActionRows()
 
   // merge rows in 'actionTable' into those in 'newTable'
   // according to the 'color' map
-  
+
   // actionTable[]:
   //
   //             t0    t1    t2    t3      // terminal equivalence classes
@@ -1130,7 +1130,7 @@ void emitTable2(EmitCode &out, EltType const *table, int size, int rowLength,
 {
   string tempName = stringc << tableName << "_static";
   emitTable(out, table, size, rowLength, typeName, tempName);
-  out << "  " << tableName << " = const_cast<" << typeName << "*>(" 
+  out << "  " << tableName << " = const_cast<" << typeName << "*>("
       << tempName << ");\n\n";
 }
 
@@ -1184,12 +1184,12 @@ void emitOffsetTable(EmitCode &out, EltType **table, EltType *base, int size,
   }
 }
 
-                
+
 // for debugging
 template <class EltType>
 void printTable(EltType const *table, int size, int rowLength,
                 rostring typeName, rostring tableName)
-{            
+{
   // disabled for now since I don't need it anymore, and it adds
   // a link dependency on emitcode.cc ...
   #if 0
@@ -1301,7 +1301,7 @@ void ParseTables::emitConstructionCode(EmitCode &out,
 
     emitOffsetTable(out, productionsForState, bigProductionList, numStates,
                     "ProdIndex*", "productionsForState", "bigProductionList");
-                    
+
     emitOffsetTable(out, ambigStateTable, ambigTable, numStates,
                     "ActionEntry*", "ambigStateTable", "ambigTable");
   }

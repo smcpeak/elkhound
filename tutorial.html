@@ -18,7 +18,7 @@ Elkhound Tutorial
 <p>The purpose of this tutorial is to walk through the steps of
 building a parser using Elkhound.  Familiarity with another parser
 generator (such as
-<a href="http://www.gnu.org/manual/bison-1.25/bison.html">Bison</a>) 
+<a href="http://www.gnu.org/manual/bison-1.25/bison.html">Bison</a>)
 might be helpful but should not be necessary.
 
 <p>The
@@ -428,7 +428,7 @@ declarations used during parsing.
 
 
   // parser context class
-  class 
+  class
   #line 6 "gcom.gr"
    GCom : public UserActions {
   public:
@@ -764,7 +764,7 @@ precedence and associativity of these operators, in the
 operators bind more tightly.  The order in which the declarations
 appear is irrelevant; only the numbers matter.  Operators with the
 same precedence are resolved using associativity, typically either
-"<tt>left</tt>" or "<tt>right</tt>".  See the 
+"<tt>left</tt>" or "<tt>right</tt>".  See the
 <a href="manual.html">manual</a>
 (Section 7) for more information.
 
@@ -863,7 +863,7 @@ expression in the usual way (from
 <p>I added a <tt>verbatim</tt> section at the top, so the identifier
 action could call two library functions.  This gets emitted directly
 into the generated <tt>gcom.h</tt> file.  In this case it could also
-have been <tt>impl_verbatim</tt>, which is only inserted into 
+have been <tt>impl_verbatim</tt>, which is only inserted into
 <tt>gcom.cc</tt>.
 
 <pre>
@@ -913,7 +913,7 @@ variables.)
 <h2>7. Filling out the language</h2>
 <!-- FILES: gcom5 -->
 
-<p>At this point, let's fill out the lexer and grammar to parse the 
+<p>At this point, let's fill out the lexer and grammar to parse the
 whole GCom language.  The lexer header gets some new tokens,
 <a href="examples/gcom5/lexer.h"><tt>lexer.h</tt></a>:
 
@@ -1063,7 +1063,7 @@ parser to skip sections of input, nor loop over the input.
 disambiguation and semantic-value handling, we need to make the
 example more realistic.  We'll modify the parser to build an abstract
 syntax tree (AST), instead of evaluating the program directly.  This
-will involve the use of another tool, 
+will involve the use of another tool,
 <a href="../ast/index.html"><tt>astgen</tt></a>, which is
 useful in its own right.
 
@@ -1198,7 +1198,7 @@ follows.
 <h3>8.3 &nbsp; Evaluation</h3>
 
 <p>We're ready to write the evaluation rules as methods of the AST
-nodes.  Those methods are declared in 
+nodes.  Those methods are declared in
 <a href="examples/gcom/gcom.ast"><tt>gcom.ast</tt></a> like:
 
 <pre>
@@ -1583,7 +1583,7 @@ construction by <tt>merge()</tt>:
           TOK_PRINT
           TOK_IDENTIFIER
     TOK_EOF
-    
+
   $ echo "x := 2+3*4; print x" | ./parser -ast
   S_seq:
     S_assign:
@@ -1611,7 +1611,7 @@ In some situations, this might not be possible.  Another approach
 is to write <tt>merge()</tt> so that it retains <em>both</em>
 alternatives, and then <tt>eval()</tt> could do disambiguation.
 While this tutorial does not have an example of this approach,
-it is used extensively in the 
+it is used extensively in the
 <a href="../elsa/index.html">Elsa C++ parser</a>, so you can look
 there for further guidance.
 

@@ -46,7 +46,7 @@ string actionFuncName(Production const &prod)
 {
   return stringc << "action" << prod.prodIndex
                  << "_" << prod.left->name;
-}                    
+}
 #endif // 0
 
 
@@ -89,7 +89,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
           << "// parser context class\n"
           << "class ";
       emitUserCode(dcl, *(iter.data()), false /*braces*/);
-  }}                         
+  }}
 
   // we end the context class with declarations of the action functions
   dcl << "\n"
@@ -130,7 +130,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
       << "\n"
       << "\n"
       ;
-  
+
   // stand-alone verbatim sections go into .ml file *also*
   {FOREACH_OBJLIST(LocString, g.verbatim, iter) {
     emitMLUserCode(out, *(iter.data()), false /*braces*/);
@@ -393,7 +393,7 @@ void emitMLActions(Grammar const &g, EmitCode &out, EmitCode &dcl)
       out << "  let " << elt.tag << " = (Obj.obj svals.(" << index << ") : "
           << typeString(elt.sym->type, elt.tag) << ") in\n";
     }
-    
+
     // give a name to the yielded value so we can ensure it conforms to
     // the declared type
     out << "  let __result: " << prod.left->type << " =";
@@ -412,7 +412,7 @@ void emitMLActions(Grammar const &g, EmitCode &out, EmitCode &dcl)
   out << "(fun _ -> (failwith \"bad production index\"))   (* no ; *)"
       << "\n"
       << "|]\n"
-      << "\n"  
+      << "\n"
       ;
 
   // main action function; uses the array emitted above
@@ -688,7 +688,7 @@ void emitMLTable(EmitCode &out, EltType const *table, int size, int rowLength,
     #if 0
     if (needCast) {
       out << "(" << typeName << ")";           // ML: not used
-    }    
+    }
     #endif // 0
 
     if (printHex) {
@@ -858,19 +858,19 @@ void ParseTables::emitMLConstructionCode
 
   emitMLTable(out, stateSymbol, numStates,
               16, "stateSymbol");
-              
+
   SET_VAR(ambigTableSize);
   emitMLTable(out, ambigTable, ambigTableSize,
               16, "ambigTable");
-              
+
   emitMLTable(out, nontermOrder, nontermOrderSize(),
               16, "nontermOrder");
 
-  SET_VAR(startState);                                              
-  
+  SET_VAR(startState);
+
   // no semicolon for last one
   out << "  finalProductionIndex = " << finalProductionIndex << "\n";
-  
+
   out << "}\n"
       << "\n"
       ;

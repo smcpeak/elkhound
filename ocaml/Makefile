@@ -14,7 +14,7 @@ OCAMLCFLAGS := -noassert
 #OCAMLOPTFLAGS := $(OCAMLCFLAGS) -p
 OCAMLOPTFLAGS := $(OCAMLCFLAGS)
 
-# using dependency strategy from 
+# using dependency strategy from
 # http://www.cs.berkeley.edu/~smcpeak/autodepend/autodepend.html
 %.cmo: %.ml
 	ocamlc -c -g $(OCAMLCFLAGS) $*.ml
@@ -27,7 +27,7 @@ OCAMLOPTFLAGS := $(OCAMLCFLAGS)
 
 # run elkhound on a grammar spec
 # (for now I don't want to use the interface stuff)
-# 
+#
 # cygwin bug...
 #%.ml: %.gr $(ELKHOUND)/elkhound
 %.ml: %.gr
@@ -67,7 +67,7 @@ MINIMAL_MODULES = \
   objpool.cmo \
   glr.cmo
 
-# these are modules for the test program; they include some specific 
+# these are modules for the test program; they include some specific
 # grammar tables/actions, a lexer, a deterministic LR parser, the
 # parse-tree-printing stuff (ptreenode, ptreeact), and a main() function
 MAIN_MODULES = \

@@ -4,7 +4,7 @@
 int main()
 {
   int a, b;
-  
+
   a = b
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
@@ -16,7 +16,7 @@ int main()
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
-      
+
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
@@ -61,6 +61,6 @@ int main()
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b
       ;
-  
+
   return a;
 }

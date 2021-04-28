@@ -202,7 +202,7 @@ testTrivGrammar testRR 1 2
 
 
 # this is a test of the delete/replace feature; it uses a script that
-# (for now) is only in Elsa, so don't try it unless that script is 
+# (for now) is only in Elsa, so don't try it unless that script is
 # in a usual place
 if [ -x ../elsa/multitest.pl ]; then
   runTest perl ../elsa/multitest.pl ./elkhound ffollow.gr ffollow_ext.gr

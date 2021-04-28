@@ -94,17 +94,17 @@ UserActions::ReductionActionFunc EEB::getReductionAction()
 
 // ---------------- dup/del/merge/keep nonterminals ---------------
 
-inline Node* EEB::dup_E(Node* n) 
+inline Node* EEB::dup_E(Node* n)
 #line 14 "cc_eeb.gr"
 { n->incRefCt();  }
 #line 101 "cc_eeb.cc"
 
-inline void EEB::del_E(Node* n) 
+inline void EEB::del_E(Node* n)
 #line 15 "cc_eeb.gr"
 { n->delRefCt();  }
 #line 106 "cc_eeb.cc"
 
-inline Node* EEB::merge_E(Node* a, Node* b) 
+inline Node* EEB::merge_E(Node* a, Node* b)
 #line 16 "cc_eeb.gr"
 { return pickLeftAssocTree(a,b);  }
 #line 111 "cc_eeb.cc"
@@ -138,7 +138,7 @@ SemanticValue EEB::mergeAlternativeParses(int nontermId, SemanticValue left,
     case 2:
       return (SemanticValue)merge_E((Node*)left, (Node*)right);
     default:
-      cout << toString(loc) 
+      cout << toString(loc)
            << ": WARNING: there is no action to merge nonterm "
            << nontermNames[nontermId] << endl;
       return left;
@@ -213,42 +213,42 @@ EEB_ParseTables::EEB_ParseTables()
   uniqueErrorRows = 0;
 
   static ActionEntry const actionTable_static[18] = {
-    /*0*/ 0, 0, 4, 
-    /*1*/ 0, 0, 0, 
-    /*2*/ 0, 0, 4, 
-    /*3*/ -3, -3, 0, 
-    /*4*/ 2, 3, 0, 
-    /*5*/ -2, 7, 0, 
+    /*0*/ 0, 0, 4,
+    /*1*/ 0, 0, 0,
+    /*2*/ 0, 0, 4,
+    /*3*/ -3, -3, 0,
+    /*4*/ 2, 3, 0,
+    /*5*/ -2, 7, 0,
   };
   actionTable = const_cast<ActionEntry*>(actionTable_static);
 
   static GotoEntry const gotoTable_static[18] = {
-    /*0*/ 65535, 65535, 4, 
-    /*1*/ 65535, 65535, 65535, 
-    /*2*/ 65535, 65535, 5, 
-    /*3*/ 65535, 65535, 65535, 
-    /*4*/ 65535, 65535, 65535, 
-    /*5*/ 65535, 65535, 65535, 
+    /*0*/ 65535, 65535, 4,
+    /*1*/ 65535, 65535, 65535,
+    /*2*/ 65535, 65535, 5,
+    /*3*/ 65535, 65535, 65535,
+    /*4*/ 65535, 65535, 65535,
+    /*5*/ 65535, 65535, 65535,
   };
   gotoTable = const_cast<GotoEntry*>(gotoTable_static);
 
   static ParseTables::ProdInfo const prodInfo_static[3] = {
-    /*0*/ {2,1}, {3,2}, {1,2}, 
+    /*0*/ {2,1}, {3,2}, {1,2},
   };
   prodInfo = const_cast<ParseTables::ProdInfo*>(prodInfo_static);
 
   static SymbolId const stateSymbol_static[6] = {
-    /*0*/ 0, 1, 2, 3, -3, -3, 
+    /*0*/ 0, 1, 2, 3, -3, -3,
   };
   stateSymbol = const_cast<SymbolId*>(stateSymbol_static);
 
   static ActionEntry const ambigTable_static[3] = {
-    /*0*/ 2, 3, -2, 
+    /*0*/ 2, 3, -2,
   };
   ambigTable = const_cast<ActionEntry*>(ambigTable_static);
 
   static NtIndex const nontermOrder_static[3] = {
-    /*0*/ 2, 1, 0, 
+    /*0*/ 2, 1, 0,
   };
   nontermOrder = const_cast<NtIndex*>(nontermOrder_static);
 

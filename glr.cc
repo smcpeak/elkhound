@@ -47,7 +47,7 @@
  *
  *   [GLR] calls this "active-parsers"
  *
- * 
+ *
  * Discussion of path re-examination, called do-limited-reductions by
  * [GLR]:
  *
@@ -223,7 +223,7 @@ enum {
 // ------------- front ends to user code ---------------
 // given a symbol id (terminal or nonterminal), and its associated
 // semantic value, yield a description string
-string symbolDescription(SymbolId sym, UserActions *user, 
+string symbolDescription(SymbolId sym, UserActions *user,
                          SemanticValue sval)
 {
   if (symIsTerm(sym)) {
@@ -237,7 +237,7 @@ string symbolDescription(SymbolId sym, UserActions *user,
 SemanticValue GLR::duplicateSemanticValue(SymbolId sym, SemanticValue sval)
 {
   xassert(sym != 0);
-  
+
   // 6/23/04: Why did I do this?  Some kind of optimization?  It should
   // at least be documented... and probably removed altogether.
   if (!sval) return sval;
@@ -453,7 +453,7 @@ SiblingLink *StackNode::
 inline void StackNode::decRefCt()
 {
   xassert(referenceCount > 0);
-  
+
   //printf("decrementing node %d to %d\n", state, referenceCount-1);
 
   if (--referenceCount == 0) {
@@ -788,12 +788,12 @@ void GLR::buildParserIndex()
 bool GLR::glrParse(LexerInterface &lexer, SemanticValue &treeTop)
 {
   #if !ACTION_TRACE
-    // tell the user why "-tr action" doesn't do anything, if 
+    // tell the user why "-tr action" doesn't do anything, if
     // they specified that
     trace("action") << "warning: ACTION_TRACE is currently disabled by a\n";
     trace("action") << "compile-time switch, so you won't see parser actions.\n";
   #endif
-                 
+
   #ifdef NDEBUG
     trace("parse") << "warning: Because NDEBUG was specified when elkhound was\n";
     trace("parse") << "         compiled, the 'parse' tracing flag does nothing.\n";
@@ -841,7 +841,7 @@ bool GLR::glrParse(LexerInterface &lexer, SemanticValue &treeTop)
            << endl;
       //PVAL(parserMerges);
       PVAL(computeDepthIters);
-      
+
       PVAL(yieldThenMergeCt);
       PVAL(totalExtracts);
       PVAL(multipleDelayedExtracts);
@@ -918,7 +918,7 @@ STATICDEF bool GLR
     //GrowArray<SemanticValue> toPass(TYPICAL_MAX_RHSLEN);
     SemanticValue toPass[MAX_RHSLEN];
   #endif
-                   
+
   // count # of times we use mini LR
   ACCOUNTING( int localDetShift=0; int localDetReduce=0; )
 
@@ -952,7 +952,7 @@ STATICDEF bool GLR
     #else     // this is what bccgr does
       //if (lexer.type == 1 /*L2_NAME*/) {
       //  lexer.type = 3 /*L2_VARIABLE_NAME*/;
-      //} 
+      //}
     #endif
 
     // alternate debugging; print after reclassification
@@ -981,7 +981,7 @@ STATICDEF bool GLR
     if (topmostParsers.length() == 1) {
       StackNode *parser = topmostParsers[0];
       xassertdb(parser->referenceCount==1);     // 'topmostParsers[0]' is referrer
-      
+
       #if ENABLE_EEF_COMPRESSION
         if (tables->actionEntryIsError(parser->state, lexer.type)) {
           return false;    // parse error
@@ -1006,10 +1006,10 @@ STATICDEF bool GLR
           // I need to hide this declaration when debugging is off and
           // optimizer and -Werror are on, because it provokes a warning
           TRSPARSE_DECL( int startStateId = parser->state; )
-          
-          // if we're tracing actions, I'm going to build a string 
+
+          // if we're tracing actions, I'm going to build a string
           // that describes all of the RHS symbols
-          ACTION( 
+          ACTION(
             string rhsDescription("");
             if (rhsLen == 0) {
               // print something anyway
@@ -1092,7 +1092,7 @@ STATICDEF bool GLR
             toPass[i] = sib.sval;
 
             // when tracing actions, continue building rhs desc
-            ACTION( rhsDescription = 
+            ACTION( rhsDescription =
               stringc << " "
                       << symbolDescription(parser->getSymbolC(), userAct, sib.sval)
                       << rhsDescription; )
@@ -1218,7 +1218,7 @@ STATICDEF bool GLR
           xassertdb(newNode->referenceCount == 1);   // topmostParsers[0] is referrer
 
           // emit some trace output
-          TRSACTION("  " << 
+          TRSACTION("  " <<
                     symbolDescription(newNode->getSymbolC(), userAct, sval) <<
                     " ->" << rhsDescription);
 
@@ -1233,7 +1233,7 @@ STATICDEF bool GLR
                 glr.detShift += localDetShift;
                 glr.detReduce += localDetReduce;
               )
-              
+
               // TODO: I'm pretty sure I'm not properly cleaning
               // up all of my state here..
               return false;
@@ -1408,7 +1408,7 @@ void GLR::printParseErrorMessage(StateId lastToDie)
     }
     cout << "\n";
   }
-  else {                                                                          
+  else {
     // this happens because I lose the dead-parser info while processing
     // the reduction worklist; to implement this I'd need to remember each
     // state that died while processing the worklist; for now I'll just let
@@ -1417,7 +1417,7 @@ void GLR::printParseErrorMessage(StateId lastToDie)
   }
 
   // failure caused by unprimed lexer?
-  if (lexerPtr->type == 0 && 
+  if (lexerPtr->type == 0 &&
       lexerPtr->sval == (SemanticValue)LexerInterface::DEFAULT_UNPRIMED_SVAL) {
     cout << "It looks like you forgot to prime the lexer before calling the parser.\n";
   }
@@ -1692,7 +1692,7 @@ SemanticValue GLR::getParseResult()
       sval;                                    // start symbol tree node
 
   return sv;
-}    
+}
 #endif // 0
 
 
@@ -1880,7 +1880,7 @@ void GLR::rwlProcessWorklist()
       // left edge?  or, have all previous tokens failed to yield
       // information?
       SOURCELOC(
-        if (sib->loc != SL_UNKNOWN) {     
+        if (sib->loc != SL_UNKNOWN) {
           leftEdge = sib->loc;
         }
       )
@@ -2242,7 +2242,7 @@ void GLR::rwlShiftTerminals()
   SiblingLink *prev = NULL;
 
   // foreach node in prevTopmost
-  while (prevTopmost.isNotEmpty()) {                
+  while (prevTopmost.isNotEmpty()) {
     // take the node from 'prevTopmost'; the refcount includes both
     // 'leftSibling' and 'prevTopmost', and then we decrement the
     // count to reflect that only 'leftSibling' has it
@@ -2253,7 +2253,7 @@ void GLR::rwlShiftTerminals()
     // where can this shift, if anyplace?
     ActionEntry action =
       tables->getActionEntry(leftSibling->state, lexerPtr->type);
-      
+
     // we'll set this if we find a valid shift dest
     StateId newState = STATE_INVALID;
 
@@ -2314,7 +2314,7 @@ void GLR::rwlShiftTerminals()
       // the 'sval' we just grabbed has already been claimed by
       // 'prev->sval'; get a fresh one by duplicating the latter
       sval = userAct->duplicateTerminalValue(lexerPtr->type, prev->sval);
-      
+
       TRSACTION("  " << userAct->terminalDescription(lexerPtr->type, sval) <<
                 " is (@lexer) DUP of " <<
                 userAct->terminalDescription(lexerPtr->type, prev->sval));
@@ -2355,7 +2355,7 @@ string reductionName(StackNode const *sn, int ruleNo, Reduction const *red)
 {
   return stringb(sn->stackNodeId << "/" << ruleNo << ":"
               << replace(red->production->toString(), " ", "_"));
-}                                                            
+}
 
 
 // this prints the graph in my java graph applet format, where
@@ -2454,7 +2454,7 @@ void GLR::writeParseGraph(char const *fname) const
 string readFileIntoString(char const *fname)
 {
   return readStringFromFile(fname);
-                                   
+
   #if 0   // old
   // open file
   FILE *fp = fopen(fname, "r");

@@ -32,7 +32,7 @@ void Lexer::nextToken(LexerInterface *lex)
     case '(': lex->type = TOK_LPAREN; return;
     case ')': lex->type = TOK_RPAREN; return;
   }
-  
+
   // integer literal
   if (isdigit(ch)) {
     int value = 0;
@@ -83,7 +83,7 @@ string Lexer::tokenDesc() const
     // for two kinds of tokens, interpret their semantic value
     case TOK_LITERAL:      return stringf("%d", (int)sval);
     case TOK_IDENTIFIER:   return string((char*)sval);
-    
+
     // otherwise, just return the token kind description
     default:               return tokenKindDesc(type);
   }
@@ -110,7 +110,7 @@ int main()
   Lexer lexer;
   for (;;) {
     lexer.getTokenFunc()(&lexer);    // first call yields a function pointer
-    
+
     // print the returned token
     string desc = lexer.tokenDesc();
     printf("%s\n", desc.c_str());
@@ -119,7 +119,7 @@ int main()
       break;
     }
   }
-  
+
   return 0;
 }
 #endif // TEST_LEXER

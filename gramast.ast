@@ -12,9 +12,9 @@ class GrammarAST (ASTList<TopForm> forms) {
   // to some things that are supposed to exist and be unique
   public TF_terminals *terms;
   public TF_nonterm *firstNT;    // textually first nonterminal
-  
+
   public bool allowContinuedNonterminals = false;
-  
+
   ctor { terms=NULL; firstNT=NULL; };
 }
 
@@ -24,7 +24,7 @@ class TopForm {
   // definition of the parser context class; the first token
   // in 'body' is the class name
   -> TF_context(LocString body);
-  
+
   // arbitrary verbatim section, emitted into either the interface
   // (isImpl=false) or implementation (isImpl=true) file
   -> TF_verbatim(bool isImpl, LocString code);
@@ -85,9 +85,9 @@ class ProdDecl (SourceLoc loc, ProdDeclKind kind, ASTList<RHSElt> rhs, LocString
 class RHSElt {
   -> RH_name(LocString tag, LocString name);         // tagged terminal or nonterminal reference
   -> RH_string(LocString tag, LocString str);        // tagged terminal reference by string alias
-  
+
   // assigns a specific precedence level to a rule
-  -> RH_prec(LocString tokName);                  
+  -> RH_prec(LocString tokName);
 
   // forbids a rule from being used when a given token
   // is next in the input

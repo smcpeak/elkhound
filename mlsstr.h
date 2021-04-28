@@ -36,7 +36,7 @@ private:
 private:
   // depth of delimiter nesting
   int nesting() const { return delims.length() + nestingBias; }
-  
+
   // whether we are in a comment
   bool inComment() const { return comNesting>0; }
 

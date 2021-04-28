@@ -2,9 +2,9 @@
 (* test program for objpool.ml *)
 
 open Objpool
-                     
+
 let counter : int ref = ref 0
-   
+
 (* my "allocator" will just return successive integers, which my testing
  * harness can then manipulate like I would addresses in C *)
 let allocator() : int =
@@ -16,7 +16,7 @@ end
 let main() : unit =
 begin
   let pool : int tObjectPool = (new tObjectPool allocator) in
-  
+
   (* allocate objects 1 through 10 *)
   for i = 1 to 10 do
     (Printf.printf "alloc: %d\n" (pool#alloc()));

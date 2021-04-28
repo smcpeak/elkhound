@@ -9,8 +9,8 @@ some stuff
 
 fundecl int foo();
 
-fun foo { 
-  return 4; 
+fun foo {
+  return 4;
 }
 fun bar = 5;
 

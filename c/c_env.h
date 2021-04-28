@@ -182,7 +182,7 @@ public:     // funcs
 
   // misc
   StringRef str(char const *s) const { return strTable.add(s); }
-  
+
   // ------------- variables -------------
   // add a new variable to the innermost scope; it is an error
   // if a variable by this name already exists; 'decl' actually
@@ -229,7 +229,7 @@ public:     // funcs
 
   // ------------------ enumerators -------------------
   // add an enum value
-  EnumType::Value *addEnumerator(StringRef name, EnumType *et, 
+  EnumType::Value *addEnumerator(StringRef name, EnumType *et,
                                  int value, Variable *decl);
 
   // lookup; return NULL if no such variable
@@ -320,7 +320,7 @@ public:     // funcs
   void checkCoercible(Type const *src, Type const *dest);
   Type const *promoteTypes(BinaryOp op, Type const *t1, Type const *t2);
 
-  
+
   // -------------- debugging -------------
   string toString() const;
   void selfCheck() const;
@@ -348,7 +348,7 @@ public:
   AtomicTypeId grabAtomic(AtomicType *type);
   AtomicType *lookupAtomic(AtomicTypeId id) { return atomicTypes.lookup(id); }
   AtomicType const *lookupAtomicC(AtomicTypeId id) const { return atomicTypes.lookupC(id); }
-  
+
   void empty() { types.empty(); atomicTypes.empty(); }
 };
 
@@ -370,7 +370,7 @@ public:
   Variable const *lookupC(VariableId id) const { return vars.lookupC(id); }
   Variable *&lookupRef(VariableId id) { return vars.lookupRef(id); }
   void empty() { vars.empty(); }
-  
+
   // only for use by the iterator macro
   ArrayMap<Variable> const &getVars() const { return vars; }
 };

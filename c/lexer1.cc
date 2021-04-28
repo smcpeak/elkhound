@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  Lexer1 lexer(argv[1]); 
+  Lexer1 lexer(argv[1]);
   lexer1_lex(lexer, fopen(argv[1], "r"));
 
   printf("%d token(s), %d error(s)\n",

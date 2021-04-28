@@ -25,7 +25,7 @@ enum ASTTypeCode {
   AST_TERMINALS,         // list of terminal declarations
   AST_TERMDECL,          // terminal: numeric-code, aliases
   AST_ALIASES,           // list of terminal aliases
-  
+
   AST_NONTERM,           // nonterminal: ntname, (form or ntbody)
   AST_NTBODY,            // list of nonterminal body elements
   AST_NTNAME,            // name, [baseclasses]
@@ -50,7 +50,7 @@ enum ASTTypeCode {
   AST_TREENODEBASE,      // base class: string
   AST_TREECOMPARE,       // name1, name2, expr
   AST_DECLARATION,       // decl: decl body
-  
+
   AST_LITERALCODE,       // code-tag, body
   AST_NAMEDLITERALCODE,  // code-tag, body, name
 
@@ -77,11 +77,11 @@ enum ASTTypeCode {
   EXP_OR,
 
   EXP_COND,              // ternary operator
-  
+
   NUM_AST_CODES          // plus one, actually
 };
 
-                                 
+
 // map type to descriptive string
 string astTypeToString(int type);
 

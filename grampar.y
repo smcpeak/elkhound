@@ -41,7 +41,7 @@
 #define noloc(str)                                                    \
   new LocString(SL_UNKNOWN,      /* unknown location */               \
                 PARAM->lexer.strtable.add(str))
-                
+
 // locstring for NULL, with no location
 #define nolocNULL()                                                   \
   new LocString(SL_UNKNOWN, NULL)
@@ -164,7 +164,7 @@ AssocKind whichKind(LocString * /*owner*/ kind);
 
 /* start symbol */
 /* yields: int (dummy value) */
-StartSymbol: TopFormList     
+StartSymbol: TopFormList
                { ((ParseParams*)parseParam)->treeTop = new GrammarAST($1); $$=0; }
            ;
 
@@ -172,7 +172,7 @@ StartSymbol: TopFormList
 TopFormList: /*empty*/              { $$ = new ASTList<TopForm>; }
            | TopFormList TopForm    { ($$=$1)->append($2); }
            ;
-           
+
 /* yields: TopForm */
 TopForm: ContextClass               { $$ = $1; }
        | Verbatim                   { $$ = $1; }
@@ -335,7 +335,7 @@ RHSElt: TOK_NAME                { $$ = new RH_name(sameloc($1, ""), $1); }
       | "precedence" "(" NameOrString ")"    { $$ = new RH_prec($3); }
       | "forbid_next" "(" NameOrString ")"   { $$ = new RH_forbid($3); }
       ;
-        
+
 /* yields: ASTList<LocString> */
 Subsets: /*empty*/                  { $$ = NULL; }
        | "subsets" Formals ";"      { $$ = $2; }
@@ -345,10 +345,10 @@ Subsets: /*empty*/                  { $$ = NULL; }
 %%
 /* ------------------ extra C code ------------------ */
 AssocKind whichKind(LocString * /*owner*/ kind)
-{ 
+{
   // delete 'kind' however we exit
   Owner<LocString> killer(kind);
-  
+
   #define CHECK(syntax, value)   \
     if (kind->equals(syntax)) {  \
       return value;              \

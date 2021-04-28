@@ -29,7 +29,7 @@ int *zoo()
 {
   return &q;
 }
-   
+
 
 int ug thmprv_attr(misspelled);     // ERROR(2)
 

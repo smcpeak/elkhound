@@ -9,10 +9,10 @@ template <class T>
 class OwnerPtr {
 private:
   T *ptr;
-  
+
   enum State { OP_NULL, OP_DEAD, OP_OWNING };
   State state;
-  
+
 public:
   OwnerPtr() : ptr(NULL), state(OP_NULL) {}
 

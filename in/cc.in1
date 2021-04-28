@@ -8,19 +8,19 @@ int foo()
   int a = B::c;
   a = ::d;
   a = e;
-  
+
   Foo f;
   f.~Foo();
-  
+
   int *p = new int;
   p = new int(5);
   p = new int[6];
   delete[] p;
   delete p;
-  
+
   (a.*b)();
   (a->*b)();
-  
+
   throw up;
 
   try {
@@ -50,7 +50,7 @@ public:
   explicit Bar(int y);
 
   operator int () const;
-  
+
   mutable int x;
 };
 

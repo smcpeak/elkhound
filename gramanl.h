@@ -50,11 +50,11 @@ private:    // data
   // to the symbol right after the dot
   Symbol *afterDot;
 
-public:     // data    
+public:     // data
   // First of the sentential form that follows the dot; this set
   // is computed by GrammarAnalysis::computeDProdFirsts
   TerminalSet firstSet;
-  
+
   // also computed by computeDProdFirsts, this is true if the
   // sentential form can derive epsilon (the empty string)
   bool canDeriveEmpty;
@@ -179,7 +179,7 @@ public:    // funcs
     { return dprod->symbolBeforeDotC(); }
   Symbol const *symbolAfterDotC() const
     { return dprod->symbolAfterDotC(); }
-    
+
   int prodIndex() const
     { return getProd()->prodIndex; }
 
@@ -397,7 +397,7 @@ protected:  // data
   // each element of the 'dottedProds' array is a pointer to an
   // array of DottedProduction objects
   DottedProduction **dottedProds;       // (owner ptr to array of owners)
-  
+
   // index of productions by id
   Production **indexedProds;            // (owner -> serfs) prodIndex -> Production
   int numProds;                         // length of 'dottedProds'
@@ -412,7 +412,7 @@ protected:  // data
 
   // the LR parsing tables
   ObjList<ItemSet> itemSets;
-  
+
   // distinguished start state; NOTE: much of the grammar analysis
   // code currently assumes (and checks) that state 0 is the start
   // state, so if you want to do something different, that code might
@@ -519,7 +519,7 @@ private:    // funcs
     ItemSet const *state,        // parse state in which the actions are possible
     Terminal const *sym,         // lookahead symbol for these actions
     ProductionList &reductions); // list to try to cut down
-  
+
   void renumberStates();
   static int renumberStatesDiff
     (ItemSet const *left, ItemSet const *right, void *vgramanl);
@@ -536,7 +536,7 @@ private:    // funcs
 
   void topologicalSort(NtIndex *order,  int &nextOrdinal,
                        NtIndex current, BitArray &seen);
-  
+
   // the inverse of transition: map a target state to the symbol that
   // would transition to that state (from the given source state)
   Symbol const *inverseTransitionC(ItemSet const *source,
@@ -612,7 +612,7 @@ public:	    // funcs
   // ---- sample inputs and contexts ----
   string sampleInput(ItemSet const *state) const;
   string leftContextString(ItemSet const *state) const;
-  
+
   // ---- moved out of private ----
   void itemSetClosure(ItemSet &itemSet);
   DottedProduction const *getDProdIndex(int prodIndex, int posn) const;

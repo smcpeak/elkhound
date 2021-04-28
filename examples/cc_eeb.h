@@ -9,7 +9,7 @@
 
 
 // parser context class
-class 
+class
 #line 4 "cc_eeb.gr"
  EEB : public UserActions {
 #line 16 "cc_eeb.h"

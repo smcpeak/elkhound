@@ -7,10 +7,10 @@
 string toString(AssocKind k)
 {
   static char const * const arr[] = {
-    "AK_LEFT", 
-    "AK_RIGHT", 
-    "AK_NONASSOC", 
-    "AK_NEVERASSOC", 
+    "AK_LEFT",
+    "AK_RIGHT",
+    "AK_NONASSOC",
+    "AK_NEVERASSOC",
     "AK_SPLIT"
   };
   STATIC_ASSERT(TABLESIZE(arr) == NUM_ASSOC_KINDS);

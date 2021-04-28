@@ -76,13 +76,13 @@ void EmitCode::flush()
 
 
 char const *hashLine()
-{                   
+{
   if (tracingSys("nolines")) {
     // emit with comment to disable its effect
     return "// #line ";
   }
   else {
-    return "#line "; 
+    return "#line ";
   }
 }
 

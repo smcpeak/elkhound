@@ -4,7 +4,7 @@
 int main()
 {
   int a, b;
-  
+
   a = b
       +b+b+b+b+b+b+b+b+b+b
       +b+b+b+b+b+b+b+b+b+b

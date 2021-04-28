@@ -56,7 +56,7 @@ void Lexer::nextToken(LexerInterface *lex)
     case '/':
       ch = getchar();
       if (ch != '\\') fail("'/' must be followed by '\\'");
-      lex->type = TOK_AND; 
+      lex->type = TOK_AND;
       return;
 
     case '\\':
@@ -71,7 +71,7 @@ void Lexer::nextToken(LexerInterface *lex)
       lex->type = TOK_ASSIGN;
       return;
   }
-  
+
   // integer literal
   if (isdigit(ch)) {
     int value = 0;
@@ -194,7 +194,7 @@ int main()
   Lexer lexer;
   for (;;) {
     lexer.getTokenFunc()(&lexer);    // first call yields a function pointer
-    
+
     // print the returned token
     string desc = lexer.tokenDesc();
     printf("%s\n", desc.c_str());
@@ -203,7 +203,7 @@ int main()
       break;
     }
   }
-  
+
   return 0;
 }
 #endif // TEST_LEXER

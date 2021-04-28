@@ -105,13 +105,13 @@ void grammarExplorer(GrammarAnalysis &g)
         int stateId = atoi(tok[1]);
         ItemSet const *set = g.getItemSet(stateId);
 
-        int prodId = atoi(tok[2]);                 
+        int prodId = atoi(tok[2]);
         Production const *prod = g.productions.nth(prodId);
 
-        int termId = atoi(tok[3]);                         
+        int termId = atoi(tok[3]);
         Terminal const *term = g.getTerminal(termId);
-        
-        
+
+
 
 
 

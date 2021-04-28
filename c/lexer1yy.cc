@@ -871,7 +871,7 @@ case YY_STATE_EOF(ST_STRING):
     // a bug in flex; its man page doesn't specify what it does), so we
     // get an extra NUL in the collected token, which I don't want
   }
-  
+
   if (!lexer.allowMultilineStrings) {
     lexer.error("unterminated string literal");
     lexer.emit(L1_STRING_LITERAL, COLLECTOR);
@@ -1883,10 +1883,10 @@ int main()
 int lexer1_lex(Lexer1 &lexer, FILE *inputFile)
 {
   yyrestart(inputFile);
-  
+
   // this collects all the tokens
   int ret = lexer1_inner_lex(lexer);
-             
+
   // prevent leaking the big buffer
   // 9/07/03: but this doesn't work with flex-2.5.31, and isn't worth the
   // hassle to portablize, since lexer1 is obsolete anyway

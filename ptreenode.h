@@ -20,7 +20,7 @@ public:    // types
   // max # of children (when this is increased, more constructors
   // for PTreeNode should be added)
   enum { MAXCHILDREN = 10 };
-  
+
   // printing options
   enum PrintFlags {
     PF_NONE    = 0,       // default, print types as-is

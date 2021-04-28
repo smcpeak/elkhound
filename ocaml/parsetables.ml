@@ -86,7 +86,7 @@ type tParseTables = {
 
   (* start state id (always 0) *)
   startState: tStateId;
-  
+
   (* index of last production to reduce *)
   finalProductionIndex: int;
 }
@@ -160,7 +160,7 @@ let handcoded_arithParseTables:tParseTables = {
 
   startState = 0;
   finalProductionIndex = 0
-} 
+}
 
 
 (* -------------- ParseTables client access interface -------------- *)
@@ -202,10 +202,10 @@ begin
   code = 0
 end
 
-                       
+
 (* this returns an index into the ambigTable *)
 (* needs tables for compression *)
-let decodeAmbigAction (tables: tParseTables) (code: tActionEntry) 
+let decodeAmbigAction (tables: tParseTables) (code: tActionEntry)
                       (inState: tStateId) : int =
 begin
   code - 1 - tables.numStates

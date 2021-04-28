@@ -160,7 +160,7 @@ nonterm NestedNameSpecifier {
 nonterm ClassOrNamespaceName {
   -> ClassName;
   -> NamespaceName;
-}                                                
+}
 
 nonterm ExpressionListOpt {
   -> empty;
@@ -222,7 +222,7 @@ nonterm UnaryOperator {
   -> "!";
   -> "~";
 }
-  
+
 nonterm NewPlacementOpt {
   -> empty;
   -> NewPlacement;
@@ -240,7 +240,7 @@ nonterm NewExpression {
 
 nonterm NewPlacement {
   -> "(" ExpressionList ")";
-}                           
+}
 
 nonterm NewDeclaratorOpt {
   -> empty;
@@ -436,7 +436,7 @@ nonterm Condition {
   -> Expression;
   -> TypeSpecifierSeq Declarator "=" AssignmentExpression;     // ?
 }
-  
+
 nonterm ConditionOpt {
   -> empty;
   -> Condition;
@@ -543,7 +543,7 @@ nonterm FunctionSpecifier {
 // repeated in spec
 //nonterm TypedefName {
 //  -> Identifier;
-//} 
+//}
 
 nonterm TypeSpecifier {
   -> SimpleTypeSpecifier;
@@ -593,7 +593,7 @@ nonterm IdentifierOpt {
   -> empty;
   -> Identifier;
 }
-        
+
 nonterm EnumeratorListOpt {
   -> empty;
   -> EnumeratorList;
@@ -621,12 +621,12 @@ nonterm Enumerator {
 //nonterm NamespaceName {
 //  -> OriginalNamespaceName;
 //  -> NamespaceAlias;
-//} 
+//}
 
 // repeated in spec
 //nonterm OriginalNamespaceName {
 //  -> Identifier;
-//} 
+//}
 
 nonterm NamespaceDefinition {
   -> NamedNamespaceDefinition;
@@ -662,7 +662,7 @@ nonterm NamespaceBody {
 // repeated in spec
 //nonterm NamespaceAlias {
 //  -> Identifier;
-//} 
+//}
 
 nonterm NamespaceAliasDefinition {
   -> "namespace" Identifier "=" QualifiedNamespaceSpecifier ";";
@@ -785,7 +785,7 @@ nonterm AbstractDeclarator {
   -> PtrOperator AbstractDeclaratorOpt;
   -> DirectAbstractDeclarator;
 }
-     
+
 nonterm DirectAbstractDeclaratorOpt {
   -> empty;
   -> DirectAbstractDeclarator;
@@ -868,7 +868,7 @@ nonterm InitializerList {
 //nonterm ClassName {
 //  -> Identifier;
 //  -> TemplateId;
-//} 
+//}
 
 nonterm MemberSpecificationOpt {
   -> empty;
@@ -895,7 +895,7 @@ nonterm ClassKey {
   -> "struct";
   -> "union";
 }
-  
+
 nonterm MemberSpecification {
   -> MemberDeclaration MemberSpecificationOpt;
   -> AccessSpecifier ":" MemberSpecificationOpt;
@@ -905,7 +905,7 @@ nonterm MemberDeclaratorListOpt {
   -> empty;
   -> MemberDeclaratorList;
 }
-  
+
 nonterm SemicolonOpt {
   -> empty;
   -> ";";
@@ -948,7 +948,7 @@ nonterm PureSpecifier {
   -> "=" IntegerLiteral;         // standard says "0" here but that's not one of my tokens..
 }
 
-nonterm ConstantInitializer{ 
+nonterm ConstantInitializer{
   -> "=" ConstantExpression;
 }
 
@@ -963,7 +963,7 @@ nonterm BaseSpecifierList {
   -> BaseSpecifier;
   -> BaseSpecifierList "," BaseSpecifier;
 }
- 
+
 // Q: is there a nonterminal called "virtual"?
 // A: no.  the standard uses the wrong font for "virtual" in the base-specifier rules
 nonterm VirtualOpt {
@@ -1016,7 +1016,7 @@ nonterm CtorInitializer {
 nonterm MemInitializerList {
   -> MemInitializer;
   -> MemInitializer "," MemInitializerList;
-}                                          
+}
 
 // Q: what is a mem-initializer?
 // A: "member initializer", in constructors after the ":" but before "{"
@@ -1128,7 +1128,7 @@ nonterm TemplateId {
 // repeated in spec
 //nonterm TemplateName {
 //  -> Identifier;
-//} 
+//}
 
 nonterm TemplateArgumentList {
   -> TemplateArgument;

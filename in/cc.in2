@@ -50,7 +50,7 @@ bool Conditions::test(AttrContext const &actx) const
   FOREACH_OBJLIST(Condition, conditions, iter) {
     try {
       if (!iter.data()->test(actx)) {
-	trace("conditions") 
+	trace("conditions")
 	  << "condition " << iter.data()->toString(actx.reductionC().production)
 	  << " not satisfied\n";
 	return false;

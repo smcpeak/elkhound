@@ -123,13 +123,13 @@ nonterm Toplevel -> EnterScope Stmts LeaveScope ;
 
 // these are placed at strategic points to get scoping right
 nonterm EnterScope -> empty    [
-  D("entering scope"); 
-  enterScope(); 
+  D("entering scope");
+  enterScope();
   R0;
 ]
 
 nonterm LeaveScope -> empty     [
-  D("exiting scope"); 
+  D("exiting scope");
   leaveScope();
   R0;
 ]

@@ -55,7 +55,7 @@ char *fgets(char *s, int size, FILE *stream);
 char *strchr(char *s, char c);
 struct termios {
   int c_lflag;
-};    
+};
 typedef int size_t;
 size_t read(int fd, void *buf, size_t count);
 int strcmp(char const *s1, char const *s2);
@@ -111,14 +111,14 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
 //#endif
   FILE *f;
   int i;
-  
+
   if (from_stdin)
     {
       f = stdin;
     }
   else
     {
-      /* Read the passphrase from /dev/tty to make it possible to ask it even 
+      /* Read the passphrase from /dev/tty to make it possible to ask it even
          when stdin has been redirected. */
       f = fopen("/dev/tty", "r");
       if (!f)
@@ -126,7 +126,7 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
           if (getenv("DISPLAY"))
             {
               char command[512];
-              
+
               fprintf(stderr,
                       "Executing ssh-askpass to query the password...\n");
               fflush(stdout);
@@ -156,10 +156,10 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
                     quoted_prompt[i] = *p;
                 }
               quoted_prompt[i] = '\0';
-  
+
               snprintf(command, sizeof(command),
                        "ssh-askpass '%.400s'", quoted_prompt);
-              
+
               f = popen(command, "r");
               if (f == 0/*NULL*/)
                 {
@@ -202,7 +202,7 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
         quoted_prompt[i] = *p;
     }
   quoted_prompt[i] = '\0';
-  
+
   /* Display the prompt (on stderr because stdout might be redirected). */
   fflush(stdout);
   fprintf(stderr, "%s", quoted_prompt);
@@ -228,7 +228,7 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
   //tio.sg_flags &= ~(ECHO);
   //ioctl(fileno(f), TIOCSETP, &tio);
 //#endif
-  
+
   {
     /* Read the passphrase from the terminal. */
     int read_bytes = 0, ret = 0;
@@ -260,7 +260,7 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
           {
             /* Got newline, error, or buf full. */
             buf[read_bytes] = '\0';
-            break;            
+            break;
           }
       }
     if (ret == 0)
@@ -283,7 +283,7 @@ char *ssh_read_passphrase(const char *prompt, Boolean from_stdin)
         if (f != stdin)
           fclose(f);
         return 0/*NULL*/;
-        
+
       }
   }
 
@@ -344,14 +344,14 @@ Boolean ssh_read_confirmation(const char *prompt, Boolean from_stdin)
 {
   char buf[1024], *p;
   FILE *f;
-  
+
   if (from_stdin)
     {
       f = stdin;
     }
   else
     {
-      /* Read the passphrase from /dev/tty to make it possible to ask it even 
+      /* Read the passphrase from /dev/tty to make it possible to ask it even
          when stdin has been redirected. */
       f = fopen("/dev/tty", "r");
       if (!f)

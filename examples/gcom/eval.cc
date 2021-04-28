@@ -147,7 +147,7 @@ void S_do::eval(Env &env)
 
 // -------------------- GCom -------------------
 bool G_stmt::eval(Env &env)
-{ 
+{
   if (b->eval(env)) {
     s->eval(env);
     return true;
@@ -166,7 +166,7 @@ bool G_seq::eval(Env &env)
   // to modify this code so that the executions it models will cover a
   // larger fraction of the state space reachable under the
   // traditional semantics.
-  
+
   if (g1->eval(env)) { return true; }
   if (g2->eval(env)) { return true; }
   return false;

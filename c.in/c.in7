@@ -28,13 +28,13 @@ int foo()
 
   a = s.m1;           // field access
   b = sp->m2;         // deref and field access
-  
+
   a = b++;            // postfix ++
   c = z--;            // postfix --
-  
+
   y = ++x;            // prefix --
   c = --a;            // prefix ++
-  
+
   b = sizeof(a);      // sizeof of expr, with built-in type
   c = sizeof(s);      // sizeof of expr, with user-def type
 
@@ -49,15 +49,15 @@ int foo()
   a = b + c;          // binary expr
   a = x && y;         // short-circuit and
   a = z || x;         // short-circuit or
-  
+
   c = x ? y : z;      // ?: with control flow
   //c = x ?: z;         // strange crap
-  
+
   a = b;              // assignment
   x += y;             // accumulation assignment
 
   a = (b , c);        // comma operator (lower prec. than '=' !)
-  
+
 myLabel: x=y;         // labeled statement
 
   if (a++) {            // if-then
@@ -82,11 +82,11 @@ myLabel: x=y;         // labeled statement
   for (a=0; a<5; a++) { // for
     y=z;
   }
-  
+
   // C++ only
   //for (int i=0; i; ) {  // for with decl in initializer slot
   //  i=7;
-  //} 
+  //}
 
   return 6;             // return with arg
   //return;               // return w/o arg

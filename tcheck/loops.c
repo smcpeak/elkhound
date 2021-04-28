@@ -3,14 +3,14 @@
 // test my CFG extraction
 
 void foo()
-{ 
+{
   int x,y,z;
 
   ;       // skip
 
 label1:
   x=4;
-  
+
   switch (y) {
     case 1: y=6; break;
     case 2: y=7;
@@ -18,26 +18,26 @@ label1:
     case 4 ... 5: z=3; break;
     default: x=5;
   }
-  
+
   switch (y) {
     default: y=9; break;
   }
-  
+
   {
     x=1;
     y=2;
     z=3;
   }
-  
+
   if (x > y) {
     z=9;
   }
   else {
     z=10;
   }
-  
+
   x=5;
-  
+
   while (z<10) {
     z++;
   }
@@ -62,20 +62,20 @@ label1:
     }
     x += 5;
   }
-  
+
   if (z > y) {
     return;
-  }        
-  
+  }
+
   if (x > y) {
     goto label1;
   }
   else {
     goto label2;
   }
-  
+
   x=9;
-  
+
 label2:
   x=8;
 }

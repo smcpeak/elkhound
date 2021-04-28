@@ -12,7 +12,7 @@ class Exp {
   private int refCt;
   public void incRefCt();
   public void decRefCt();      // deletes when it hits 0
-  
+
   // whoever creates this object initially is its first owner,
   // hence the refct starts at 1
   ctor { refCt=0; incRefCt(); };
@@ -34,7 +34,7 @@ class Exp {
       { return i; };
   }
 
-  // 'op' can be either '+' or '*' 
+  // 'op' can be either '+' or '*'
   // the explicit pointer notation means "serf"
   -> E_op(char op, Exp *left, Exp *right) {
     dtor {

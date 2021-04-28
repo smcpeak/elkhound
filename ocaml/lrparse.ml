@@ -53,7 +53,7 @@ begin
   (!stateStack).(!stackLen - 1)
 end
 
-let parse (lex:tLexerInterface) (tables:tParseTables) (actions:tUserActions) 
+let parse (lex:tLexerInterface) (tables:tParseTables) (actions:tUserActions)
   : tSemanticValue =
 begin
   (* initial state *)
@@ -85,7 +85,7 @@ begin
 
       (* next token *)
       (lex#getToken());
-             
+
       if (debug) then (
         (Printf.printf "shift to state %d\n" dest);
         (flush stdout);

@@ -48,24 +48,24 @@ type tUserActions = {
   (* merge svals for alternative derivations of the same nonterminal *)
   mergeAlternativeParses:
     int ->                     (* nonterminal with two derivations *)
-    tSemanticValue ->          (* sval from derivation 1 *)  
+    tSemanticValue ->          (* sval from derivation 1 *)
     tSemanticValue ->          (* sval from derivation 2 *)
     tSemanticValue;            (* merged sval *)
-    
+
   (* choose whether to keep or drop a reduced value *)
   keepNontermValue:
     int ->                     (* reduced nonterm id *)
     tSemanticValue ->          (* sval that 'reductionAction' yielded *)
     bool;                      (* if false, drop the sval on the floor *)
-    
+
   (* reclassification goes here *)
-  
+
   (* debugging support; see useract.h for more info *)
   terminalDescription: int -> tSemanticValue -> string;
   nonterminalDescription: int -> tSemanticValue -> string;
   terminalName: int -> string;
   nonterminalName: int -> string;
-} 
+}
 
 
 (* ---------------- sample reduction actions -------------- *)
@@ -128,15 +128,15 @@ let handcoded_arithUserActions = {
     |] in
     (actions.(prodId) svals)
   ));
-  
+
   duplicateTerminalValue = (fun termId sval -> sval);
   duplicateNontermValue = (fun termId sval -> sval);
-  
+
   deallocateTerminalValue = (fun termId sval -> ());
   deallocateNontermValue = (fun termId sval -> ());
-  
+
   mergeAlternativeParses = (fun nontermId sval1 sval2 -> sval1);
-  
+
   keepNontermValue = (fun nontermId sval -> true);
 
   terminalDescription = (fun termId sval -> "TODO");

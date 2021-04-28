@@ -33,7 +33,7 @@ object (self)
   method getIntSval() : int =          (Obj.obj sval : int)
 
   (* interface that must be implemented *)
-  
+
   (* retrieve the next token, storing its information in tokType & sval *)
   method virtual getToken : unit -> unit
 

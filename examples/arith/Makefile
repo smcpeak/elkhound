@@ -48,7 +48,7 @@ arithyy.cc: arith.lex
 # also run it with a test input
 arith: arith.o arithyy.o arith.gr.gen.o
 	g++ -o $@ -g $^ $(LDFLAGS)
-	echo "3 + 4 * 5" | ./arith 
+	echo "3 + 4 * 5" | ./arith
 	echo "3 + 4 * 5" | ./arith printTree
 
 

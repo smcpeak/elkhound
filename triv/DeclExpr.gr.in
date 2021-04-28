@@ -5,7 +5,7 @@ terminals {
   a      // identifier
   b      // another identifier
   l      // left paren
-  r      // right paren       
+  r      // right paren
   s      // semicolon
 }
 

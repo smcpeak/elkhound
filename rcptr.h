@@ -4,7 +4,7 @@
 // the object pointed-at must support this interface:
 //   // increment reference count
 //   void incRefCt();
-//   
+//
 //   // decrement refcount, and if it becomes 0, delete yourself
 //   void decRefCt();
 
@@ -59,7 +59,7 @@ public:     // funcs
   // escape hatch for when operators flake out on us
   T *get() { DBG("get"); return ptr; }
   T const *getC() const { DBG("getC"); return ptr; }
-  
+
   // sometimes, in performance-critical code, I need fine control
   // over the refcount operations; this lets me change 'ptr', the
   // assumption being I'll update the refct manually

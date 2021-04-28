@@ -94,7 +94,7 @@ public:
   SiblingLink(StackNode *s, SemanticValue sv
               SOURCELOCARG( SourceLoc L ) );
   ~SiblingLink();
-  
+
   #if GLR_SOURCELOC
     bool validLoc() const { return loc != SL_UNKNOWN; }
   #else
@@ -163,8 +163,8 @@ public:
   // count and high-water for stack nodes
   static int numStackNodesAllocd;
   static int maxStackNodesAllocd;
-                           
-  
+
+
 private:    // funcs
   SiblingLink *
     addAdditionalSiblingLink(StackNode *leftSib, SemanticValue sval
@@ -185,7 +185,7 @@ public:     // funcs
   // add a new link with the given tree node; return the link
   SiblingLink *addSiblingLink(StackNode *leftSib, SemanticValue sval
                               SOURCELOCARG( SourceLoc loc ) );
-                                
+
   // specialized version for performance-critical sections
   inline void
     addFirstSiblingLink_noRefCt(StackNode *leftSib, SemanticValue sval
@@ -213,7 +213,7 @@ public:     // funcs
   // retrieve pointer to the sibling link to a given node, or NULL if none
   SiblingLink *getLinkTo(StackNode *another);
 
-  // recompute my determinDepth based on siblings, 
+  // recompute my determinDepth based on siblings,
   // but don't actually change the state
   int computeDeterminDepth() const;
 
@@ -285,7 +285,7 @@ private:      // data
   // parse tables, so we can decode prodIndex and also compare
   // production ids for sorting purposes
   ParseTables *tables;
-       
+
 private:      // funcs
   bool goesBefore(Path const *p1, Path const *p2) const;
 
@@ -300,7 +300,7 @@ public:       // funcs
   // fields using 'leftEdge', and insert it into sorted order
   // in the queue
   void insertPathCopy(Path const *src, StackNode *leftEdge);
-                       
+
   // true if there are no more paths
   bool isEmpty() const { return top == NULL; }
   bool isNotEmpty() const { return !isEmpty(); }
@@ -367,7 +367,7 @@ public:
   // ---- allocation pools ----
   // this is a pointer to the same-named local variable in innerGlrParse
   ObjectPool<StackNode> *stackNodePool;
-                               
+
   // pool and list for the RWL implementation
   ReductionPathQueue pathQueue;
 
@@ -388,7 +388,7 @@ public:
 
   // statistics on parser actions
   int detShift, detReduce, nondetShift, nondetReduce;
-  
+
   // count of # of times yield-then-merge happens
   int yieldThenMergeCt;
 

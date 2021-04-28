@@ -42,7 +42,7 @@ object (self)
   begin
     (* read from stdin *)
     let t:tToken = (readToken lexbuf) in
-    
+
     (* break the tToken apart into a kind and an sval; perhaps
      * this belongs in lexer.mll too? *)
     match t with
@@ -181,7 +181,7 @@ begin
       (lex, actions)                           (* unchanged *)
     )
   in
-  
+
   (* parse the input *)
   let sval:tSemanticValue =
     if (not !useGLR) then (
@@ -206,7 +206,7 @@ begin
       (Printf.printf "nondetShift:  %d\n" glr.nondetShift);
       (Printf.printf "nondetReduce: %d\n" glr.nondetReduce);
       (flush stdout);
-      
+
       !treeTop
     )
   in

@@ -53,7 +53,7 @@ void doit(int argc, char **argv)
       node->printTree(cout);
     }
 
-    delete user;         
+    delete user;
     delete tables;
   }
 

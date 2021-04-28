@@ -20,7 +20,7 @@ public:
 // syntax: The second section is a list of tokens (terminals) that the
 // lexer will yield.  The primary purpose is simply to give
 // human-readable names to the numeric codes the lexer will actually
-// use.  
+// use.
 //
 // Optionally, you can associate quoted aliases, which can help to
 // make the grammar more readable.  For example, with an alias a rule
@@ -50,7 +50,7 @@ terminals {
   5 : TOK_DIVIDE   "/";
   6 : TOK_LPAREN   "(";
   7 : TOK_RPAREN   ")";
-  
+
   // syntax: Some terminals have useful semantic values, and those
   // are declared here.
   token(int) TOK_NUMBER;       // numbers have associated int-typed values

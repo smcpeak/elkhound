@@ -14,7 +14,7 @@ public:
 public:
   Foo(int a);
   ~Foo();
-  
+
   void incRefCt() { refCt++; }
   void decRefCt();
 };
@@ -50,7 +50,7 @@ void printFoo(Foo *f)
 
 void printFooC(Foo const *f)
 {
-  printf("const Foo at %p, x=%d, refct=%d\n", 
+  printf("const Foo at %p, x=%d, refct=%d\n",
          f, f? f->x : 0, f? f->refCt : 0);
 }
 
@@ -126,7 +126,7 @@ int main()
   test3();
   test4();
   test5();
-  
+
   printf("%d Foos leaked\n", Foo::count);
   return Foo::count;
 }

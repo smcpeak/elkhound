@@ -215,7 +215,7 @@ void xferNullableSerfPtrToList(Flatten &flat, T *&ptr, ObjList<T> &masterList)
   }
 }
 
-                  
+
 template <class T>
 void computedValue(Flatten &flat, T &variable, T value)
 {

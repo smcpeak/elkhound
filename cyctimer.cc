@@ -55,7 +55,7 @@ int main()
     string s = timer.elapsed();
     printf("one second: %s\n", s.pcharc());
   }
-  
+
   {
     CycleTimer timer;
     sleep(2);

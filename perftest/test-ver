@@ -97,7 +97,7 @@ cd ..
 # ------------------- build ast ---------------------
 echo "building ast.."
 (cd ast; make SMBASE="../smbase" >make.out 2>&1)
-  
+
 
 # ------------------ build parsgen -----------------
 echo "building parsgen.."
@@ -129,11 +129,11 @@ for n in 1 2 3 4 5; do
   echo "running test $n.."
   (time ./ccgr -tr trivialActions,stopAfterParse cc.bin ../../../c.in4d) 2>&1 \
     | tee test.out
-    
+
   parseStart=`grep 'parsing\.\.\.' test.out | awk '{ print $3 }' | sed 's/ms://'`
   parseDone=`grep 'done parsing' test.out | awk '{ print $3 }' | sed 's/ms://'`
   realTime=`grep '^real' test.out | awk '{ print $2 }' | sed 's/s//'`
-  
+
   if [ x$parseDone == x ]; then
     # use realTime as an estimate of parsing-done time
     mins=`echo $realTime | sed 's/m.*//'`

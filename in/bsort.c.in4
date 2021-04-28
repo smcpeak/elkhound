@@ -11,12 +11,12 @@ void foo ( int * a , int b )
 {
   int x , y ;
 
-  for ( x = 2 ; x <= b ; x ++ ) { 	       
-    for ( y = x - 1 ; y >= 1 ; y -- ) {       
-      
-      if ( a [ y - 1 ]  >  a [ y ] ) {     
-        
-        int z = a [ y ] ;	       
+  for ( x = 2 ; x <= b ; x ++ ) {
+    for ( y = x - 1 ; y >= 1 ; y -- ) {
+
+      if ( a [ y - 1 ]  >  a [ y ] ) {
+
+        int z = a [ y ] ;
         a [ y ] = a [ y - 1 ] ;
         a [ y - 1 ] = z ;
       }

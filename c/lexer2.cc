@@ -117,7 +117,7 @@ Lexer2TokenTypeDesc const l2TokTypes[] = {
   { N(L2_VOLATILE),             "volatile", true },
   { N(L2_WCHAR_T),              "wchar_t", true },
   { N(L2_WHILE),                "while", true },
-  
+
   // operators
   { N(L2_LPAREN),               "(", true },
   { N(L2_RPAREN),               ")", true },
@@ -168,21 +168,21 @@ Lexer2TokenTypeDesc const l2TokTypes[] = {
   { N(L2_SEMICOLON),            ";", true },
   { N(L2_LBRACE),               "{", true },
   { N(L2_RBRACE),               "}", true },
-  
+
   // extensions for parsing gnu
   { N(L2___ATTRIBUTE__),        "__attribute__", true },
   { N(L2___FUNCTION__),         "__FUNCTION__", true },
   { N(L2___LABEL__),            "__label__", true },
   { N(L2___PRETTY_FUNCTION__),  "__PRETTY_FUNCTION__", true },
   { N(L2___TYPEOF__),           "__typeof__", true },
-  
+
   // my own extension
   { N(L2_OWNER),                "owner_ptr_qualifier", true },
-  
+
   // additional tokens to help in specifying disambiguation
   { N(L2_PREFER_REDUCE),        "PREFER_REDUCE", true },
   { N(L2_PREFER_SHIFT),         "PREFER_SHIFT", true },
-                                                           
+
   // theorem-prover extensions
   { N(L2_THMPRV_ASSERT),        "thmprv_assert", true },
   { N(L2_THMPRV_ASSUME),        "thmprv_assume", true },
@@ -498,7 +498,7 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
 
     try {
       switch (L1->type) {
-        case L1_IDENTIFIER:                                   
+        case L1_IDENTIFIER:
           // get either keyword's type, or L2_NAME
           L2->type = lookupKeyword(dest.lang, L1->text);
           if (L2->type == L2_NAME) {
@@ -669,7 +669,7 @@ STATICDEF void Lexer2::nextToken(Lexer2 *ths)
   ths->currentToken.adv();
   ths->copyFields();
 }
-       
+
 LexerInterface::NextTokenFunc Lexer2::getTokenFunc() const
 {
   return (NextTokenFunc)&Lexer2::nextToken;
@@ -684,7 +684,7 @@ string Lexer2::tokenDesc() const
 
 
 string Lexer2::tokenKindDesc(int kind) const
-{                                            
+{
   return l2Tok2String((Lexer2TokenType)kind);
 }
 

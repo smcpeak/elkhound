@@ -118,7 +118,7 @@ nonterm LeaveScope -> empty     [
 // source of problems parsing C and C++
 
 // name of a type; introduced by class, struct, union, enum, typedef
-nonterm[StringRef] TypeName 
+nonterm[StringRef] TypeName
   -> n:L2_TYPE_NAME     [ return n; ]
 
 // name of a variable or function; introduced by a declaration
@@ -223,7 +223,7 @@ nonterm[StringRef] PQVarName {
 
 
 nonterm[Expression*] PostfixExpression {
-  -> e:PrimaryExpression 
+  -> e:PrimaryExpression
        [ return e; ]
 
   // array access
@@ -243,7 +243,7 @@ nonterm[Expression*] PostfixExpression {
   -> p:PostfixExpression "->" n:PQVarName
        [ return new E_fieldAcc(new E_deref(p), n); ]
 
-  -> p:PostfixExpression "++" 
+  -> p:PostfixExpression "++"
        [ return new E_effect(EFF_POSTINC, p); ]
   -> p:PostfixExpression "--"
        [ return new E_effect(EFF_POSTDEC, p); ]
@@ -299,7 +299,7 @@ nonterm[Expression*] UnaryExpression {
   -> "-" e:CastExpression        [ return new E_unary(UNY_MINUS, e); ]
   -> "!" e:CastExpression        [ return new E_unary(UNY_NOT, e); ]
   -> "~" e:CastExpression        [ return new E_unary(UNY_BITNOT, e); ]
-                                               
+
   // size of type
   -> "sizeof" "(" t:TypeId ")"   [ return new E_sizeofType(t); ]
 
@@ -315,7 +315,7 @@ nonterm[E_new*] NewExpression {
   // LALR(1) conflict because then "new char * 6" could either be
   // "(new char) * 6" or "(new (char*)) 6" -- neither makes sense but
   // the parser doesn't know that
-  
+
   // there's still an LALR(1) shift/reduce conflict involving __attribute__,
   // but I haven't spent enough time staring at the parser dump to figure
   // out why, so I'll rely on GLR to deal with it;
@@ -324,7 +324,7 @@ nonterm[E_new*] NewExpression {
   // stuck in long loops)
 
   -> "new" t:TypeSpecifier /*NewDeclaratorOpt NewInitializerOpt*/
-       [ return new E_new(new ASTTypeId(t,              
+       [ return new E_new(new ASTTypeId(t,
            // declarator which doesn't modify type:
            new Declarator(new D_name(loc, NULL, NULL), NULL))); ]
   -> "new" "(" t:TypeId ")" /*NewDeclaratorOpt NewInitializerOpt*/
@@ -355,9 +355,9 @@ nonterm[E_new*] NewExpression {
 //  }
 
 nonterm[Expression*] CastExpression {
-  -> e:UnaryExpression 
+  -> e:UnaryExpression
        [ return e; ]
-  -> "(" t:TypeId ")" e:CastExpression 
+  -> "(" t:TypeId ")" e:CastExpression
        [ return new E_cast(t, e); ]
 }
 
@@ -385,17 +385,17 @@ nonterm[Expression*] BinaryExpression {
 
   -> left:BinaryExpression "&&" right:BinaryExpression   [ return new E_binary(left, BIN_AND, right); ]
   -> left:BinaryExpression "||" right:BinaryExpression   [ return new E_binary(left, BIN_OR, right); ]
-  
+
   // theorem prove extensions
   -> left:BinaryExpression "==>" right:BinaryExpression  [ return new E_binary(left, BIN_IMPLIES, right); ]
 }
 
 
 nonterm[Expression*] ConditionalExpression {
-  -> e:BinaryExpression 
+  -> e:BinaryExpression
        [ return e; ]
 
-  -> cond:BinaryExpression "?" th:Expression ":" el:AssignmentExpression 
+  -> cond:BinaryExpression "?" th:Expression ":" el:AssignmentExpression
        [ return new E_cond(cond, th, el); ]
 
   // wtf?  gnu...
@@ -410,7 +410,7 @@ nonterm[Expression*] ConditionalExpression {
 // that in another language spec?  clearly both alternatives would have
 // to be like-typed lvalues, but...
 nonterm[Expression*] AssignmentExpression {
-  -> e:ConditionalExpression 
+  -> e:ConditionalExpression
        [ return e; ]
 
   -> e1:BinaryExpression op:AssignmentOperator e2:AssignmentExpression
@@ -439,10 +439,10 @@ nonterm[enum BinaryOp] AssignmentOperator {
 // in the meanings is great enough that I think they should be
 // separate, as they are
 nonterm[Expression*] Expression {
-  -> ae:AssignmentExpression 
+  -> ae:AssignmentExpression
        [ return ae; ]
 
-  -> e:Expression "," ae:AssignmentExpression 
+  -> e:Expression "," ae:AssignmentExpression
        [ return new E_comma(e, ae); ]
 }
 
@@ -456,14 +456,14 @@ nonterm[Expression*] ExpressionOpt {
 // it be entirely evaluable to an int at compile time
 // (the name exists simply to help document that fact; the grammar
 // cannot enforce it)
-nonterm[Expression*] ConstantExpression -> e:ConditionalExpression 
+nonterm[Expression*] ConstantExpression -> e:ConditionalExpression
   [ return e; ]
 
 
 // ------ A.5 Statements ------
 // labeled-statement
 nonterm[Statement*] Statement {
-  -> n:L2_VARIABLE_NAME ":" s:Statement 
+  -> n:L2_VARIABLE_NAME ":" s:Statement
        [ return new S_label(loc, n, s); ]
 
   // I need a disambiguation here other than prec/assoc..
@@ -595,7 +595,7 @@ nonterm[Statement*] ForInitStatement {
 //       [ return new ASTList<Declaration>(); ]
 //  -> seq:DeclarationSeqOpt d:Declaration
 //       [ seq->append(d); return seq; ]
-//} 
+//}
 
 nonterm[TopForm*] Declaration {
   -> d:BlockDeclaration      [ return new TF_decl(loc, d); ]
@@ -652,7 +652,7 @@ nonterm[Declaration*] DeclSpecifier {
   -> "inline" s:TypeSpecifier
        [ return new Declaration(DF_INLINE, s, NULL); ]
 
-  -> s:TypeSpecifier 
+  -> s:TypeSpecifier
        [ return new Declaration(DF_NONE, s, NULL); ]
 }
 
@@ -675,7 +675,7 @@ nonterm[enum DeclFlags] DeclModifier {
 
 nonterm[TypeSpecifier*] TypeSpecifier {
   // the existence of this production is part of why parsing C is hard
-  -> n:PQTypeName 
+  -> n:PQTypeName
        [ return new TS_name(n); ]
 
   -> s:SimpleTypeSpecifier            // int
@@ -827,7 +827,7 @@ nonterm[ASTList<Enumerator>*] EnumeratorList {
 }
 
 nonterm[ASTList<Enumerator>*] EnumeratorListOpt {
-  -> empty 
+  -> empty
        [ return new ASTList<Enumerator>(); ]
 
   -> list:EnumeratorList CommaOpt   // CommaOpt is GNU extension (??)
@@ -836,7 +836,7 @@ nonterm[ASTList<Enumerator>*] EnumeratorListOpt {
 
 
 nonterm[Enumerator*] EnumeratorDefinition {
-  -> name:AnyName 
+  -> name:AnyName
        [ return new Enumerator(loc, name, NULL /*expr*/); ]
   -> name:AnyName "=" expr:ConstantExpression
        [ return new Enumerator(loc, name, expr); ]
@@ -848,7 +848,7 @@ nonterm[Enumerator*] EnumeratorDefinition {
 //nonterm LinkageSpecification {
 //  -> "extern" L2_STRING_LITERAL "{" d:DeclarationSeqOpt "}" ;
 //  -> "extern" L2_STRING_LITERAL d:Declaration ;
-//} 
+//}
 
 // ------ A.7 Declarators ------
 // -- declarator --
@@ -878,7 +878,7 @@ nonterm[Declarator*] InitDeclarator {
 }
 
 nonterm[Initializer*] Initializer {
-  -> "=" i:InitializerClause 
+  -> "=" i:InitializerClause
        [ return i; ]
 
   // this causes an ambiguity with
@@ -1017,7 +1017,7 @@ nonterm[enum CVFlags] CVQualifier {
 // these are separated out because the parser wants to track the
 // introduction of type names
 nonterm[ASTList<Declarator>*] TypedefDeclaratorList {
-  -> d:TypedefDeclarator              
+  -> d:TypedefDeclarator
        [ return new ASTList<Declarator>(new Declarator(d, NULL)); ]
   -> list:TypedefDeclaratorList "," d:TypedefDeclarator
        [ list->append(new Declarator(d, NULL)); return list; ]
@@ -1043,9 +1043,9 @@ nonterm[IDeclarator*] DirectTypedefDeclarator {
   -> d:DirectTypedefDeclarator "(" args:ParameterDeclarationClause ")" //CVQualifierSeqOpt
                                                ann:FuncAnnotationsOpt
        [ return new D_func(loc, d, args, ann); ]
-  -> d:DirectTypedefDeclarator "[" sz:ConstantExpression "]" 
+  -> d:DirectTypedefDeclarator "[" sz:ConstantExpression "]"
        [ return new D_array(d, sz); ]
-  -> d:DirectTypedefDeclarator "[" "]" 
+  -> d:DirectTypedefDeclarator "[" "]"
        [ return new D_array(d, NULL); ]
   -> "(" d:TypedefDeclarator ")"
        [ return d; ]
@@ -1131,9 +1131,9 @@ nonterm[ASTList<ASTTypeId>*] ParameterDeclarationClause {
 }
 
 nonterm[ASTList<ASTTypeId>*] ParameterDeclarationList {
-  -> d:ParameterDeclaration 
+  -> d:ParameterDeclaration
        [ return new ASTList<ASTTypeId>(d); ]
-  -> list:ParameterDeclarationList "," d:ParameterDeclaration 
+  -> list:ParameterDeclarationList "," d:ParameterDeclaration
        [ list->append(d); return list; ]
 }
 
@@ -1549,9 +1549,9 @@ nonterm GNUAsmStatement {
 
 // ----------------- thmprv extensions ----------------
 nonterm[ASTList<FuncAnnotation>*] FuncAnnotationsOpt {
-  -> empty                              
+  -> empty
        [ return new ASTList<FuncAnnotation>(); ]
-  -> list:FuncAnnotationsOpt ann:FuncAnnotation  
+  -> list:FuncAnnotationsOpt ann:FuncAnnotation
        [ list->append(ann); return list; ]
 }
 

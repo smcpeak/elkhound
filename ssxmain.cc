@@ -122,8 +122,8 @@ int entry(int argc, char *argv[])
 
   // print what it should be
   int n = (inputLen - 1) / 2;
-  cout << "input is x^" << inputLen 
-       << "; C(" << n 
+  cout << "input is x^" << inputLen
+       << "; C(" << n
        << ") = " << C(n)
        << endl;
 

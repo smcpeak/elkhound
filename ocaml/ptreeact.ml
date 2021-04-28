@@ -48,7 +48,7 @@ end
 
 
 (* ----------------------- parseTreeActions ------------------------ *)
-let makeParseTreeActions (underlying: tUserActions) (tables: tParseTables) 
+let makeParseTreeActions (underlying: tUserActions) (tables: tParseTables)
   : tUserActions =
 begin
   let actions:tUserActions = {
@@ -58,7 +58,7 @@ begin
         (* production info *)
         let rhsLen:int = (getProdInfo_rhsLen tables prodId) in
         let lhsIndex:int = (getProdInfo_lhsIndex tables prodId) in
-        
+
         (* make a tree node, initially with no children *)
         let ret:tPTreeNode = (makePTreeNode (underlying.nonterminalName lhsIndex)) in
 
@@ -68,10 +68,10 @@ begin
           let child:tPTreeNode = (Obj.obj svals.(i) : tPTreeNode) in
           (setChild ret i child);
         done;
-        
+
         (Obj.repr ret)
       ));
-      
+
     (* duplicate a semantic value: trivial *)
     duplicateTerminalValue = (fun _ sval -> sval);
     duplicateNontermValue = (fun _ sval -> sval);
@@ -85,7 +85,7 @@ begin
       fun (ntIndex:int) (left:tSemanticValue) (right:tSemanticValue) -> (
         let l:tPTreeNode = ((Obj.obj left) : tPTreeNode) in
         let r:tPTreeNode = ((Obj.obj right) : tPTreeNode) in
-        
+
         (addAlternative l r);
         (Obj.repr l)
       ));
@@ -98,7 +98,7 @@ begin
     terminalName = (fun id -> (underlying.terminalName id));
     nonterminalName = (fun id -> (underlying.nonterminalName id));
   } in
-  
+
   actions
 end
 

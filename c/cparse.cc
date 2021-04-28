@@ -8,7 +8,7 @@
 #include "trace.h"       // trace
 
 ParseEnv::ParseEnv(StringTable &table, CCLang &L)
-  : str(table), 
+  : str(table),
     intType(table.add("int")),
     strRefAttr(table.add("attr")),
     types(),

@@ -188,8 +188,8 @@ bool equalExpr(OwnerHashTable<VariablePair> &equiv,
 
           // in expectation of all variables being of same type,
           // add these variables to the equivalence map
-          equiv.add(varL, new VariablePair(varL, varR));       
-          
+          equiv.add(varL, new VariablePair(varL, varR));
+
           // keep track of what gets added
           addedEquiv.prepend(const_cast<Variable*>(varL));
         }
@@ -207,14 +207,14 @@ bool equalExpr(OwnerHashTable<VariablePair> &equiv,
       }
 
       return ret;
-             
+
     ASTDEFAULTC
       xfailure("bad expr tag");
       return false;   // silence warning
 
     ASTENDCASEC
   }
-  
+
   #undef DOUBLECASEC
 }
 

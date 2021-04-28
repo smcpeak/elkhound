@@ -603,7 +603,7 @@ int countPaths(Env &env, Expression *ths)
         ths->recordSideEffect();
         numPaths = mult(numPaths, 1 + ths->el->numPaths);
       }
-    }    
+    }
     #endif // 0
     ASTNEXT(E_comma, ths) {
       numPaths = ths->e1->numPaths;

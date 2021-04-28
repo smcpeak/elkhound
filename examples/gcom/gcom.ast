@@ -58,7 +58,7 @@ class Stmt {
 }
 
 // guarded commands
-class GCom {                       
+class GCom {
   // returns true if it finds an enabled alternative, false o.w.
   pure_virtual bool eval(Env &env);
 

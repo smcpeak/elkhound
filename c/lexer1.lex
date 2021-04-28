@@ -28,10 +28,10 @@
 
   // used for 2nd and 3rd arguments to lexer1Emit
   #define COLLECTOR (char*)collector.getDataC(), collector.getDataLen()
-  
+
   // declare the interface to the lexer
   #define YY_DECL int lexer1_inner_lex(Lexer1 &lexer)
-  
+
   // this works around a problem with cygwin & fileno
   #define YY_NEVER_INTERACTIVE 1
 
@@ -170,7 +170,7 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
     // a bug in flex; its man page doesn't specify what it does), so we
     // get an extra NUL in the collected token, which I don't want
   }
-  
+
   if (!lexer.allowMultilineStrings) {
     lexer.error("unterminated string literal");
     lexer.emit(L1_STRING_LITERAL, COLLECTOR);
@@ -261,10 +261,10 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
 int lexer1_lex(Lexer1 &lexer, FILE *inputFile)
 {
   yyrestart(inputFile);
-  
+
   // this collects all the tokens
   int ret = lexer1_inner_lex(lexer);
-             
+
   // prevent leaking the big buffer
   // 9/07/03: but this doesn't work with flex-2.5.31, and isn't worth the
   // hassle to portablize, since lexer1 is obsolete anyway

@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     PTreeNode *ptn = (PTreeNode*)result;
     ptn->printTree(cout, PTreeNode::PF_EXPAND);
   }
-  
+
   else {
     // initialize the parser
     GLR glr(&sless, sless.makeTables());

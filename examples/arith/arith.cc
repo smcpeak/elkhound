@@ -22,7 +22,7 @@ LexerInterface::NextTokenFunc ArithLexer::getTokenFunc() const
   return (NextTokenFunc)&ArithLexer::nextToken;
 }
 
-  
+
 char const *toString(ArithTokenCodes code)
 {
   char const * const names[] = {
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
   // uncomment this to get bison-like shift/reduce reports
   //traceAddSys("parse");
-  
+
   // get tracing info from environment variable TRACE
   traceAddFromEnvVar();
 

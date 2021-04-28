@@ -14,7 +14,7 @@ terminals {
   c
   d
   e
-  
+
   precedence {
     // assign both 'B' productions the same precedence; there was a
     // bug in Elkhound that would cause it to drop one of the

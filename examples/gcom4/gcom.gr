@@ -34,7 +34,7 @@ nonterm(int) AExp {
   -> a1:AExp "-" a2:AExp   { return a1 - a2; }
   -> a1:AExp "*" a2:AExp   { return a1 * a2; }
   -> "(" a:AExp ")"        { return a; }
-  
+
   // interpret identifiers using environment variables; it's
   // a bit of a hack, and we'll do something better later
   -> x:TOK_IDENTIFIER {

@@ -63,7 +63,7 @@ void Symbol::xfer(Flatten &flat)
 
   flattenStrTable->xfer(flat, delParam);
   delCode.xfer(flat);
-  
+
   flat.xferBool(reachable);
 }
 
@@ -299,7 +299,7 @@ void Nonterminal::print(ostream &os, Grammar const *grammar) const
 void Nonterminal::internalPrintDDM(ostream &os) const
 {
   Symbol::internalPrintDDM(os);
-  
+
   if (mergeCode.isNonNull()) {
     os << "    merge(" << mergeParam1 << ", " << mergeParam2
        << ") [" << mergeCode << "]\n";
@@ -418,7 +418,7 @@ void TerminalSet::add(int id)
 
 
 void TerminalSet::remove(int id)
-{                             
+{
   unsigned char *p = getByte(id);
   *p &= (unsigned char)(~(1 << getBit(id)));
 }
@@ -715,7 +715,7 @@ DottedProduction const *Production::getDProdC(int dotPlace) const
 {
   xassert(0 <= dotPlace && dotPlace < numDotPlaces);
   return &dprods[dotPlace];
-}    
+}
 #endif // 0
 
 
@@ -750,7 +750,7 @@ string Production::toString(bool printType, bool printIndex) const
     sb << "[" << left->type << "]";
   }
   sb << " -> " << rhsString();
-  
+
   if (printType && precedence) {
     // take this as licence to print prec too
     sb << " %prec(" << precedence << ")";
@@ -851,7 +851,7 @@ void Grammar::xfer(Flatten &flat)
   eh_xferObjList(flat, actionClasses);
 
   eh_xferObjList(flat, implVerbatim);
-                               
+
   targetLang.xfer(flat);
   flat.xferBool(useGCDefaults);
   flat.xferBool(defaultMergeAborts);
@@ -883,7 +883,7 @@ int Grammar::numTerminals() const
 }
 
 int Grammar::numNonterminals() const
-{                                
+{
   // everywhere, we regard emptyString as a nonterminal
   return nonterminals.count() + 1;
 }
@@ -948,7 +948,7 @@ void Grammar::addProduction(Production *prod)
 
   prod->prodIndex = productions.count();
   productions.append(prod);
-  
+
   // if the start symbol isn't defined yet, we can here
   // implement the convention that the LHS of the first
   // production is the start symbol
@@ -959,7 +959,7 @@ void Grammar::addProduction(Production *prod)
 
 
 // add a token to those we know about
-bool Grammar::declareToken(LocString const &symbolName, int code, 
+bool Grammar::declareToken(LocString const &symbolName, int code,
                            LocString const &alias)
 {
   // verify that this token hasn't been declared already
@@ -1018,7 +1018,7 @@ void Grammar::printAsBison(ostream &os) const
     FOREACH_TERMINAL(terminals, iter) {
       highMark = max(iter.data()->precedence, highMark);
     }
-            
+
     // map AssocKind to bison declaration; map stuff bison doesn't
     // have to %nonassoc
     static char const * const kindMap[NUM_ASSOC_KINDS] =
@@ -1065,7 +1065,7 @@ void Grammar::printAsBison(ostream &os) const
         if (first) {
           os << nt.data()->name << ":";
         }
-        else {       
+        else {
           os << "\n";
           INTLOOP(i, 0, nt.data()->name.length()) {
             os << " ";

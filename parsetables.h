@@ -121,7 +121,7 @@ private:    // types
 
     // nascent bigProductionList
     ArrayStack<ProdIndex> bigProductionList;
-    
+
     // nascent productionsForState, except using integer offsets from
     // start of 'bigProductionList' instead of direct pointers into it
     ArrayStack<int> productionsForState;

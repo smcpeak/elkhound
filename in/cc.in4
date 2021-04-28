@@ -116,7 +116,7 @@ public:     // funcs
 
   virtual void print(ostream &os) const;
   OSTREAM_OPERATOR(Terminal);
-                          
+
   // return alias if defined, name otherwise
   string toString() const;
 };
@@ -332,7 +332,7 @@ private:    // data
   // array will point to all such items
   DottedProduction const **dotsAtEnd;        // (owner ptr to array of serf ptrs)
   int numDotsAtEnd;                          // number of elements in 'dotsAtEnd'
-  
+
   // profiler also reports I'm still spending time comparing item sets; this
   // stores a CRC of the numerically sorted kernel item pointer addresses,
   // concatenated into a buffer of sufficient size
@@ -356,7 +356,7 @@ private:    // funcs
   int bcheckTerm(int index);
   int bcheckNonterm(int index);
   ItemSet *&refTransition(Symbol const *sym);
-                      
+
   // computes things derived from the item set lists
   void changedItems();
 

@@ -3,7 +3,7 @@
 
 #ifndef SSXNODE_H
 #define SSXNODE_H
-                      
+
 // for storing counts of parse trees
 typedef int TreeCount;
 

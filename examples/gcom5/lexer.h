@@ -9,7 +9,7 @@
 // token codes (must agree with the parser)
 enum TokenCode {
   TOK_EOF         = 0,     // end of file
-  
+
   // minimal set of tokens for AExp
   TOK_LITERAL,             // integer literal
   TOK_IDENTIFIER,          // identifier like "x"
@@ -38,7 +38,7 @@ enum TokenCode {
   TOK_FI,                  // "fi"
   TOK_DO,                  // "do"
   TOK_OD,                  // "od"
-  
+
   // for GCom
   TOK_ARROW,               // "->"
   TOK_FATBAR,              // "#"

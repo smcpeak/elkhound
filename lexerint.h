@@ -67,7 +67,7 @@ public:     // funcs
   // the result of a method lookup this wouldn't be necessary.
   virtual NextTokenFunc getTokenFunc() const=0;
 
-  
+
   // The following functions are called to help create diagnostic
   // reports.  They should describe the current token (the one
   // which the above fields refer to) in more-or-less human-readable

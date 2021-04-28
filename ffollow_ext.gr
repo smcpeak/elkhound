@@ -25,7 +25,7 @@ nonterm T {
 nonterm Tp {
   // try to make new, but it already exists in base
   //ERROR(1): -> "*" F Tp;
-  
+
   // delete nonexistent
   //ERROR(3): delete -> "*" "*" "*";
 

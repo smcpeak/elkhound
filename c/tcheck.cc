@@ -106,7 +106,7 @@ void TF_func::itcheck(Env &env)
     IN_PREDICATE(env);
 
     // make bindings for precondition logic variables (they would
-    // have been added to the environment when typechecked above, 
+    // have been added to the environment when typechecked above,
     // but then we closed that scope (why? not sure))
     FA_precondition *pre = ftype()->precondition;
     if (pre) {
@@ -119,7 +119,7 @@ void TF_func::itcheck(Env &env)
 
       //checkBoolean(env, pre->expr->tcheck(env), pre->expr);
     }
-                            
+
     #if 0     // typechecking postconditions happens in D_func::tcheck
     // and the postcondition
     FA_postcondition *post = ftype()->postcondition;
@@ -240,7 +240,7 @@ void Declaration::tcheck(Env &env)
   FOREACH_ASTLIST_NC(Declarator, decllist, iter) {
     Declarator *d = iter.data();
     d->tcheck(env, base, dflags);
-    
+
     // we just declared a local variable, if we're in a function
     TF_func *func = env.getCurrentFunction();
     if (func) {
@@ -341,7 +341,7 @@ public:
 };
 
 XNonConst::~XNonConst()
-{}               
+{}
 
 
 int constEval(Env &env, Expression *expr)
@@ -373,7 +373,7 @@ Type const *TS_enumSpec::tcheck(Env &env)
     if (e->expr) {
       nextValue = constEval(env, e->expr);
     }
-    
+
     // make a record of the name introduction
     Variable *var = new Variable(e->loc, name,
                                  new CVAtomicType(et, CV_NONE), DF_NONE);
@@ -387,7 +387,7 @@ Type const *TS_enumSpec::tcheck(Env &env)
     // if the next enumerator doesn't specify a value, use +1
     nextValue++;
   }
-  
+
   return env.makeCVType(et, cv);
 }
 
@@ -571,7 +571,7 @@ void /*Type const * */D_func::itcheck(Env &env, Type const *rettype,
 }
 
 
-void /*Type const * */D_array::itcheck(Env &env, Type const *elttype,  
+void /*Type const * */D_array::itcheck(Env &env, Type const *elttype,
                                        DeclFlags dflags, Declarator *declarator)
 {
   ArrayType *at;
@@ -586,7 +586,7 @@ void /*Type const * */D_array::itcheck(Env &env, Type const *elttype,
 }
 
 
-void /*Type const * */D_bitfield::itcheck(Env &env, Type const *base, 
+void /*Type const * */D_bitfield::itcheck(Env &env, Type const *base,
                                           DeclFlags dflags, Declarator *declarator)
 {
   trace("tcheck")
@@ -628,7 +628,7 @@ void Statement::tcheck(Env &env)
 
   // do inner typecheck
   itcheck(env);
-  
+
   env.popLocation();
 }
 
@@ -821,7 +821,7 @@ void S_continue::itcheck(Env &env)
 void S_return::itcheck(Env &env)
 {
   // ensure my 'next' is null
-  env.clearNexts();          
+  env.clearNexts();
   xassert(next == NULL);
 
   Type const *rettype = env.getCurrentRetType();
@@ -949,7 +949,7 @@ string Statement::successorsToString() const
 
   for (VoidListIter iter(succYesCont); !iter.isDone(); iter.adv()) {
     NextPtr np = iter.data();
-    
+
     // a leading "(c)" means the successor edge is only present when
     // this node is reached via continue; a trailing "(c)" means that
     // successor is itself a continue edge; the algorithm assumes
@@ -982,7 +982,7 @@ string nextPtrString(NextPtr np)
 Type const *Expression::tcheck(Env &env)
 {
   type = itcheck(env);
-  
+
   // it's important we cound paths *after* typechecking, because
   // the path counter will rely on the fact that all subexpressions
   // have already had their paths counted
@@ -1062,7 +1062,7 @@ Type const *E_variable::itcheck(Env &env)
     // redundant..)
     CompoundType const *ct = scopeType->ifCompoundType();
     if (!ct || (ct->keyword == CompoundType::K_UNION)) {
-      return env.err(stringc << "qualifier must be struct or class, in " 
+      return env.err(stringc << "qualifier must be struct or class, in "
                              << toString());
     }
 
@@ -1110,7 +1110,7 @@ Type const *E_variable::itcheck(Env &env)
 }
 
 
-Type const *typeError(Env &env, Expression const *expr, 
+Type const *typeError(Env &env, Expression const *expr,
                       Type const *type, char const *msg)
 {
   if (type->isError()) {
@@ -1270,7 +1270,7 @@ Type const *coerceArrayToPointer(Env &env, Type const *t, Expression *&nodePtr)
   newNode->type = t;
   newNode->numPaths = nodePtr->numPaths;
   nodePtr = newNode;
-  
+
   return t;
 }
 
@@ -1320,7 +1320,7 @@ Type const *E_addrOf::itcheck(Env &env)
       // for globals, we require that DF_ADDRTAKEN be specified by
       // an attribute, for it to be legal to take that global's
       // address, so we have a consistent view across compilation
-      // units                                 
+      // units
       //
       // I allow a tracing flag to suppress this error since I want
       // to parse c.in4d with my C++ grammar, which doesn't have
@@ -1336,7 +1336,7 @@ Type const *E_addrOf::itcheck(Env &env)
   return env.makePtrOperType(PO_POINTER, CV_NONE, t);
 }
 
-                              
+
 Type const *E_deref::itcheck(Env &env)
 {
   Type const *t = ptr->tcheck(env)->asRval();
@@ -1457,7 +1457,7 @@ Type const *E_quantifier::itcheck(Env &env)
 
   // typecheck the predicate
   Type const *type = pred->tcheck(env)->asRval();
-  
+
   // I really want this to be an int.. in fact I want it to be
   // bool, but that type doesn't exist (yet?)
   if (!type->isSimple(ST_INT)) {
@@ -1639,12 +1639,12 @@ string E_unary::toString() const
   { return stringc << ::toString(op) << expr->toString(); }
 
 string E_effect::toString() const
-{ 
+{
   if (isPostfix(op)) {
     return stringc << expr->toString() << ::toString(op);
   }
   else {
-    return stringc << ::toString(op) << expr->toString(); 
+    return stringc << ::toString(op) << expr->toString();
   }
 }
 
@@ -1709,7 +1709,7 @@ string E_quantifier::toString() const
   E_funCall
   E_fieldAcc
   E_sizeof
-  E_unary 
+  E_unary
   E_effect
   E_binary
   E_addrOf
@@ -1732,7 +1732,7 @@ void IN_expr::tcheck(Env &env, Type const *type)
 void IN_compound::tcheck(Env &env, Type const *type)
 {
   // for now, ignore labels
-  
+
   if (type->isArrayType()) {
     ArrayType const &at = type->asArrayTypeC();
 
@@ -1752,11 +1752,11 @@ void IN_compound::tcheck(Env &env, Type const *type)
   else if (type->isCVAtomicType() &&
            type->asCVAtomicTypeC().atomic->isCompoundType()) {
     CompoundType const &ct = type->asCVAtomicTypeC().atomic->asCompoundTypeC();
-    
+
     if (ct.keyword == CompoundType::K_UNION) {
       env.err("I don't know how to initialize unions");
       return;
-    }        
+    }
 
     // iterate simultanously over fields and initializers, establishing
     // correspondence
@@ -1774,7 +1774,7 @@ void IN_compound::tcheck(Env &env, Type const *type)
 
       // check this initializer against the field it initializes
       iter.data()->tcheck(env, f->type);
-      
+
       field++;
     }
 

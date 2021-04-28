@@ -125,12 +125,12 @@ void MLSubstrate::handle(char const *str, int len, char finalDelim)
           state = ST_APOSTROPHE2;
         }
         break;
-        
+
       case ST_APOSTROPHE2:
         if (*str == '\'') {
           state = ST_NORMAL;    // finishes the character literal
         }
-        else {                  
+        else {
           // whole thing is a type variable; but if *str is something
           // like ')' then we need to consider its effects on nesting
           state = ST_NORMAL;
@@ -206,12 +206,12 @@ string MLSubstrate::getDeclName() const
   // just before the first '(' is the function's name
   char const *start = text.c_str();
   char const *p = start;
-  
+
   // find first '('
   while (*p && *p!='(') { p++; }
   if (!*p) {
     xformat("missing '('");
-  }             
+  }
   if (p == start) {
     xformat("missing name");
   }
@@ -223,13 +223,13 @@ string MLSubstrate::getDeclName() const
     xformat("missing name");
   }
   char const *nameEnd = p+1;    // char just past last
-  
+
   // move backward through the name
-  while (p>=start && 
+  while (p>=start &&
          (isalnum(*p) || *p=='_'))
     { p--; }
   p++;    // move back to most recent legal char
-  
+
   // done
   return substring(p, nameEnd-p);
 }
@@ -373,10 +373,10 @@ int Test::main(int argc, char *argv[])
   if (argc >= 2) {
     // analyze the files passed as an argument, expecting them to be
     // complete caml source files, ending in normal mode with all
-    // delimiters closed         
+    // delimiters closed
     for (int i=1; i<argc; i++) {
       string text = readStringFromFile(argv[i]);
-      
+
       ML ml;
       silentFeed(ml, text.c_str());
 
@@ -418,7 +418,7 @@ int Test::main(int argc, char *argv[])
   str("main() { printf(\"hello \\", 2, true);
   str("main() { printf(\"hello \\ world", 2, false);
   str("main() { printf(\"hello \\ world\", \"hi", 2, false);
-  
+
   // escaped newline
   normal("main() { printf(\"hello \\\n world\"); }", 0);
 

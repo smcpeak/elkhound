@@ -14,5 +14,5 @@ nonterm E {
   fun del(v)     []
 
   -> a:E p b:E ;
-  -> b         ; 
+  -> b         ;
 }

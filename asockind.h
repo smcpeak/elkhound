@@ -5,7 +5,7 @@
 #define ASOCKIND_H
 
 #include "str.h"      // string
-  
+
 // specifies what to do when there is a shift/reduce conflict, and
 // the production and token have the same precedence; this is attached
 // to the token

@@ -101,7 +101,7 @@
 #define noloc(str)                                                    \
   new LocString(SL_UNKNOWN,      /* unknown location */               \
                 PARAM->lexer.strtable.add(str))
-                
+
 // locstring for NULL, with no location
 #define nolocNULL()                                                   \
   new LocString(SL_UNKNOWN, NULL)
@@ -1960,10 +1960,10 @@ yyreturn:
 
 /* ------------------ extra C code ------------------ */
 AssocKind whichKind(LocString * /*owner*/ kind)
-{ 
+{
   // delete 'kind' however we exit
   Owner<LocString> killer(kind);
-  
+
   #define CHECK(syntax, value)   \
     if (kind->equals(syntax)) {  \
       return value;              \

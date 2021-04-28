@@ -20,12 +20,12 @@ int binops()
 
 int unops(int x)
 {
-  int r;     
-  
+  int r;
+
   r = -x;
   r = !x;
   r = ~x;
-  
+
   return r;
 }
 
@@ -72,18 +72,18 @@ void insts()
   z = unops(x);
   x = twoArgFn(y,z);
   { x=1; y=2; }       // interestingly, this doesn't lead to a CilCompound
-  
+
   while (x) {
     y = 3;
   }
 
-  if (x) { 
+  if (x) {
     z = 1;
   }
   else {
     z = 2;
   }
-  
+
 mylabel:
   x = 6;
   goto mylabel;

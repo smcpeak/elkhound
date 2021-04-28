@@ -24,10 +24,10 @@ int main()
     printf("parse error\n");
     return 2;
   }
-  
+
   // print result
   printf("result: %d\n", (int)result);
-  
+
   return 0;
 }
 

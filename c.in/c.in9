@@ -24,7 +24,7 @@ void foo()
   // not simplified!
   *(arr+1) = 4;
 
-  
+
   // unassigned lval cast rewrite
   f = (float)x;
 

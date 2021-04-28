@@ -69,7 +69,7 @@ public:
 
   StringRef delParam;       // param name; may be NULL to indicate not used
   LocString delCode;        // code
-  
+
 // ----------- annotation ------------
 public:
   bool reachable;           // computed by constructLRItemSets; true when nonterminal reachable from start symbol
@@ -107,7 +107,7 @@ public:      // funcs
     { return const_cast<Terminal*>(ifTerminalC()); }
 
   Nonterminal const *ifNonterminalC() const;
-  Nonterminal *ifNonterminal() 
+  Nonterminal *ifNonterminal()
     { return const_cast<Nonterminal*>(ifNonterminalC()); }
 
   // debugging
@@ -172,7 +172,7 @@ public:     // data
   // terminal class index - this terminal's id; -1 means unassigned
   int termIndex;
 
-protected:  // funcs  
+protected:  // funcs
   virtual void internalPrintDDM(ostream &os) const;
 
 public:     // funcs
@@ -246,12 +246,12 @@ public:     // funcs
 
   // call this to re-allocate at a new size; set is emptied
   void reset(int numTerms);
-                                               
+
   // true when the # of symbols is 0; an unfinished state
   bool nullMap() const { return bitmap==NULL; }
 
   bool contains(int terminalId) const;
-  
+
   // NOTE: can only compare dotted productions which have the
   // same number of symbols (assertion fail otherwise)
   bool isEqual(TerminalSet const &obj) const;
@@ -282,7 +282,7 @@ public:
   LocString keepCode;       // code to decide whether to keep a reduction
 
   bool maximal;             // if true, use maximal munch disambiguation
-  
+
   SObjList<Nonterminal> subsets;      // preferred subsets (for scannerless)
 
 protected:  // funcs
@@ -514,7 +514,7 @@ public:     // funcs
   // ---- building a grammar ----
   // declare a new token exists, with name and optional alias;
   // return false if it's already declared
-  bool declareToken(LocString const &symbolName, int code, 
+  bool declareToken(LocString const &symbolName, int code,
                     LocString const &alias);
 
   // add a new production; the rhs arg list must be terminated with a NULL

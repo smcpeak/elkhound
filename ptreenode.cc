@@ -13,7 +13,7 @@ int PTreeNode::alternativeCount = 0;
 
 
 void PTreeNode::init()
-{ 
+{
   merged = NULL;
   allocCount++;
 }
@@ -25,7 +25,7 @@ TreeCount PTreeNode::countTrees()
   if (count != 0) {
     return count;
   }
-  
+
   else {
     // a single tree can have any possibility for each of
     // its children, so the result is their product
@@ -33,7 +33,7 @@ TreeCount PTreeNode::countTrees()
     for (int i=0; i<numChildren; i++) {
       count *= children[i]->countTrees();
     }
-    
+
     // are there alternatives?
     if (merged) {
       // add them too (recurse down the list of alts)
@@ -57,7 +57,7 @@ void PTreeNode::printTree(ostream &out, PrintFlags pf) const
 // amount to indent per level
 enum { INDENT_INC = 2 };
 
-void PTreeNode::innerPrintTree(ostream &out, int indentation, 
+void PTreeNode::innerPrintTree(ostream &out, int indentation,
                                PrintFlags pf) const
 {
   int alts = 1;
@@ -150,6 +150,6 @@ void PTreeNode::addAlternative(PTreeNode *alt)
   // insert as 2nd element
   alt->merged = this->merged;
   this->merged = alt;
-  
+
   alternativeCount++;
 }

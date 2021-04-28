@@ -57,7 +57,7 @@ public:
 
   virtual char const *terminalName(int termId);
   virtual char const *nonterminalName(int termId);
-  
+
   ParseTables *getTables() { return tables; }
 };
 

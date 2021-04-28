@@ -6,7 +6,7 @@
 #include "c.ast.gen.h"       // C AST definitions
 
 void walkExpression(ExpressionVisitor &vis, Expression const *root)
-{     
+{
   // visit the current node
   vis.visitExpr(root);
 
@@ -20,7 +20,7 @@ void walkExpression(ExpressionVisitor &vis, Expression const *root)
     ASTNEXTC(E_fieldAcc, e)
       walkExpression(vis, e->obj);
 
-    ASTNEXTC(E_sizeof, e)     
+    ASTNEXTC(E_sizeof, e)
       // this is potentially bad since, e.g. if I'm searching for
       // modifications to variables, it doesn't hurt inside sizeof..
       // need walk cancellation semantics, but whatever
@@ -29,7 +29,7 @@ void walkExpression(ExpressionVisitor &vis, Expression const *root)
     ASTNEXTC(E_unary, e)
       walkExpression(vis, e->expr);
 
-    ASTNEXTC(E_effect, e)     
+    ASTNEXTC(E_effect, e)
       walkExpression(vis, e->expr);
 
     ASTNEXTC(E_binary, e)

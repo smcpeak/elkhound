@@ -16,7 +16,7 @@ string astTypeToString(int type)
     N(AST_INTEGER)
     N(AST_STRING)
     N(AST_NAME)
-    
+
     N(AST_TOPLEVEL)
     N(AST_TERMINALS)
     N(AST_TERMDECL)
@@ -73,7 +73,7 @@ string astTypeToString(int type)
       return arr[i].name;
     }
   }
-  
+
   xfailure("bad type code");
   return NULL;   // silence warning
 }

@@ -10,7 +10,7 @@ if (@ARGV < 1) {
         "  -ptree: emit code to build a parse tree\n");
   exit(0);
 }
-                          
+
 my $ptree = 0;
 if ($ARGV[0] eq "-ptree") {
   $ptree = 1;
@@ -110,7 +110,7 @@ while (defined($line = <STDIN>)) {
   if (defined($rule)) {
     $len = length($space) + length($rule);
     print($space, $rule, " " x (25-$len));
-    
+
     # text of the rule with quotes escaped
     ($ruleText = $rule) =~ s/\"/\\\"/g;
 
