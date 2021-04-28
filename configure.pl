@@ -8,6 +8,10 @@ $SMBASE = "../smbase";
 $req_smcv = 1.03;            # required sm_config version number
 $thisPackage = "elkhound";
 
+# Silence warning about "main::debug" being a possible typo.  It is
+# set by 'get_sm_config_version()' but perl does not see that.
+$main::debug = 0;
+
 # -------------- BEGIN common block ---------------
 # do an initial argument scan to find if smbase is somewhere else
 for (my $i=0; $i < @ARGV; $i++) {
