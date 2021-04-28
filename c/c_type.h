@@ -11,6 +11,8 @@
 #include "strtable.h"     // StringRef
 #include "strsobjdict.h"  // StrSObjDict
 
+#include <stdint.h>       // intptr_t
+
 // below, the type language refers to the AST language in exactly
 // one place: function pre/post conditions; the type language treats
 // these opaquely; it is important to prevent the type language from
@@ -46,7 +48,7 @@ public:     // funcs
   virtual ~AtomicType();
 
   // stand-in if I'm not really using ids..
-  long getId() const { return (long)this; }
+  intptr_t getId() const { return (intptr_t)this; }
 
   virtual Tag getTag() const = 0;
   bool isSimpleType() const { return getTag() == T_SIMPLE; }
@@ -235,7 +237,7 @@ public:     // funcs
   Type();
   virtual ~Type();
 
-  long getId() const { return (long)this; }
+  intptr_t getId() const { return (intptr_t)this; }
 
   virtual Tag getTag() const = 0;
   bool isCVAtomicType() const { return getTag() == T_ATOMIC; }

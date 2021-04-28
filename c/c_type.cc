@@ -226,7 +226,7 @@ NamedAtomicType::~NamedAtomicType()
 string NamedAtomicType::uniqueName() const
 {
   // 'a' for atomic
-  return stringc << "a" << (long)this /*id*/ << "_" << name;
+  return stringc << "a" << (intptr_t)this /*id*/ << "_" << name;
 }
 
 
