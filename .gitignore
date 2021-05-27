@@ -57,6 +57,7 @@ examples/scannerless/sless.cc
 examples/scannerless/sless.h
 glrconfig.h
 gramlex.yy.cc
+gramlex.yy.h
 grampar.output
 *.a
 mlsstr

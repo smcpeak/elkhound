@@ -4,7 +4,10 @@
 // the user supplies in a .gr file
 
 #include "grampar.h"         // this module
+
+#include "gramlex.yy.h"      // Needed by gramlex.h.
 #include "gramlex.h"         // GrammarLexer
+
 #include "trace.h"           // tracing debug functions
 #include "gramast.ast.gen.h" // grammar AST nodes
 #include "grammar.h"         // Grammar, Production, etc.

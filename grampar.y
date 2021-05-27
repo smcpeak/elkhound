@@ -7,7 +7,10 @@
 
 #include "grampar.h"        // yylex, etc.
 #include "gramast.ast.gen.h"// grammar syntax AST definition
+
+#include "gramlex.yy.h"     // Needed by gramlex.h.
 #include "gramlex.h"        // GrammarLexer
+
 #include "owner.h"          // Owner
 
 #include <stdlib.h>         // malloc, free

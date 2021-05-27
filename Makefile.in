@@ -21,9 +21,8 @@ ASTGEN    := $(AST)/astgen
 # external tools
 PERL := @PERL@
 
-FLEXDIR := ../flex
-RUNFLEX := $(FLEXDIR)/flex
-FLEXINC := $(FLEXDIR)
+SMFLEXDIR := ../smflex
+SMFLEX    := $(SMFLEXDIR)/smflex
 
 
 # remake the generated Makefile if its inputs have changed
@@ -47,7 +46,7 @@ CXX := @CXX@
 
 # flags for the C and C++ compilers (and preprocessor)
 # "-Ic" is needed for binaries that use $(support-set)
-CCFLAGS := @CCFLAGS@ -I$(SMBASE) -I$(FLEXINC) -I$(AST) -Ic
+CCFLAGS := @CCFLAGS@ -I$(SMBASE) -I$(AST) -Ic
 
 # flags for the linker
 libraries := $(LIBAST) $(LIBSMBASE)
@@ -189,12 +188,14 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 
 
 # ------------------- intermediate files --------------------
-# grammar lexer
-gramlex.yy.cc: gramlex.lex
-	$(RUNFLEX) -o$@ gramlex.lex
+# Rule for running smflex.
+%.yy.cc %.yy.h: %.lex
+	$(SMFLEX) -o$*.yy.cc $*.lex
 
 # grammar description AST (manual instantiation of above
 # commented-out pattern rule)
+#
+# TODO: This multi-target rule is not safe.
 .PRECIOUS: gramast.ast.gen.cc gramast.ast.gen.h
 gramast.ast.gen.cc gramast.ast.gen.h: gramast.ast $(AST)/astgen
 	rm -f gramast.ast.gen.*
@@ -205,6 +206,8 @@ gramast.ast.gen.cc gramast.ast.gen.h: gramast.ast $(AST)/astgen
 # I have to make some changes to the generated output so it will compile
 # with a C++ compiler, and want to extract the codes so they're available
 # separately without having to know about all of the types in YYSTYPE.
+#
+# TODO: This multi-target rule is not safe.
 grampar.tab.cc grampar.tab.h grampar.codes.h: grampar.y
 	bison -d -v grampar.y
 	@#
@@ -220,6 +223,8 @@ grampar.tab.cc grampar.tab.h grampar.codes.h: grampar.y
 	sed -n -e '/enum yytokentype/,/};/p' < grampar.tab.h > grampar.codes.h
 
 # new C++ grammar with treebuilding actions
+#
+# TODO: This multi-target rule is not safe.
 cc2/cc2t.gr.gen.cc cc2/cc2t.gr.gen.h cc2/cc2t.gr.gen.y: cc2/cc2.gr c/c.tok elkhound
 	rm -f cc2/cc2t*
 	sed -e 's/cc2\.gr\.gen\.h/cc2t.gr.gen.h/' <cc2/cc2.gr >cc2/cc2t.gr
@@ -569,6 +574,7 @@ clean: gcom-clean
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
 	rm -f examples/crash1.{cc,h}
+	rm -f c.in/c.in4c c.in/c.in4d
 	cd cc2; rm -f $(CLEAN_PATTERNS)
 	cd triv; rm -f $(CLEAN_PATTERNS) *.y *.gr
 	for dir in arith cdecl cexp; do \

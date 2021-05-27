@@ -8,6 +8,8 @@
  * design tension.
  */
 
+%smflex 100
+
 /* ----------------- C definitions -------------------- */
 %{
 
@@ -24,16 +26,13 @@
 // for maintaining column count
 #define TOKEN_START  tokenStartLoc = fileState.loc /* user ; */
 #define UPD_COL      \
-  fileState.loc = sourceLocManager->advCol(fileState.loc, yyleng)  /* user ; */
+  fileState.loc = sourceLocManager->advCol(fileState.loc, YY_LENG)  /* user ; */
 #define TOK_UPD_COL  TOKEN_START; UPD_COL  /* user ; */
 
 %}
 
 
 /* -------------------- flex options ------------------ */
-/* no wrapping is needed; setting this means we don't have to link with libfl.a */
-%option noyywrap
-
 /* don't use the default-echo rules */
 %option nodefault
 
@@ -42,6 +41,8 @@
 
 /* and I will define the class */
 %option yyclass="GrammarLexer"
+
+/* This intentionally shares a prefix with ../ast/agramlex.lex. */
 
 
 /* ------------------- definitions -------------------- */
@@ -116,15 +117,15 @@ HWHITE    [ \t\f\v\r]
   /* C-style comments */
   TOKEN_START;
   UPD_COL;
-  prevState = YY_START;
-  BEGIN(C_COMMENT);
+  prevState = YY_GET_START_CONDITION();
+  YY_SET_START_CONDITION(C_COMMENT);
 }
 
 <C_COMMENT>{
   "*/" {
     /* end of comment */
     UPD_COL;
-    BEGIN(prevState);
+    YY_SET_START_CONDITION(prevState);
   }
 
   . {
@@ -137,7 +138,7 @@ HWHITE    [ \t\f\v\r]
   }
 
   <<EOF>> {
-    UPD_COL;      // <<EOF>> yyleng is 1!
+    UPD_COL;      // <<EOF>> YY_LENG is 1!
     errorUnterminatedComment();
     return TOK_EOF;
   }
@@ -147,7 +148,7 @@ HWHITE    [ \t\f\v\r]
 "//".*"\n" {
   /* C++-style comment -- eat it */
   TOKEN_START;
-  advCol(yyleng-1);   // don't count newline
+  advCol(YY_LENG-1);   // don't count newline
   newLine();          // count it here
 }
 
@@ -174,7 +175,7 @@ HWHITE    [ \t\f\v\r]
    * delimited embedded sequences */
 "[" {
   TOK_UPD_COL;
-  BEGIN(LITCODE);
+  YY_SET_START_CONDITION(LITCODE);
   beginEmbed(']', TOK_LIT_CODE);
 }
 
@@ -183,14 +184,14 @@ HWHITE    [ \t\f\v\r]
    * section of literal code */
 "->" {
   TOK_UPD_COL;
-  BEGIN(RHS);
+  YY_SET_START_CONDITION(RHS);
   return TOK_ARROW;
 }
 
   /* "{" in a RHS begins embedded */
 <RHS,FUN>"{" {
   TOK_UPD_COL;
-  BEGIN(LITCODE);
+  YY_SET_START_CONDITION(LITCODE);
   beginEmbed('}', TOK_LIT_CODE);
 }
 
@@ -204,7 +205,7 @@ HWHITE    [ \t\f\v\r]
    * ";", the semicolon gets out of RHS mode */
 <INITIAL,RHS>";" {
   TOK_UPD_COL;
-  BEGIN(INITIAL);     // if in RHS, reset to INITIAL
+  YY_SET_START_CONDITION(INITIAL);     // if in RHS, reset to INITIAL
   return TOK_SEMICOLON;
 }
 
@@ -213,14 +214,14 @@ HWHITE    [ \t\f\v\r]
    * the start of an embedded sequence. */
 "token"|"nonterm" {
   TOK_UPD_COL;
-  BEGIN(OPTIONAL_TYPE);
-  return yytext[0]=='t'? TOK_TOKEN : TOK_NONTERM;
+  YY_SET_START_CONDITION(OPTIONAL_TYPE);
+  return YY_TEXT[0]=='t'? TOK_TOKEN : TOK_NONTERM;
 }
 
   /* so now this begins embedded */
 <OPTIONAL_TYPE>"(" {
   TOK_UPD_COL;
-  BEGIN(LITCODE);
+  YY_SET_START_CONDITION(LITCODE);
   beginEmbed(')', TOK_LIT_CODE);
 }
 
@@ -233,15 +234,15 @@ HWHITE    [ \t\f\v\r]
   /* function beginning */
 "fun" {
   TOK_UPD_COL;
-  BEGIN(FUN);            // treat "{" as beginning literal code
+  YY_SET_START_CONDITION(FUN);            // treat "{" as beginning literal code
   return TOK_FUN;
 }
 
   /* verbatim beginning */
 "verbatim"|"impl_verbatim" {
   TOK_UPD_COL;
-  BEGIN(FUN);            // close enough
-  return yytext[0]=='v'? TOK_VERBATIM : TOK_IMPL_VERBATIM;
+  YY_SET_START_CONDITION(FUN);            // close enough
+  return YY_TEXT[0]=='v'? TOK_VERBATIM : TOK_IMPL_VERBATIM;
 }
 
 
@@ -251,22 +252,22 @@ HWHITE    [ \t\f\v\r]
 <LITCODE>{
   [^\]\})\n]+ {
     UPD_COL;
-    embedded->handle(yytext, yyleng, embedFinish);
+    embedded->handle(YY_TEXT, YY_LENG, embedFinish);
   }
 
   "\n" {
     newLine();
-    embedded->handle(yytext, yyleng, embedFinish);
+    embedded->handle(YY_TEXT, YY_LENG, embedFinish);
   }
 
   ("]"|"}"|")") {
     UPD_COL;
     if (embedded->zeroNesting()) {
       // done
-      BEGIN(INITIAL);
+      YY_SET_START_CONDITION(INITIAL);
 
       // check for balanced delimiter
-      if (embedFinish != yytext[0]) {
+      if (embedFinish != YY_TEXT[0]) {
         err("unbalanced literal code delimiter");
       }
 
@@ -281,25 +282,25 @@ HWHITE    [ \t\f\v\r]
     }
     else {
       // delimeter paired within the embedded code, mostly ignore it
-      embedded->handle(yytext, yyleng, embedFinish);
+      embedded->handle(YY_TEXT, YY_LENG, embedFinish);
     }
   }
 
   <<EOF>> {
     err(stringc << "hit end of file while looking for final `"
                 << embedFinish << "'");
-    yyterminate();
+    YY_TERMINATE();
   }
 }
 
 
   /* embedded *type* description */
 "context_class" {
-  /* caller will get text from yytext and yyleng */
+  /* caller will get text from YY_TEXT and YY_LENG */
   TOK_UPD_COL;
 
   /* drop into literal-code processing */
-  BEGIN(LITCODE);
+  YY_SET_START_CONDITION(LITCODE);
 
   /* I reset the initial nesting to -1 so that the '{' at the
    * beginning of the class body sets nesting to 0, thus when
@@ -313,7 +314,7 @@ HWHITE    [ \t\f\v\r]
   /* ---------- includes ----------- */
 "include" {
   TOK_UPD_COL;    /* hence no TOKEN_START in INCLUDE area */
-  BEGIN(INCLUDE);
+  YY_SET_START_CONDITION(INCLUDE);
 }
 
 <INCLUDE>{
@@ -323,7 +324,7 @@ HWHITE    [ \t\f\v\r]
     UPD_COL;
 
     /* find quotes */
-    char *leftq = strchr(yytext, '"');
+    char *leftq = strchr(YY_TEXT, '"');
     char *rightq = strchr(leftq+1, '"');
     xassert(leftq && rightq);
 
@@ -331,7 +332,7 @@ HWHITE    [ \t\f\v\r]
     includeFileName = addString(leftq+1, rightq-leftq-1);
 
     /* go back to normal processing */
-    BEGIN(INITIAL);
+    YY_SET_START_CONDITION(INITIAL);
     return TOK_INCLUDE;
   }
 
@@ -341,7 +342,7 @@ HWHITE    [ \t\f\v\r]
     errorMalformedInclude();
 
     /* rudimentary error recovery.. */
-    BEGIN(EAT_TO_NEWLINE);
+    YY_SET_START_CONDITION(EAT_TO_NEWLINE);
   }
 }
 
@@ -354,16 +355,16 @@ HWHITE    [ \t\f\v\r]
   "\n" {
     /* get out of here */
     newLine();
-    BEGIN(INITIAL);
+    YY_SET_START_CONDITION(INITIAL);
   }
 }
 
   /* -------- name literal --------- */
 {LETTER}({LETTER}|{DIGIT})* {
-  /* get text from yytext and yyleng */
+  /* get text from YY_TEXT and YY_LENG */
   TOK_UPD_COL;
-  if (YY_START == OPTIONAL_TYPE) {
-    BEGIN(INITIAL);      // bail out of OPTIONAL_TYPE mode
+  if (YY_GET_START_CONDITION() == OPTIONAL_TYPE) {
+    YY_SET_START_CONDITION(INITIAL);      // bail out of OPTIONAL_TYPE mode
   }
   return TOK_NAME;
 }
@@ -371,21 +372,21 @@ HWHITE    [ \t\f\v\r]
   /* -------- numeric literal ------ */
 {DIGIT}+ {
   TOK_UPD_COL;
-  integerLiteral = strtoul(yytext, NULL, 10 /*radix*/);
+  integerLiteral = strtoul(YY_TEXT, NULL, 10 /*radix*/);
   return TOK_INTEGER;
 }
 
   /* ----------- string literal ----- */
 {DQUOTE}{STRCHR}*{DQUOTE} {
   TOK_UPD_COL;
-  stringLiteral = addString(yytext+1, yyleng-2);        // strip quotes
+  stringLiteral = addString(YY_TEXT+1, YY_LENG-2);        // strip quotes
   return TOK_STRING;
 }
 
   /* --------- illegal ------------- */
 {ANY} {
   TOK_UPD_COL;
-  errorIllegalCharacter(yytext[0]);
+  errorIllegalCharacter(YY_TEXT[0]);
 }
 
 
