@@ -140,7 +140,7 @@ clean:
 	rm -f lexer2 cparse bcparse
 
 distclean: clean
-	rm -f Makefile config.status config.summary
+	rm -f Makefile config.status config.summary testcout.exe
 
 toolclean: clean
 	rm -f lexer1yy.cc
