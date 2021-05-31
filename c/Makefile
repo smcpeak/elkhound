@@ -1,41 +1,86 @@
-# Makefile.in
+# elkhound/c/Makefile
 # this is the Makefile for the Elkhound-based C Parser
 
 # main target: an Elkhound-based C parser
 all: cparse
 
+
+# ------------------------- Configuration --------------------------
 # directories of other software
-SMBASE   := @SMBASE@
-AST      := @AST@
-ELKHOUND := @ELKHOUND@
+SMBASE   = ../../smbase
+AST      = ../../ast
+ELKHOUND = ..
 
 # stuff inside those other directories
-LIBSMBASE   := $(SMBASE)/libsmbase.a
-LIBAST      := $(AST)/libast.a
-LIBELKHOUND := $(ELKHOUND)/libelkhound.a
+LIBSMBASE   = $(SMBASE)/libsmbase.a
+LIBAST      = $(AST)/libast.a
+LIBELKHOUND = $(ELKHOUND)/libelkhound.a
+
+# C++ compiler.
+CXX = g++
+
+# Flags to control generation of debug info.
+DEBUG_FLAGS = -g
+
+# Flags to enable dependency generation of .d files.
+GENDEPS_FLAGS = -MMD
+
+# Flags to control optimization.
+OPTIMIZATION_FLAGS = -O2
+
+# Flags to control compiler warnings.
+WARNING_FLAGS =
+
+# Flags for C++ standard to use.
+CXX_STD_FLAGS = -std=c++11
+
+# Preprocessing flags.
+CPPFLAGS = -I$(SMBASE) -I$(AST) -I$(ELKHOUND)
+
+# Flags for the C++ compiler and preprocessor.
+#
+# Note: $(GENDEPS_FLAGS) are not included because these flags are used
+# for linking too, and if that used $(GENDEPS_FLAGS) then the .d files
+# for .o files would be overwritten with info for .exe files.
+CXXFLAGS = $(DEBUG_FLAGS) $(OPTIMIZATION_FLAGS) $(WARNING_FLAGS) $(CXX_STD_FLAGS) $(CPPFLAGS)
+
+# Libraries to link with when creating executables.
+LIBS = $(LIBELKHOUND) $(LIBAST) $(LIBSMBASE)
+
+# Flags to add to a link command *in addition* to either $(CFLAGS) or
+# $(CXXFLAGS), depending on whether C++ modules are included.
+LDFLAGS =
 
 
-# re-create the Makefile if Makefile.in has changed
-Makefile: Makefile.in
-	./config.status
+# ---- Automatic Configuration ----
+# Pull in settings from ./configure.  They override the defaults above,
+# and are in turn overridden by personal.mk, below.
+ifeq ($(wildcard config.mk),)
+  $(error The file 'config.mk' does not exist.  Run './configure' before 'make'.)
+endif
+include config.mk
 
 
-# ----------------------- compiler configuration -------------------
-# C++ preprocessor, compiler and linker
-CXX := g++
+# ---- Customization ----
+# Allow customization of the above variables in a separate file.  Just
+# create personal.mk with desired settings.
+#
+# Common things to set during development:
+#
+#   WERROR = -Werror
+#   WARNING_FLAGS = -Wall $(WERROR)
+#   OPTIMIZATION_FLAGS =
+#
+-include personal.mk
 
-# flags for the C++ compiler (and preprocessor)
-CCFLAGS := @CCFLAGS@ -I$(SMBASE) -I$(AST) -I$(ELKHOUND)
 
-# flags for the linker
-libraries := $(LIBELKHOUND) $(LIBAST) $(LIBSMBASE)
-LDFLAGS := -g -Wall $(libraries)
+# ----------------------------- Rules ------------------------------
+# Get rid of some built-in rules.
+.SUFFIXES:
 
-
-# compile .cc in this directory to a .o
+# Compile .cc to .o, also generating dependency files.
 %.o: %.cc
-	$(CXX) -c -o $@ $< $(CCFLAGS)
-	@perl ../depend.pl -o $@ $< $(CCFLAGS) >$*.d
+	$(CXX) -c -o $@ $(GENDEPS_FLAGS) $(CXXFLAGS) $<
 
 
 # ----------------------- lexer2 -------------------
@@ -51,8 +96,8 @@ LEXER2_OBJS := \
   cc_lang.o
 
 # lexer2 stand-alone binary
-lexer2: lexer2.cc lexer2.h $(LEXER2_OBJS)
-	$(CXX) -o $@ -DTEST_LEXER2 $(CCFLAGS) lexer2.cc $(LEXER2_OBJS) $(LDFLAGS)
+lexer2: lexer2.cc lexer2.h $(LEXER2_OBJS) $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) -DTEST_LEXER2 $(LDFLAGS) lexer2.cc $(LEXER2_OBJS) $(LIBS)
 
 
 # ------------------------- cparse ---------------------
@@ -94,8 +139,8 @@ CPARSE_OBJS := \
   main.o
 
 # parser binary
-cparse: $(CPARSE_OBJS)
-	$(CXX) -o $@ $(CPARSE_OBJS) $(LDFLAGS)
+cparse: $(CPARSE_OBJS) $(LIBS)
+	$(CXX) -o $@ $(CPARSE_OBJS) $(LDFLAGS) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
 
 
@@ -128,8 +173,8 @@ bcparse.y: c.gr.gen.y
 
 # C-without-typedefs parser, using Bison
 bcparse-deps := bcparse.cc bcparse.tab.o lexer1.o lexer1yy.o lexer2.o cc_lang.o
-bcparse: $(bcparse-deps) $(libraries)
-	$(CXX) -o $@ $(CCFLAGS) $(bcparse-deps) $(LDFLAGS)
+bcparse: $(bcparse-deps) $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(bcparse-deps) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
 
 
@@ -140,10 +185,11 @@ clean:
 	rm -f lexer2 cparse bcparse
 
 distclean: clean
-	rm -f Makefile config.status config.summary testcout.exe
+	rm -f config.mk
 
 toolclean: clean
 	rm -f lexer1yy.cc
 
 check:
 	@echo "The C parser doesn't have an independent 'make check'."
+	@echo "Run 'make check' in Elkhound to run the C parser tests."

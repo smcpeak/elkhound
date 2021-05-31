@@ -2,7 +2,9 @@
 # Sorted in "env LANG=C sort" order.
 
 c.tok
+config.mk
 cparse
 lexer2
+personal.mk
 
 # EOF
