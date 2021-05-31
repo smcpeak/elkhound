@@ -1,20 +1,23 @@
-.vscode
-Makefile
+# .gitignore
+# Sorted in "env LANG=C sort" order.
+
+*.a
 *.d
-*.o
-c.in/c.in4c
-c.in/c.in4d
+*.exe
 *.gen.cc
 *.gen.h
+*.gen.out
 *.gen.y
+*.o
+.vscode
+Makefile
+c.in/c.in4c
+c.in/c.in4d
 c/c.tok
-config.status
-config.summary
 c/cparse
 c/lexer2
-testcout
-*.exe
-*.gen.out
+config.status
+config.summary
 elkhound
 examples/arith/arith
 examples/cdecl/cdecl
@@ -59,7 +62,9 @@ glrconfig.h
 gramlex.yy.cc
 gramlex.yy.h
 grampar.output
-*.a
 mlsstr
 test-bad-tmp.c
+testcout
 triv/*.gr
+
+# EOF
