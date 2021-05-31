@@ -570,7 +570,7 @@ clean: gcom-clean
 	rm -f $(CLEAN_PATTERNS)
 	rm -f elkhound glr gramlex cyctimer
 	rm -f grampar.output grampar tlexer
-	rm -f gramlex.yy.cc
+	rm -f gramlex.yy.cc gramlex.yy.h
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
 	rm -f examples/crash1.{cc,h}
