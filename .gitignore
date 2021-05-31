@@ -13,9 +13,6 @@
 Makefile
 c.in/c.in4c
 c.in/c.in4d
-c/c.tok
-c/cparse
-c/lexer2
 config.status
 config.summary
 elkhound

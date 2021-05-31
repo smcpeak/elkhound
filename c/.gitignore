@@ -1,0 +1,8 @@
+# c/.gitignore
+# Sorted in "env LANG=C sort" order.
+
+c.tok
+cparse
+lexer2
+
+# EOF
