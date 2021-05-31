@@ -35,7 +35,7 @@ LDFLAGS := -g -Wall $(libraries)
 # compile .cc in this directory to a .o
 %.o: %.cc
 	$(CXX) -c -o $@ $< $(CCFLAGS)
-	@perl $(SMBASE)/depend.pl -o $@ $< $(CCFLAGS) >$*.d
+	@perl ../depend.pl -o $@ $< $(CCFLAGS) >$*.d
 
 
 # ----------------------- lexer2 -------------------
