@@ -4,6 +4,8 @@
 c.tok
 config.mk
 cparse
+lexer1.lex.cc
+lexer1.lex.h
 lexer2
 personal.mk
 

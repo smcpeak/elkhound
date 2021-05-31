@@ -46,7 +46,7 @@ extras := \
   $(ELKHOUND)/c/parssppt.o \
   $(ELKHOUND)/c/lexer2.o \
   $(ELKHOUND)/c/lexer1.o \
-  $(ELKHOUND)/c/lexer1yy.o \
+  $(ELKHOUND)/c/lexer1.lex.o \
   $(ELKHOUND)/c/cc_lang.o
 
 # cexp3b: disambiguation using 'merge'

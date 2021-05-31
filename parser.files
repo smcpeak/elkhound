@@ -20,7 +20,8 @@ grampar.codes.h
 grampar.h
 lexer1.cc
 lexer1.h
-lexer1yy.cc
+lexer1.lex.cc
+lexer1.lex.h
 lexer2.cc
 lexer2.h
 lexer2stub.cc

@@ -104,7 +104,7 @@ support-set := \
   c/cc_lang.o \
   c/parssppt.o \
   c/lexer1.o \
-  c/lexer1yy.o \
+  c/lexer1.lex.o \
   c/lexer2.o
 
 #-include $(support-set:.o=.d)

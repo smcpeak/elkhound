@@ -51,6 +51,9 @@ LIBS = $(LIBELKHOUND) $(LIBAST) $(LIBSMBASE)
 # $(CXXFLAGS), depending on whether C++ modules are included.
 LDFLAGS =
 
+# Other tools.
+SMFLEX = ../../smflex/smflex
+
 
 # ---- Automatic Configuration ----
 # Pull in settings from ./configure.  They override the defaults above,
@@ -78,21 +81,27 @@ include config.mk
 # Get rid of some built-in rules.
 .SUFFIXES:
 
+# Delete a target when its recipe fails.
+.DELETE_ON_ERROR:
+
+# Do not remove "intermediate" targets.
+.SECONDARY:
+
 # Compile .cc to .o, also generating dependency files.
 %.o: %.cc
 	$(CXX) -c -o $@ $(GENDEPS_FLAGS) $(CXXFLAGS) $<
 
 
 # ----------------------- lexer2 -------------------
-# run flex on the lexer description
-lexer1yy.cc: lexer1.lex lexer1.h
-	flex lexer1.lex
+# run smflex on the lexer description
+%.lex.cc %.lex.h: %.lex
+	$(SMFLEX) -o$*.lex.cc $*.lex
 
 
 # modules needed for lexer2 stand-alone
 LEXER2_OBJS := \
   lexer1.o \
-  lexer1yy.o \
+  lexer1.lex.o \
   cc_lang.o
 
 # lexer2 stand-alone binary
@@ -106,11 +115,15 @@ c.tok: lexer2
 	./lexer2 -myparser >$@
 
 # run astgen to generate the AST implementation
+#
+# TODO: Multi-target non-pattern rules are not safe.
 c.ast.gen.h c.ast.gen.cc: c.ast
 	$(AST)/astgen -oc.ast.gen c.ast
 
 
 # run elkhound to generate the parser
+#
+# TODO: Multi-target non-pattern rules are not safe.
 c.gr.gen.h c.gr.gen.cc c.gr.gen.y: c.gr c.tok
 	$(ELKHOUND)/elkhound -tr bison -v -o c.gr.gen c.gr
 
@@ -118,7 +131,7 @@ c.gr.gen.h c.gr.gen.cc c.gr.gen.y: c.gr c.tok
 # list of modules needed for the parser
 CPARSE_OBJS := \
   lexer1.o \
-  lexer1yy.o \
+  lexer1.lex.o \
   cc_lang.o \
   lexer2.o \
   parssppt.o \
@@ -172,7 +185,7 @@ bcparse.y: c.gr.gen.y
 	$(CXX) -c -g -o $*.tab.o -O2 -DNDEBUG -Wall $(YYDEBUG) $*.tab.c
 
 # C-without-typedefs parser, using Bison
-bcparse-deps := bcparse.cc bcparse.tab.o lexer1.o lexer1yy.o lexer2.o cc_lang.o
+bcparse-deps := bcparse.cc bcparse.tab.o lexer1.o lexer1.lex.o lexer2.o cc_lang.o
 bcparse: $(bcparse-deps) $(LIBS)
 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(bcparse-deps) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
@@ -182,13 +195,11 @@ bcparse: $(bcparse-deps) $(LIBS)
 clean:
 	rm -f *.o *.d *.gen.* *.tab.* *.output a.out core
 	rm -f bcparse.y c.tok
+	rm -f lexer1.lex.{cc,h}
 	rm -f lexer2 cparse bcparse
 
 distclean: clean
 	rm -f config.mk
-
-toolclean: clean
-	rm -f lexer1yy.cc
 
 check:
 	@echo "The C parser doesn't have an independent 'make check'."

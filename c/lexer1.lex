@@ -2,21 +2,25 @@
    flex scanner for Lexer 1 of C++ compiler
    see lexer1.txt for specification */
 
+%smflex 101
+
 /******************/
 /* C declarations */
 /******************/
 
-  #include "lexer1.h"        /* Lexer 1 stuff */
-
+%header{
+#include "lexer1.h"        /* Lexer1 */
+%}
 
 /****************/
 /* flex options */
 /****************/
 
-%option noyywrap
-%option nounput
-%option outfile="lexer1yy.cc"
-%option prefix="lexer1_"
+%option prefix="lexer1"
+
+/* Interface to the lexer. */
+%option yy_lex_name="lexer1_inner_lex"
+%option yy_lex_parameters="Lexer1 &lexer"
 
 
 /********************/
@@ -28,12 +32,6 @@
 
   // used for 2nd and 3rd arguments to lexer1Emit
   #define COLLECTOR (char*)collector.getDataC(), collector.getDataLen()
-
-  // declare the interface to the lexer
-  #define YY_DECL int lexer1_inner_lex(Lexer1 &lexer)
-
-  // this works around a problem with cygwin & fileno
-  #define YY_NEVER_INTERACTIVE 1
 
 
 /***************/
@@ -118,55 +116,55 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
 
   /* identifier: e.g. foo */
 {LETTER}{ALNUM}* {
-  lexer.emit(L1_IDENTIFIER, yytext, yyleng);
+  lexer.emit(L1_IDENTIFIER, YY_TEXT, YY_LENG);
 }
 
   /* integer literal; dec, oct, or hex */
 [1-9][0-9]*{INT_SUFFIX}?           |
 [0][0-7]*{INT_SUFFIX}?             |
 [0][xX][0-9A-Fa-f]+{INT_SUFFIX}?   {
-  lexer.emit(L1_INT_LITERAL, yytext, yyleng);
+  lexer.emit(L1_INT_LITERAL, YY_TEXT, YY_LENG);
 }
 
   /* floating literal */
 {DIGITS}"."{DIGITS}?([eE]{SIGN}?{DIGITS})?{FLOAT_SUFFIX}?   |
-{DIGITS}"."?([eE]{SIGN}?{DIGITS})?{FLOAT_SUFFIX}?	    |
-"."{DIGITS}([eE]{SIGN}?{DIGITS})?{FLOAT_SUFFIX}?	    {
-  lexer.emit(L1_FLOAT_LITERAL, yytext, yyleng);
+{DIGITS}"."?([eE]{SIGN}?{DIGITS})?{FLOAT_SUFFIX}?           |
+"."{DIGITS}([eE]{SIGN}?{DIGITS})?{FLOAT_SUFFIX}?            {
+  lexer.emit(L1_FLOAT_LITERAL, YY_TEXT, YY_LENG);
 }
 
   /* ----- string literal ------- */
   /* intial */
 "L"?{QUOTE}   {
-  collector.setFromBlock(yytext, yyleng);
-  BEGIN(ST_STRING);
+  collector.setFromBlock(YY_TEXT, YY_LENG);
+  YY_SET_START_CONDITION(ST_STRING);
 }
 
   /* continuation */
 <ST_STRING>({STRCHAR}|{ESCAPE})*   {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
 }
 
   /* final */
 <ST_STRING>{QUOTE} {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
   lexer.emit(L1_STRING_LITERAL, COLLECTOR);
-  BEGIN(INITIAL);
+  YY_SET_START_CONDITION(INITIAL);
 }
 
   /* dsw: user-defined qualifier; example: $tainted */
 \${ALNUM}+ {
-  lexer.emit(L1_UDEF_QUAL, yytext, yyleng);
+  lexer.emit(L1_UDEF_QUAL, YY_TEXT, YY_LENG);
 }
 
   /* final, error */
 <ST_STRING>{EOL}   |
 <ST_STRING><<EOF>> {
-  if (yytext[0] == '\n') {
-    collector.append(yytext, yyleng);
+  if (YY_TEXT[0] == '\n') {
+    collector.append(YY_TEXT, YY_LENG);
   }
   else {
-    // when matching <<EOF>>, yytext[0]=0 and yyleng=1 (possibly
+    // when matching <<EOF>>, YY_TEXT[0]=0 and YY_LENG=1 (possibly
     // a bug in flex; its man page doesn't specify what it does), so we
     // get an extra NUL in the collected token, which I don't want
   }
@@ -174,28 +172,28 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
   if (!lexer.allowMultilineStrings) {
     lexer.error("unterminated string literal");
     lexer.emit(L1_STRING_LITERAL, COLLECTOR);
-    BEGIN(INITIAL);
+    YY_SET_START_CONDITION(INITIAL);
   }
 
-  if (yytext[0] != '\n') {
-    yyterminate();     	  // flex man page says to do this for <<EOF>>
+  if (YY_TEXT[0] != '\n') {
+    YY_TERMINATE();       // flex man page says to do this for <<EOF>>
   }
 }
 
 
   /* character literal */
 "L"?{TICK}({CCCHAR}|{ESCAPE})*{TICK}   {
-  lexer.emit(L1_CHAR_LITERAL, yytext, yyleng);
+  lexer.emit(L1_CHAR_LITERAL, YY_TEXT, YY_LENG);
 }
 
 
   /* operator */
   /* extensions for theorem prover: "==>" */
 "("|")"|"["|"]"|"->"|"::"|"."|"!"|"~"|"+"|"-"|"++"|"--"|"&"|"*"  |
-".*"|"->*"|"/"|"%"|"<<"|">>"|"<"|"<="|">"|">="     	         |
+".*"|"->*"|"/"|"%"|"<<"|">>"|"<"|"<="|">"|">="                   |
 "=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|"="|"*="|"/="|"%="|"+="      |
 "-="|"&="|"^="|"|="|"<<="|">>="|","|"..."|";"|"{"|"}"|"==>"      {
-  lexer.emit(L1_OPERATOR, yytext, yyleng);
+  lexer.emit(L1_OPERATOR, YY_TEXT, YY_LENG);
 }
 
   /* preprocessor */
@@ -204,50 +202,50 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
    * I want to deal with that (I originally was using '^', but that
    * interacts badly with the whitespace rule) */
 "#"{PPCHAR}*({BACKSL}{NL}{PPCHAR}*)*   {
-  lexer.emit(L1_PREPROCESSOR, yytext, yyleng);
+  lexer.emit(L1_PREPROCESSOR, YY_TEXT, YY_LENG);
 }
 
   /* whitespace */
   /* 10/20/02: added '\r' to accomodate files coming from Windows */
 [ \t\n\f\v\r]+  {
-  lexer.emit(L1_WHITESPACE, yytext, yyleng);
+  lexer.emit(L1_WHITESPACE, YY_TEXT, YY_LENG);
 }
 
   /* C++ comment */
   /* we don't match the \n because that way this works at EOF */
 "//"{NOTNL}*    {
-  lexer.emit(L1_COMMENT, yytext, yyleng);
+  lexer.emit(L1_COMMENT, YY_TEXT, YY_LENG);
 }
 
   /* ------- C comment --------- */
   /* initial */
 "/""*"     {
-  collector.setFromBlock(yytext, yyleng);
-  BEGIN(ST_C_COMMENT);
+  collector.setFromBlock(YY_TEXT, YY_LENG);
+  YY_SET_START_CONDITION(ST_C_COMMENT);
 }
 
   /* continuation */
 <ST_C_COMMENT>([^*]|"*"[^/])*   {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
 }
 
   /* final */
 <ST_C_COMMENT>"*/"     {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
   lexer.emit(L1_COMMENT, COLLECTOR);
-  BEGIN(INITIAL);
+  YY_SET_START_CONDITION(INITIAL);
 }
 
   /* final, error */
 <ST_C_COMMENT><<EOF>>     {
   lexer.error("unterminated /**/ comment");
   lexer.emit(L1_COMMENT, COLLECTOR);
-  BEGIN(INITIAL);
+  YY_SET_START_CONDITION(INITIAL);
 }
 
   /* illegal */
 .  {
-  lexer.emit(L1_ILLEGAL, yytext, yyleng);
+  lexer.emit(L1_ILLEGAL, YY_TEXT, YY_LENG);
 }
 
 
@@ -260,15 +258,15 @@ PPCHAR        ([^\\\n]|{BACKSL}{NOTNL})
 /* wrapper around main lex routine to do init */
 int lexer1_lex(Lexer1 &lexer, FILE *inputFile)
 {
-  yyrestart(inputFile);
+  lexer1_lexer_t lexState;
+  lexer1_construct(&lexState);
+  lexer1_restart(&lexState, inputFile);
 
   // this collects all the tokens
-  int ret = lexer1_inner_lex(lexer);
+  int ret = lexer1_inner_lex(&lexState, lexer);
 
-  // prevent leaking the big buffer
-  // 9/07/03: but this doesn't work with flex-2.5.31, and isn't worth the
-  // hassle to portablize, since lexer1 is obsolete anyway
-  //yy_delete_buffer(yy_current_buffer);
+  // Clean up.
+  lexer1_destroy(&lexState);
 
   return ret;
 }
@@ -316,21 +314,21 @@ int lexer1_lex(Lexer1 &lexer, FILE *inputFile)
   /* ------- preprocessor ---------- */
   /* initial */
 {BOL}{SPTAB}*"#"    {
-  collector.setFromBlock(yytext, yyleng);
-  BEGIN(ST_PREPROC);
+  collector.setFromBlock(YY_TEXT, YY_LENG);
+  YY_SET_START_CONDITION(ST_PREPROC);
 }
 
   /* continuation */
 <ST_PREPROC>({BACKSL}{NL}|{PPCHAR})+     {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
 }
 
   /* final */
 <ST_PREPROC>{EOL}   |
 <ST_PREPROC><<EOF>> {
-  collector.append(yytext, yyleng);
+  collector.append(YY_TEXT, YY_LENG);
   lexer.emit(L1_PREPROCESSOR, COLLECTOR);
-  BEGIN(INITIAL);
+  YY_SET_START_CONDITION(INITIAL);
 }
 
 
