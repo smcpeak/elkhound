@@ -203,7 +203,7 @@ bcparse.exe: $(bcparse-deps) $(LIBS)
 clean:
 	rm -f *.o *.d *.exe *.gen.* *.tab.* *.output
 	rm -f bcparse.y c.tok
-	rm -f lexer1.lex.{cc,h}
+	rm -f lexer1.lex.cc lexer1.lex.h
 
 distclean: clean
 	rm -f config.mk

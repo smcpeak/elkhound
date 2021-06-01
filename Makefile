@@ -586,7 +586,7 @@ clean: gcom-clean
 	rm -f gramlex.yy.cc gramlex.yy.h
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
-	rm -f examples/crash1.{cc,h}
+	rm -f examples/crash1.cc examples/crash1.h
 	rm -f c.in/c.in4c c.in/c.in4d
 	cd cc2; rm -f $(CLEAN_PATTERNS)
 	cd triv; rm -f $(CLEAN_PATTERNS) *.y *.gr
@@ -600,7 +600,7 @@ distclean: clean
 	cd triv; rm -rf sssx.in ssx.in eeb.in
 	$(MAKE) -C c distclean
 	rm -rf gendoc
-	rm -f c.in/c.in4{c,d}
+	rm -f c.in/c.in4c c.in/c.in4d
 
 # 'clean', plus remove distributed output files from bison
 toolclean: clean
