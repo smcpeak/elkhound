@@ -107,7 +107,7 @@ include config.mk
 
 # Things in other components.
 LIBSMBASE = $(SMBASE)/libsmbase.a
-SMFLEX    = $(SMFLEXDIR)/smflex.exe
+SMFLEX    = $(SMFLEXDIR)/smflex
 LIBAST    = $(AST)/libast.a
 ASTGEN    = $(AST)/astgen.exe
 
