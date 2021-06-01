@@ -171,16 +171,6 @@ support-set := \
 
 
 # ---------------------- generic rules ----------------------
-# intermediate files for an ast spec
-# (this have been commented-out and instantiated with the specific
-# rules for gramast.ast, because I only need once instance, and
-# because the cygwin version of make-3.80 fails to recognize the
-# applicability of this pattern for some reason)
-# %.ast.gen.cc %.ast.gen.h: %.ast $(AST)/astgen
-# 	rm -f $*.ast.gen.*
-# 	$(AST)/astgen -o$*.ast.gen $*.ast
-# 	chmod a-w $*.ast.gen.h $*.ast.gen.cc
-
 # intermediate files for a grammar
 # TRGRAMANL: extra trace flags specified by user; starts with "," if defined
 # ('chmod a-w' is so I don't accidentally edit it)
@@ -243,8 +233,7 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 %.yy.cc %.yy.h: %.lex
 	$(SMFLEX) -o$*.yy.cc $*.lex
 
-# grammar description AST (manual instantiation of above
-# commented-out pattern rule)
+# grammar description AST
 %.ast.gen.cc %.ast.gen.h: %.ast $(AST)/astgen.exe
 	$(AST)/astgen.exe -o$*.ast.gen $*.ast
 	chmod a-w $*.ast.gen.h $*.ast.gen.cc
