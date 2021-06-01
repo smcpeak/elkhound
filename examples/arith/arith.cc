@@ -2,6 +2,7 @@
 // driver program for arithmetic evaluator
 
 #include "arith.h"     // this module
+
 #include "glr.h"       // GLR parser
 #include "ptreenode.h" // PTreeNode
 #include "ptreeact.h"  // ParseTreeLexer, ParseTreeActions
@@ -11,10 +12,21 @@
 
 
 // ------------------ ArithLexer ------------------
+ArithLexer::ArithLexer()
+{
+  yy_construct(&lexerState);
+}
+
+ArithLexer::~ArithLexer()
+{
+  yy_destroy(&lexerState);
+}
+
+
 /*static*/ void ArithLexer::nextToken(ArithLexer *ths)
 {
   // call underlying lexer; it will set 'sval' if necessary
-  ths->type = yylex();
+  ths->type = yy_lex(&ths->lexerState);
 }
 
 LexerInterface::NextTokenFunc ArithLexer::getTokenFunc() const

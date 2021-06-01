@@ -4,6 +4,7 @@
 # -------- external tools and libraries --------
 # paths to the relevant subsystems
 SMBASE        := ../../../smbase
+SMFLEX        := ../../../smflex
 AST           := ../../../ast
 ELKHOUND      := ../..
 
@@ -36,7 +37,7 @@ arith.gr.gen.cc arith.gr.gen.h: arith.gr
 
 # invoke the lexer generator
 arithyy.cc: arith.lex
-	flex -o$@ arith.lex
+	$(SMFLEX)/smflex -o$@ arith.lex
 
 # compile a C++ source file
 %.o: %.cc

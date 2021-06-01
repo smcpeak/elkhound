@@ -6,6 +6,7 @@
 
 #include "lexerint.h"        // LexerInterface
 #include "arith.gr.gen.h"    // Arith, the parser context class
+#include "arithyy.h"         // yy_lex, yy_lexer_t
 
 class ParseTables;           // parsetables.h
 class UserActions;           // useract.h
@@ -16,9 +17,6 @@ class UserActions;           // useract.h
 // defined in arith.gr -> arith.gr.gen.cc
 UserActions *makeUserActions();
 ParseTables *make_Arith_tables();
-
-// interface to the lexer
-int yylex();                        // defined in arith.lex -> arithyy.cc
 
 
 // token codes
@@ -38,7 +36,13 @@ char const *toString(ArithTokenCodes code);
 
 // lexer interface object
 class ArithLexer : public LexerInterface {
-public:
+private:     // data
+  yy_lexer_t lexerState;
+
+public:      // methods
+  ArithLexer();
+  ~ArithLexer();
+
   static void nextToken(ArithLexer *ths);
 
   // LexerInterface functions

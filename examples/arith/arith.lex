@@ -1,9 +1,7 @@
 /* arith.lex
  * lexical analyzer for arithmetic language */
 
-/* flex options */
-%option noyywrap
-%option nounput
+%smflex 101
 
 
 /* C++ declarations */
@@ -14,7 +12,7 @@
 %%
 
 [0-9]+      {
-  lexer.sval = (SemanticValue)atoi(yytext);
+  lexer.sval = (SemanticValue)atoi(YY_TEXT);
   return TOK_NUMBER;
 }
 
@@ -35,6 +33,6 @@
 }
 
 .           {
-  printf("illegal character: %c\n", yytext[0]);
+  printf("illegal character: %c\n", YY_TEXT[0]);
   /* but continue anyway */
 }
