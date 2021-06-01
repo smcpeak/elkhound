@@ -205,29 +205,29 @@ testTrivGrammar testRR 1 2
 # (for now) is only in Elsa, so don't try it unless that script is
 # in a usual place
 if [ -x ../elsa/multitest.pl ]; then
-  runTest perl ../elsa/multitest.pl ./elkhound ffollow.gr ffollow_ext.gr
+  runTest perl ../elsa/multitest.pl ./elkhound.exe ffollow.gr ffollow_ext.gr
 fi
 
 
 # make sure Elkhound doesn't segfault on the following
-runTest ./elkhound examples/crash1.gr
+runTest ./elkhound.exe examples/crash1.gr
 
 
 # ------------ test the C grammar and parser -------------
 for n in 1 2 3 4 5 6 7 8 9 10 11 12; do
-  runTest c/cparse -tr stopAfterTCheck,suppressAddrOfError c.in/c.in$n
+  runTest c/cparse.exe -tr stopAfterTCheck,suppressAddrOfError c.in/c.in$n
 done
 
 
 tcheck() {
-  runTest ./test-bad c/cparse tcheck/$1 -tr stopAfterTCheck
+  runTest ./test-bad c/cparse.exe tcheck/$1 -tr stopAfterTCheck
 }
 
 tcheck init.c
 tcheck addrglob.c
 tcheck loops.c
 tcheck exprpath.c
-runTest c/cparse -tr printAnalysisPath tcheck/morepaths.c
+runTest c/cparse.exe -tr printAnalysisPath tcheck/morepaths.c
 
 
 # --------- test C++ parser using standard grammar ------------
@@ -241,7 +241,7 @@ runTest $MAKE examples
 
 
 # print config info
-runTest c/cparse -tr trivialActions,stopAfterParse,glrConfig,yieldVariableName \
+runTest c/cparse.exe -tr trivialActions,stopAfterParse,glrConfig,yieldVariableName \
   c.in/c.in4b
 
 # bison performance test
@@ -250,10 +250,10 @@ runTest $MAKE c.in/c.in4d
 # I've disable this one because I don't want to build bcparse
 # in my Elkhound distribution, since that is a dependency on
 # Bison
-#runTest c/bcparse c.in/c.in4d
+#runTest c/bcparse.exe c.in/c.in4d
 
 # this one is my main performance tester for comparison to bison
-runTest c/cparse -tr trivialActions,stopAfterParse,yieldVariableName \
+runTest c/cparse.exe -tr trivialActions,stopAfterParse,yieldVariableName \
   c.in/c.in4d
 
 

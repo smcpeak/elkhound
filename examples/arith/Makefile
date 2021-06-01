@@ -32,7 +32,7 @@ arith.o: arith.gr.gen.h
 
 # invoke the parser generator
 arith.gr.gen.cc arith.gr.gen.h: arith.gr
-	$(ELKHOUND)/elkhound -v -o arith.gr.gen arith.gr
+	$(ELKHOUND)/elkhound.exe -v -o arith.gr.gen arith.gr
 
 # invoke the lexer generator
 arithyy.cc: arith.lex

@@ -25,11 +25,11 @@ LDFLAGS := $(LIBELKHOUND) $(AST)/libast.a $(SMBASE)/libsmbase.a
 # -------- generic rules --------
 # invoke the parser generator
 %.gr.gen.cc %.gr.gen.h: %.gr
-	$(ELKHOUND)/elkhound -v -o $*.gr.gen $*.gr
+	$(ELKHOUND)/elkhound.exe -v -o $*.gr.gen $*.gr
 
 # invoke the AST generator
 %.ast.gen.cc %.ast.gen.h: %.ast
-	$(AST)/astgen -b$*.ast.gen $*.ast
+	$(AST)/astgen.exe -b$*.ast.gen $*.ast
 
 # compile a C++ source file
 %.o: %.cc

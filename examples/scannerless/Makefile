@@ -21,7 +21,7 @@ all: sless
 	g++ -c -o $@ $(CCFLAGS) $*.cc
 
 sless.h sless.cc: sless.gr
-	$(ELKHOUND)/elkhound sless.gr
+	$(ELKHOUND)/elkhound.exe sless.gr
 
 main.o: sless.h
 

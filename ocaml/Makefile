@@ -29,9 +29,9 @@ OCAMLOPTFLAGS := $(OCAMLCFLAGS)
 # (for now I don't want to use the interface stuff)
 #
 # cygwin bug...
-#%.ml: %.gr $(ELKHOUND)/elkhound
+#%.ml: %.gr $(ELKHOUND)/elkhound.exe
 %.ml: %.gr
-	$(ELKHOUND)/elkhound -ocaml -v $*.gr
+	$(ELKHOUND)/elkhound.exe -ocaml -v $*.gr
 	rm -f $*.mli
 
 # run ocamllex on a lex spec

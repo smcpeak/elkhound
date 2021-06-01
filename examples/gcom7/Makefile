@@ -29,10 +29,10 @@ lexer: lexer.cc
 	g++ -o $@ $(CCFLAGS) -DTEST_LEXER lexer.cc $(LDFLAGS)
 
 gcom.h gcom.cc: gcom.gr tokens.tok
-	$(ELKHOUND)/elkhound gcom.gr
+	$(ELKHOUND)/elkhound.exe gcom.gr
 
 ast.h ast.cc: gcom.ast
-	$(AST)/astgen -o ast gcom.ast
+	$(AST)/astgen.exe -o ast gcom.ast
 
 parser.o: gcom.h ast.h
 
