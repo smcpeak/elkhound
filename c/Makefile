@@ -121,7 +121,7 @@ c.tok: lexer2.exe
 
 # run elkhound to generate the parser
 %.gr.gen.h %.gr.gen.cc %.gr.gen.y: %.gr %.tok
-	$(ELKHOUND)/elkhound -tr bison -v -o $*.gr.gen $*.gr
+	$(ELKHOUND)/elkhound.exe -tr bison -v -o $*.gr.gen $*.gr
 
 
 # list of modules needed for the parser

@@ -2,10 +2,10 @@
 # see license.txt for copyright and terms of use
 
 # I uncomment this temporarily to just build certain modules
-#tmp: mlsstr
+#tmp: mlsstr.exe
 
 # main targets: elkhound, and some examples
-all: elkhound libelkhound.a forbid.gr.gen.cc arith c cc2/cc2.exe
+all: elkhound.exe libelkhound.a forbid.gr.gen.cc arith c cc2/cc2.exe
 	@echo BUILD FINISHED
 
 
@@ -107,9 +107,9 @@ include config.mk
 
 # Things in other components.
 LIBSMBASE = $(SMBASE)/libsmbase.a
-SMFLEX    = $(SMFLEXDIR)/smflex
+SMFLEX    = $(SMFLEXDIR)/smflex.exe
 LIBAST    = $(AST)/libast.a
-ASTGEN    = $(AST)/astgen
+ASTGEN    = $(AST)/astgen.exe
 
 
 # compile .cc to .o
@@ -174,9 +174,9 @@ support-set := \
 # intermediate files for a grammar
 # TRGRAMANL: extra trace flags specified by user; starts with "," if defined
 # ('chmod a-w' is so I don't accidentally edit it)
-%.gr.gen.cc %.gr.gen.h %.gr.gen.y: %.gr elkhound
+%.gr.gen.cc %.gr.gen.h %.gr.gen.y: %.gr elkhound.exe
 	rm -f $*.gr.gen.*
-	./elkhound -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr
+	./elkhound.exe -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr
 	chmod a-w $*.gr.gen.h $*.gr.gen.cc
 
 # bison parser from the a given grammar; the 'sed' is because Bison
@@ -214,8 +214,8 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 	$(SMFLEX) -o$*.yy.cc $*.lex
 
 # grammar description AST
-%.ast.gen.cc %.ast.gen.h: %.ast $(AST)/astgen.exe
-	$(AST)/astgen.exe -o$*.ast.gen $*.ast
+%.ast.gen.cc %.ast.gen.h: %.ast $(ASTGEN)
+	$(ASTGEN) -o$*.ast.gen $*.ast
 	chmod a-w $*.ast.gen.h $*.ast.gen.cc
 
 # bison implementation of grammar parser.
@@ -244,7 +244,7 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 	test "x$*" = "xcc2"
 	rm -f cc2/cc2t*
 	sed -e 's/cc2\.gr\.gen\.h/cc2t.gr.gen.h/' <cc2/cc2.gr >cc2/cc2t.gr
-	./elkhound -v -tr treebuild$(TRGRAMANL) -o cc2/cc2t.gr.gen cc2/cc2t.gr
+	./elkhound.exe -v -tr treebuild$(TRGRAMANL) -o cc2/cc2t.gr.gen cc2/cc2t.gr
 	chmod a-w cc2/cc2t.gr*
 
 
@@ -266,21 +266,21 @@ extradep.mk:
 # --------------------- test programs ----------------------
 # grammar lexer test program
 gramlex-dep := gramlex.yy.cc $(AST)/gramlex.cc
-gramlex: ../ast/gramlex.h $(gramlex-dep) $(LIBS)
+gramlex.exe: ../ast/gramlex.h $(gramlex-dep) $(LIBS)
 	$(CXX) -o $@ -DTEST_GRAMLEX $(CXXFLAGS) $(LDFLAGS) $(gramlex-dep) $(LIBS)
 
 # cycle timer test
-cyctimer: cyctimer.cc cyctimer.h
+cyctimer.exe: cyctimer.cc cyctimer.h
 	$(CXX) -o $@ -DTEST_CYCTIMER $(CXXFLAGS) $(LDFLAGS) cyctimer.cc $(LIBS)
 
 # ML lexical parser
-mlsstr: mlsstr.cc mlsstr.h
+mlsstr.exe: mlsstr.cc mlsstr.h
 	$(CXX) -o $@ -DTEST_MLSSTR $(CXXFLAGS) $(LDFLAGS) mlsstr.cc $(LIBS)
 
 # test grammar for 'forbid' (there is no executable for this, I just look
 # at the Elkhound output)
 forbid.gr.gen.cc: forbid.gr
-	./elkhound -tr requireExactStats -o forbid.gr.gen forbid.gr
+	./elkhound.exe -tr requireExactStats -o forbid.gr.gen forbid.gr
 
 
 # -------------------- exported library ----------------
@@ -295,7 +295,7 @@ libelkhound.a: $(glr-set) $(util-set)
 # reads the grammar and emits C++ code for semantic functions;
 # this is the main parser generator binary
 elkhound-dep := gramanl.cc gramexpl.o $(grammar-set) $(grampar-set) parsetables.o
-elkhound: $(elkhound-dep) grammar.h gramanl.h $(LIBS)
+elkhound.exe: $(elkhound-dep) grammar.h gramanl.h $(LIBS)
 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) -DGRAMANL_MAIN $(elkhound-dep) $(LIBS)
 
 # C++ parser based on Standard grammar
@@ -311,7 +311,7 @@ cc2/cc2t.exe: $(cc2t-deps) $(LIBS)
 
 # ---------------------- Elkhound examples ------------------
 .PHONY: c
-c: elkhound libelkhound.a
+c: elkhound.exe libelkhound.a
 	$(MAKE) -C c
 
 c.in/c.in4c: c.in/c.in4b
@@ -328,7 +328,7 @@ c.in/c.in4d: c.in/c.in4c
 
 # stuff in examples directory
 .PHONY: examples arith
-arith: elkhound libelkhound.a
+arith: elkhound.exe libelkhound.a
 	$(MAKE) -C examples/arith
 
 examples: all glrmain.o arith gcom
@@ -584,8 +584,6 @@ CLEAN_PATTERNS := \
 
 clean: gcom-clean
 	rm -f $(CLEAN_PATTERNS)
-	rm -f elkhound glr gramlex cyctimer
-	rm -f grampar.output grampar tlexer
 	rm -f gramlex.yy.cc gramlex.yy.h
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
@@ -611,8 +609,8 @@ toolclean: clean
 	$(MAKE) -C examples/arith toolclean
 	$(MAKE) -C c toolclean
 
-check: all mlsstr
-	./mlsstr
+check: all mlsstr.exe
+	./mlsstr.exe
 	MAKE=$(MAKE) ./regrtest
 	@echo ""
 	@echo "Regression tests passed."
@@ -628,5 +626,5 @@ config.status: configure.pl sm_config.pm
 
 # --------------- random other stuff --------------------
 # test for rcptr
-trcptr: rcptr.h trcptr.cc
+trcptr.exe: rcptr.h trcptr.cc
 	$(CXX) -o $@ trcptr.cc
