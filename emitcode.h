@@ -6,11 +6,11 @@
 
 #include "str.h"          // stringBuffer
 #include "srcloc.h"       // SourceLoc
-#include "ofstreamts.h"   // ofstreamTS
+#include "sm-fstream.h"   // ofstream
 
 class EmitCode : public stringBuilder {
 private:     // data
-  ofstreamTS os;       // stream to write to
+  ofstream os;         // stream to write to
   string fname;        // filename for emitting #line
   int line;            // current line number
 

@@ -9,7 +9,7 @@
 
 EmitCode::EmitCode(rostring f)
   : stringBuilder(),
-    os(f.c_str()),
+    os(f.c_str(), std::ios::binary),
     fname(f),
     line(1)
 {
