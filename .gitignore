@@ -60,6 +60,7 @@ gramlex.yy.cc
 gramlex.yy.h
 grampar.output
 mlsstr
+personal.mk
 test-bad-tmp.c
 testcout
 triv/*.gr

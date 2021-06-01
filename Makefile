@@ -8,51 +8,114 @@
 all: elkhound libelkhound.a forbid.gr.gen.out arith c cc2/cc2.exe
 	@echo BUILD FINISHED
 
-# Automatic configuration.
+
+# ------------------------- Configuration --------------------------
+# Directories of other components.
+SMBASE    = ../smbase
+SMFLEXDIR = ../smflex
+AST       = ../ast
+
+# C++ compiler.
+CXX = g++
+
+# Flags to control generation of debug info.
+DEBUG_FLAGS = -g
+
+# Flags to enable dependency generation of .d files.
+GENDEPS_FLAGS = -MMD
+
+# Flags to control optimization.
+#
+# TODO: I previously identified a problem with enabling optimization.
+# I doubt that has been fixed.  Investigate.
+OPTIMIZATION_FLAGS =
+
+# Flags to control compiler warnings.
+WARNING_FLAGS =
+
+# Flags for C++ standard to use.
+CXX_STD_FLAGS = -std=c++11
+
+# Preprocessing flags.
+#
+# "-I." is needed so files compiled in subdirectories can include files
+# in the top-level directory.
+#
+# "-Ic" is needed for binaries that use $(support-set).
+#
+CPPFLAGS = -I$(SMBASE) -I$(AST) -I. -Ic
+
+# Flags for the C++ compiler and preprocessor.
+#
+# Note: $(GENDEPS_FLAGS) are not included because these flags are used
+# for linking too, and if that used $(GENDEPS_FLAGS) then the .d files
+# for .o files would be overwritten with info for .exe files.
+CXXFLAGS = $(DEBUG_FLAGS) $(OPTIMIZATION_FLAGS) $(WARNING_FLAGS) $(CXX_STD_FLAGS) $(CPPFLAGS)
+
+# Libraries to link with when creating test executables.
+LIBS = $(LIBAST) $(LIBSMBASE)
+
+# Flags to add to a link command *in addition* to either $(CFLAGS) or
+# $(CXXFLAGS), depending on whether C++ modules are included.
+LDFLAGS =
+
+# external tools
+PERL   = perl
+AR     = ar
+RANLIB = ranlib
+
+
+# ---- Options within this Makefile ----
+# This variable is a parameter that can be passed on the 'make' command
+# line.  It becomes part of the -tr argument to 'elkhound'.  By default,
+# it's set to the flag to generate a debug dump of the LR parse tables.
+TRGRAMANL = ,lrtable
+
+
+# ---- Automatic Configuration ----
+# Pull in settings from ./configure.  They override the defaults above,
+# and are in turn overridden by personal.mk, below.
 ifeq ($(wildcard config.mk),)
   $(error The file 'config.mk' does not exist.  Run './configure' before 'make'.)
 endif
 include config.mk
 
-# Things inside other directories.
-LIBSMBASE := $(SMBASE)/libsmbase.a
-LIBAST    := $(AST)/libast.a
-ASTGEN    := $(AST)/astgen
 
-SMFLEXDIR := ../smflex
-SMFLEX    := $(SMFLEXDIR)/smflex
-
-
-# remake the generated config.mk if its inputs have changed
-config.mk: config.mk.in config.status
-	./config.status
-
-# reconfigure if the configure script has changed
-config.status: configure.pl sm_config.pm
-	./config.status -reconfigure
+# ---- Customization ----
+# Allow customization of the above variables in a separate file.  Just
+# create personal.mk with desired settings.
+#
+# Common things to set during development:
+#
+#   WERROR = -Werror
+#   WARNING_FLAGS = -Wall $(WERROR)
+#   OPTIMIZATION_FLAGS =
+#
+-include personal.mk
 
 
-# This variable is a parameter that can be passed on the 'make' command
-# line.  It becomes part of the -tr argument to 'elkhound'.  By default,
-# it's set to the flag to generate a debug dump of the LR parse tables.
-TRGRAMANL := ,lrtable
+# ----------------------------- Rules ------------------------------
+# Get rid of (some...) built-in rules.
+.SUFFIXES:
+
+# Delete a target when its recipe fails.
+.DELETE_ON_ERROR:
+
+# Do not remove "intermediate" targets.
+.SECONDARY:
 
 
-# -------------------- compiler configuration -------------------
-# flags for the linker
-libraries := $(LIBAST) $(LIBSMBASE)
-LDFLAGS := -g -Wall $(libraries)
-
-
-# some other tools
-AR     := ar
-RANLIB := ranlib
+# Things in other components.
+LIBSMBASE = $(SMBASE)/libsmbase.a
+SMFLEX    = $(SMFLEXDIR)/smflex
+LIBAST    = $(AST)/libast.a
+ASTGEN    = $(AST)/astgen
 
 
 # compile .cc to .o
 %.o: %.cc
-	$(CXX) -c -o $@ $< $(CCFLAGS)
-	@perl depend.pl -o $@ $< $(CCFLAGS) >$*.d
+	$(CXX) -c -o $@ $(CXXFLAGS) $<
+	@perl depend.pl -o $@ $(CXXFLAGS) $< >$*.d
 
 
 # ----------------- sets of related object files ---------------------
@@ -153,7 +216,7 @@ support-set := \
 #	sed -e 's/__attribute__ ((__unused__))//' \
 #	  <$*.tab.c.orig >$*.tab.c
 #	rm $*.tab.c.orig
-#	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CCFLAGS)
+#	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CXXFLAGS)
 
 # run the trivial-grammar helper
 .PRECIOUS: %.gr %.tree.gr
@@ -169,13 +232,13 @@ support-set := \
 
 # make a parser for testing some grammar, using trivial lexer
 trivparse-deps := trivmain.cc trivlex.o libelkhound.a
-%.gr.exe: %.gr.gen.o $(trivparse-deps) $(libraries)
-	$(CXX) -o $@ -DGRAMMAR_NAME=\"$*.bin\" $(CCFLAGS) $*.gr.gen.o $(support-set) $(trivparse-deps) $(LDFLAGS)
+%.gr.exe: %.gr.gen.o $(trivparse-deps) $(LIBS)
+	$(CXX) -o $@ -DGRAMMAR_NAME=\"$*.bin\" $(CXXFLAGS) $(LDFLAGS) $*.gr.gen.o $(support-set) $(trivparse-deps) $(LIBS)
 
 # similar, for Bison as the parser-generator
 trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 %.bison.exe: %.tab.o $(trivbison-deps)
-	$(CXX) -o $@ $*.tab.o $(trivbison-deps) $(LDFLAGS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $*.tab.o $(trivbison-deps)
 
 
 # ------------------- intermediate files --------------------
@@ -185,13 +248,9 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 
 # grammar description AST (manual instantiation of above
 # commented-out pattern rule)
-#
-# TODO: This multi-target rule is not safe.
-.PRECIOUS: gramast.ast.gen.cc gramast.ast.gen.h
-gramast.ast.gen.cc gramast.ast.gen.h: gramast.ast $(AST)/astgen
-	rm -f gramast.ast.gen.*
-	$(AST)/astgen -ogramast.ast.gen gramast.ast
-	chmod a-w gramast.ast.gen.h gramast.ast.gen.cc
+%.ast.gen.cc %.ast.gen.h: %.ast $(AST)/astgen.exe
+	$(AST)/astgen.exe -o$*.ast.gen $*.ast
+	chmod a-w $*.ast.gen.h $*.ast.gen.cc
 
 # bison implementation of grammar parser.
 # I have to make some changes to the generated output so it will compile
@@ -241,16 +300,16 @@ extradep.mk:
 # --------------------- test programs ----------------------
 # grammar lexer test program
 gramlex-dep := gramlex.yy.cc $(AST)/gramlex.cc
-gramlex: ../ast/gramlex.h $(gramlex-dep) $(libraries)
-	$(CXX) -o $@ -DTEST_GRAMLEX $(CCFLAGS) $(gramlex-dep) $(LDFLAGS)
+gramlex: ../ast/gramlex.h $(gramlex-dep) $(LIBS)
+	$(CXX) -o $@ -DTEST_GRAMLEX $(CXXFLAGS) $(LDFLAGS) $(gramlex-dep) $(LIBS)
 
 # cycle timer test
 cyctimer: cyctimer.cc cyctimer.h
-	$(CXX) -o $@ -DTEST_CYCTIMER $(CCFLAGS) cyctimer.cc $(LDFLAGS)
+	$(CXX) -o $@ -DTEST_CYCTIMER $(CXXFLAGS) $(LDFLAGS) cyctimer.cc $(LIBS)
 
 # ML lexical parser
 mlsstr: mlsstr.cc mlsstr.h
-	$(CXX) -o $@ -DTEST_MLSSTR $(CCFLAGS) mlsstr.cc $(LDFLAGS)
+	$(CXX) -o $@ -DTEST_MLSSTR $(CXXFLAGS) $(LDFLAGS) mlsstr.cc $(LIBS)
 
 # test grammar for 'forbid' (there is no executable for this, I just look
 # at the Elkhound output)
@@ -270,18 +329,18 @@ libelkhound.a: $(glr-set) $(util-set)
 # reads the grammar and emits C++ code for semantic functions;
 # this is the main parser generator binary
 elkhound-dep := gramanl.cc gramexpl.o $(grammar-set) $(grampar-set) parsetables.o
-elkhound: $(elkhound-dep) grammar.h gramanl.h $(libraries)
-	$(CXX) -o $@ -DGRAMANL_MAIN $(CCFLAGS) $(elkhound-dep) $(LDFLAGS)
+elkhound: $(elkhound-dep) grammar.h gramanl.h $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) -DGRAMANL_MAIN $(elkhound-dep) $(LIBS)
 
 # C++ parser based on Standard grammar
 cc2-deps := cc2/cc2main.o cc2/cc2.gr.gen.o libelkhound.a
-cc2/cc2.exe: $(cc2-deps) $(libraries)
-	$(CXX) -o $@ $(support-set) $(cc2-deps) $(LDFLAGS)
+cc2/cc2.exe: $(cc2-deps) $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(support-set) $(cc2-deps) $(LIBS)
 
 # new C++ parser with treebuilding
 cc2t-deps := cc2/cc2main.o cc2/cc2t.gr.gen.o libelkhound.a
-cc2/cc2t.exe: $(cc2t-deps) $(libraries)
-	$(CXX) -o $@ $(support-set) $(cc2t-deps) $(LDFLAGS)
+cc2/cc2t.exe: $(cc2t-deps) $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(support-set) $(cc2t-deps) $(LIBS)
 
 
 # ---------------------- Elkhound examples ------------------
@@ -591,6 +650,14 @@ check: all mlsstr
 	MAKE=$(MAKE) ./regrtest
 	@echo ""
 	@echo "Regression tests passed."
+
+# remake the generated config.mk if its inputs have changed
+config.mk: config.mk.in config.status
+	./config.status
+
+# reconfigure if the configure script has changed
+config.status: configure.pl sm_config.pm
+	./config.status -reconfigure
 
 
 # --------------- random other stuff --------------------
