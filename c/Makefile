@@ -2,7 +2,7 @@
 # this is the Makefile for the Elkhound-based C Parser
 
 # main target: an Elkhound-based C parser
-all: cparse
+all: cparse.exe
 
 
 # ------------------------- Configuration --------------------------
@@ -105,20 +105,20 @@ LEXER2_OBJS := \
   cc_lang.o
 
 # lexer2 stand-alone binary
-lexer2: lexer2.cc lexer2.h $(LEXER2_OBJS) $(LIBS)
+lexer2.exe: lexer2.cc lexer2.h $(LEXER2_OBJS) $(LIBS)
 	$(CXX) -o $@ $(CXXFLAGS) -DTEST_LEXER2 $(LDFLAGS) lexer2.cc $(LEXER2_OBJS) $(LIBS)
 
 
 # ------------------------- cparse ---------------------
 # run lexer2 stand-alone to generate token list
-c.tok: lexer2
-	./lexer2 -myparser >$@
+c.tok: lexer2.exe
+	./lexer2.exe -myparser >$@
 
 # run astgen to generate the AST implementation
 #
 # TODO: Multi-target non-pattern rules are not safe.
 c.ast.gen.h c.ast.gen.cc: c.ast
-	$(AST)/astgen -oc.ast.gen c.ast
+	$(AST)/astgen.exe -oc.ast.gen c.ast
 
 
 # run elkhound to generate the parser
@@ -152,7 +152,7 @@ CPARSE_OBJS := \
   main.o
 
 # parser binary
-cparse: $(CPARSE_OBJS) $(LIBS)
+cparse.exe: $(CPARSE_OBJS) $(LIBS)
 	$(CXX) -o $@ $(CPARSE_OBJS) $(LDFLAGS) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
 
@@ -186,17 +186,16 @@ bcparse.y: c.gr.gen.y
 
 # C-without-typedefs parser, using Bison
 bcparse-deps := bcparse.cc bcparse.tab.o lexer1.o lexer1.lex.o lexer2.o cc_lang.o
-bcparse: $(bcparse-deps) $(LIBS)
+bcparse.exe: $(bcparse-deps) $(LIBS)
 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(bcparse-deps) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
 
 
 # -------------------- clean, etc. -------------------
 clean:
-	rm -f *.o *.d *.gen.* *.tab.* *.output a.out core
+	rm -f *.o *.d *.exe *.gen.* *.tab.* *.output
 	rm -f bcparse.y c.tok
 	rm -f lexer1.lex.{cc,h}
-	rm -f lexer2 cparse bcparse
 
 distclean: clean
 	rm -f config.mk
