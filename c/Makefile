@@ -147,6 +147,18 @@ CPARSE_OBJS := \
   c.gr.gen.o \
   main.o
 
+# Dependencies on generated code.
+c_env.o: c.ast.gen.h
+cparse.o: c.ast.gen.h
+exprequal.o: c.ast.gen.h
+exprvisit.d: c.ast.gen.h
+main.o: c.gr.gen.h c.ast.gen.h
+paths.o: c.ast.gen.h
+postorder.d: c.ast.gen.h
+stubs.d: c.ast.gen.h
+tcheck.d: c.ast.gen.h
+
+
 # parser binary
 cparse.exe: $(CPARSE_OBJS) $(LIBS)
 	$(CXX) -o $@ $(CPARSE_OBJS) $(LDFLAGS) $(LIBS)
