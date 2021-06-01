@@ -324,8 +324,8 @@ HWHITE    [ \t\f\v\r]
     UPD_COL;
 
     /* find quotes */
-    char *leftq = strchr(YY_TEXT, '"');
-    char *rightq = strchr(leftq+1, '"');
+    char const *leftq = strchr(YY_TEXT, '"');
+    char const *rightq = strchr(leftq+1, '"');
     xassert(leftq && rightq);
 
     /* extract filename string */
