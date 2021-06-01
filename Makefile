@@ -112,10 +112,9 @@ LIBAST    = $(AST)/libast.a
 ASTGEN    = $(AST)/astgen.exe
 
 
-# compile .cc to .o
+# Compile .cc to .o and generate .d dependency file.
 %.o: %.cc
-	$(CXX) -c -o $@ $(CXXFLAGS) $<
-	@perl depend.pl -o $@ $(CXXFLAGS) $< >$*.d
+	$(CXX) -c -o $@ $(GENDEPS_FLAGS) $(CXXFLAGS) $<
 
 
 # ----------------- sets of related object files ---------------------
