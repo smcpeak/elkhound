@@ -10,9 +10,9 @@
 *.gen.y
 *.o
 .vscode
-Makefile
 c.in/c.in4c
 c.in/c.in4d
+config.mk
 config.status
 config.summary
 elkhound

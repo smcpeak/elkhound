@@ -1,4 +1,4 @@
-# Makefile.in for elkhound
+# Makefile for elkhound
 # see license.txt for copyright and terms of use
 
 # I uncomment this temporarily to just build certain modules
@@ -8,25 +8,23 @@
 all: elkhound libelkhound.a forbid.gr.gen.out arith c cc2/cc2.exe
 	@echo BUILD FINISHED
 
+# Automatic configuration.
+ifeq ($(wildcard config.mk),)
+  $(error The file 'config.mk' does not exist.  Run './configure' before 'make'.)
+endif
+include config.mk
 
-# directories of other software
-SMBASE    := @SMBASE@
-AST       := @AST@
-
-# stuff inside those other directories
+# Things inside other directories.
 LIBSMBASE := $(SMBASE)/libsmbase.a
 LIBAST    := $(AST)/libast.a
 ASTGEN    := $(AST)/astgen
-
-# external tools
-PERL := @PERL@
 
 SMFLEXDIR := ../smflex
 SMFLEX    := $(SMFLEXDIR)/smflex
 
 
-# remake the generated Makefile if its inputs have changed
-Makefile: Makefile.in config.status
+# remake the generated config.mk if its inputs have changed
+config.mk: config.mk.in config.status
 	./config.status
 
 # reconfigure if the configure script has changed
@@ -41,13 +39,6 @@ TRGRAMANL := ,lrtable
 
 
 # -------------------- compiler configuration -------------------
-# C++ compiler, etc.
-CXX := @CXX@
-
-# flags for the C and C++ compilers (and preprocessor)
-# "-Ic" is needed for binaries that use $(support-set)
-CCFLAGS := @CCFLAGS@ -I$(SMBASE) -I$(AST) -Ic
-
 # flags for the linker
 libraries := $(LIBAST) $(LIBSMBASE)
 LDFLAGS := -g -Wall $(libraries)
@@ -583,7 +574,7 @@ clean: gcom-clean
 	$(MAKE) -C c clean
 
 distclean: clean
-	rm -f Makefile config.status config.summary glrconfig.h
+	rm -f config.mk config.status config.summary glrconfig.h
 	cd triv; rm -rf sssx.in ssx.in eeb.in
 	$(MAKE) -C c distclean
 	rm -rf gendoc
