@@ -115,17 +115,13 @@ c.tok: lexer2.exe
 	./lexer2.exe -myparser >$@
 
 # run astgen to generate the AST implementation
-#
-# TODO: Multi-target non-pattern rules are not safe.
-c.ast.gen.h c.ast.gen.cc: c.ast
-	$(AST)/astgen.exe -oc.ast.gen c.ast
+%.ast.gen.h %.ast.gen.cc: %.ast
+	$(AST)/astgen.exe -o$*.ast.gen $*.ast
 
 
 # run elkhound to generate the parser
-#
-# TODO: Multi-target non-pattern rules are not safe.
-c.gr.gen.h c.gr.gen.cc c.gr.gen.y: c.gr c.tok
-	$(ELKHOUND)/elkhound -tr bison -v -o c.gr.gen c.gr
+%.gr.gen.h %.gr.gen.cc %.gr.gen.y: %.gr %.tok
+	$(ELKHOUND)/elkhound -tr bison -v -o $*.gr.gen $*.gr
 
 
 # list of modules needed for the parser
