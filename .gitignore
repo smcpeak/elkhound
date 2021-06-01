@@ -15,7 +15,6 @@ c.in/c.in4d
 config.mk
 config.status
 config.summary
-elkhound
 examples/arith/arith
 examples/cdecl/cdecl
 examples/cexp/cexp3
@@ -59,10 +58,8 @@ glrconfig.h
 gramlex.yy.cc
 gramlex.yy.h
 grampar.output
-mlsstr
 personal.mk
 test-bad-tmp.c
-testcout
 triv/*.gr
 
 # EOF
