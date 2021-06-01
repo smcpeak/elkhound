@@ -190,12 +190,12 @@ support-set := \
 # run the trivial-grammar helper
 %.gr: %.gr.in make-trivparser.pl
 	rm -f $@
-	perl ./make-trivparser.pl $(notdir $*) <$*.gr.in >$@
+	$(PERL) ./make-trivparser.pl $(notdir $*) <$*.gr.in >$@
 	chmod a-w $@
 
 %.tree.gr: %.gr.in make-trivparser.pl
 	rm -f $@
-	perl ./make-trivparser.pl -ptree $(notdir $*) <$*.gr.in >$@
+	$(PERL) ./make-trivparser.pl -ptree $(notdir $*) <$*.gr.in >$@
 	chmod a-w $@
 
 # make a parser for testing some grammar, using trivial lexer
@@ -257,7 +257,7 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 # compilation succeeds.
 
 extradep.mk:
-	perl ./find-extra-deps *.d cc2/*.d >$@
+	$(PERL) ./find-extra-deps *.d cc2/*.d >$@
 
 -include extradep.mk
 
@@ -363,7 +363,7 @@ gcom-clean:
 # input for EFa
 triv/efa.in:
 	mkdir $@
-	perl -e 'foreach $$n (500, 1000, 1500, 2000, 2500, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000) {  \
+	$(PERL) -e 'foreach $$n (500, 1000, 1500, 2000, 2500, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000) {  \
 	           $$name = sprintf("%07d", $$n);            \
 	           open(OUT, ">$@/$$name.in") or die $!; \
 	           print OUT "A";                            \
@@ -420,7 +420,7 @@ triv/efa.bison.notree.perf.txt:
 
 %.csv: %.txt
 	cat $^ | grep cycles | \
-	  perl -p -e 's/^[^:]*\D(\d+)\D.*:.*\D(\d+)_(\d+) cycles.*$$/$$1, $$2$$3/' >$@
+	  $(PERL) -p -e 's/^[^:]*\D(\d+)\D.*:.*\D(\d+)_(\d+) cycles.*$$/$$1, $$2$$3/' >$@
 
 all-efa-csv: $(EFA_TESTS:.txt=.csv)
 
@@ -429,7 +429,7 @@ all-efa-csv: $(EFA_TESTS:.txt=.csv)
 # input for EEb
 triv/eeb.in:
 	mkdir $@
-	perl -e 'foreach $$n (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 20, 50, 100, 200, 300, 400, 500) {  \
+	$(PERL) -e 'foreach $$n (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 20, 50, 100, 200, 300, 400, 500) {  \
 	           open(OUT, ">$@/$$n.in") or die $!;    \
 	           print OUT "B";                            \
 	           for($$i=0; $$i < $$n; $$i++) {            \
@@ -458,7 +458,7 @@ triv/eeb.notree.perf.txt:
 # input for SSx
 triv/ssx.in:
 	mkdir $@
-	perl -e 'for($$n=1; $$n <= 99; $$n += 2) {           \
+	$(PERL) -e 'for($$n=1; $$n <= 99; $$n += 2) {           \
 	           open(OUT, ">$@/$$n.in") or die $!;        \
 	           for($$i=0; $$i < $$n; $$i++) {            \
 	             print OUT ("X");                        \
@@ -487,7 +487,7 @@ triv/ssx.notree.perf.txt:
 # input for SSSx
 triv/sssx.in:
 	mkdir $@
-	perl -e 'for($$n=1; $$n <= 99; $$n += 1) {           \
+	$(PERL) -e 'for($$n=1; $$n <= 99; $$n += 1) {           \
 	           open(OUT, ">$@/$$n.in") or die $!;        \
 	           for($$i=0; $$i < $$n; $$i++) {            \
 	             print OUT ("X");                        \
@@ -526,11 +526,11 @@ gendoc:
 
 # dependencies for 'elkhound', the parser generator executable
 gendoc/elkhound_dep.dot:
-	perl $(SMBASE)/scan-depends.pl -r -I$(AST) gramanl.cc >$@
+	$(PERL) $(SMBASE)/scan-depends.pl -r -I$(AST) gramanl.cc >$@
 
 # dependencies for 'glr.h', the entry point to the runtime library
 gendoc/glr.dot:
-	perl $(SMBASE)/scan-depends.pl -r -I$(AST) glr.h >$@
+	$(PERL) $(SMBASE)/scan-depends.pl -r -I$(AST) glr.h >$@
 
 # check to see if they have dot
 .PHONY: dot
