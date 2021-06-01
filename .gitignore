@@ -60,6 +60,7 @@ gramlex.yy.h
 grampar.output
 personal.mk
 test-bad-tmp.c
+testcout
 triv/*.gr
 
 # EOF
