@@ -11,7 +11,7 @@ LIBAST      := $(AST)/libast.a
 LIBSMBASE   := $(SMBASE)/libsmbase.a
 
 # compilation flags
-CCFLAGS := $(shell $(SMBASE)/config.summary | grep CCFLAGS | sed 's/^.*: *//')
+CCFLAGS := -g -Wall
 CCFLAGS += -I$(ELKHOUND) -I$(AST) -I$(SMBASE)
 LDFLAGS := -g -Wall $(LIBELKHOUND) $(LIBAST) $(LIBSMBASE)
 
