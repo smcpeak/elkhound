@@ -176,7 +176,6 @@ support-set := \
 # rules for gramast.ast, because I only need once instance, and
 # because the cygwin version of make-3.80 fails to recognize the
 # applicability of this pattern for some reason)
-# .PRECIOUS: %.ast.gen.cc %.ast.gen.h
 # %.ast.gen.cc %.ast.gen.h: %.ast $(AST)/astgen
 # 	rm -f $*.ast.gen.*
 # 	$(AST)/astgen -o$*.ast.gen $*.ast
@@ -185,7 +184,6 @@ support-set := \
 # intermediate files for a grammar
 # TRGRAMANL: extra trace flags specified by user; starts with "," if defined
 # ('chmod a-w' is so I don't accidentally edit it)
-.PRECIOUS: %.gr.gen.cc %.gr.gen.h
 %.gr.gen.cc %.gr.gen.h %.gr.gen.y: %.gr elkhound
 	rm -f $*.gr.gen.*
 	./elkhound -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr
@@ -219,7 +217,6 @@ support-set := \
 #	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CXXFLAGS)
 
 # run the trivial-grammar helper
-.PRECIOUS: %.gr %.tree.gr
 %.gr: %.gr.in make-trivparser.pl
 	rm -f $@
 	perl ./make-trivparser.pl $(notdir $*) <$*.gr.in >$@
