@@ -188,24 +188,6 @@ support-set := \
 	echo '%}' >>$@
 	sed -e 's/"EOF" {/{/' <$*.gr.gen.y >>$@
 
-# run Bison; the 'sed' command is to silence a spurious warning about
-# 'yyval' being used uninitialized; I also compile here (instead of
-# relying on another pattern rule) because I want to control exactly
-# how the compilation happens (to ensure the Bison-parser is compiled
-# with flags to make it a fair performance test with my own stuff)
-#
-# When enabled, this rule gets used to compile grampar.y, even though
-# I have a non-pattern rule below for that file.  There do not seem to
-# be any other .y files here currently, so I'm just disabling this
-# entire rule.
-#%.tab.c %.tab.o %.tab.h: %.y
-#	bison -d -v $*.y
-#	mv $*.tab.c $*.tab.c.orig
-#	sed -e 's/__attribute__ ((__unused__))//' \
-#	  <$*.tab.c.orig >$*.tab.c
-#	rm $*.tab.c.orig
-#	g++ -c -o $*.tab.o $(YYDEBUG) $*.tab.c $(CXXFLAGS)
-
 # run the trivial-grammar helper
 %.gr: %.gr.in make-trivparser.pl
 	rm -f $@
@@ -227,8 +209,6 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 %.bison.exe: %.tab.o $(trivbison-deps)
 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $*.tab.o $(trivbison-deps)
 
-
-# ------------------- intermediate files --------------------
 # Rule for running smflex.
 %.yy.cc %.yy.h: %.lex
 	$(SMFLEX) -o$*.yy.cc $*.lex
@@ -242,26 +222,26 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 # I have to make some changes to the generated output so it will compile
 # with a C++ compiler, and want to extract the codes so they're available
 # separately without having to know about all of the types in YYSTYPE.
-#
-# TODO: This multi-target rule is not safe.
-grampar.tab.cc grampar.tab.h grampar.codes.h: grampar.y
-	bison -d -v grampar.y
+%.tab.cc %.tab.h %.codes.h: %.y
+	bison -d -v $*.y
 	@#
 	@# I will be compiling the output as C++.
 	@#
-	mv -f grampar.tab.c grampar.tab.cc
+	mv -f $*.tab.c $*.tab.cc
 	@#
 	@# This extracts the declaration of "enum yytokentype" and
-	@# puts it into agrampar.codes.h.  That way I can use the
+	@# puts it into $*.codes.h.  That way I can use the
 	@# token codes in the lexer without also having to declare
 	@# everything that is in the YYSTYPE union.
 	@#
-	sed -n -e '/enum yytokentype/,/};/p' < grampar.tab.h > grampar.codes.h
+	sed -n -e '/enum yytokentype/,/};/p' < $*.tab.h > $*.codes.h
 
 # new C++ grammar with treebuilding actions
 #
-# TODO: This multi-target rule is not safe.
-cc2/cc2t.gr.gen.cc cc2/cc2t.gr.gen.h cc2/cc2t.gr.gen.y: cc2/cc2.gr c/c.tok elkhound
+# This rule is only for use when "%" is "cc2".  It is written as a
+# pattern rule because multi-target non-pattern rules are broken.
+%/cc2t.gr.gen.cc %/cc2t.gr.gen.h %/cc2t.gr.gen.y: %/cc2.gr c/c.tok elkhound
+	test "x$*" = "xcc2"
 	rm -f cc2/cc2t*
 	sed -e 's/cc2\.gr\.gen\.h/cc2t.gr.gen.h/' <cc2/cc2.gr >cc2/cc2t.gr
 	./elkhound -v -tr treebuild$(TRGRAMANL) -o cc2/cc2t.gr.gen cc2/cc2t.gr
