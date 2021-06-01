@@ -5,7 +5,7 @@
 #tmp: mlsstr
 
 # main targets: elkhound, and some examples
-all: elkhound libelkhound.a forbid.gr.gen.out arith c cc2/cc2.exe
+all: elkhound libelkhound.a forbid.gr.gen.cc arith c cc2/cc2.exe
 	@echo BUILD FINISHED
 
 
@@ -279,7 +279,7 @@ mlsstr: mlsstr.cc mlsstr.h
 
 # test grammar for 'forbid' (there is no executable for this, I just look
 # at the Elkhound output)
-forbid.gr.gen.out: forbid.gr
+forbid.gr.gen.cc: forbid.gr
 	./elkhound -tr requireExactStats -o forbid.gr.gen forbid.gr
 
 
