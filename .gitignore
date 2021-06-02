@@ -15,7 +15,6 @@ c.in/c.in4d
 config.mk
 config.status
 config.summary
-examples/arith/arith
 examples/cdecl/cdecl
 examples/cexp/cexp3
 examples/cexp/cexp3b

@@ -25,7 +25,7 @@ LDFLAGS := $(LIBELKHOUND) $(SMBASE)/libsmbase.a
 
 # -------- targets --------
 # main target
-all: arith
+all: arith.exe
 
 # tell 'make' that it cannot compile arith.cc until after
 # it has generated arith.gr.gen.h
@@ -45,14 +45,14 @@ arithyy.cc: arith.lex
 
 # link the driver code with the generated parser and lexer;
 # also run it with a test input
-arith: arith.o arithyy.o arith.gr.gen.o
+arith.exe: arith.o arithyy.o arith.gr.gen.o
 	g++ -o $@ -g $^ $(LDFLAGS)
-	echo "3 + 4 * 5" | ./arith
-	echo "3 + 4 * 5" | ./arith printTree
+	echo "3 + 4 * 5" | ./arith.exe
+	echo "3 + 4 * 5" | ./arith.exe printTree
 
 
 clean:
-	rm -f arith *.bin *.gen.* *.o
+	rm -f *.exe *.bin *.gen.* *.o
 
 toolclean: clean
 	rm -f arithyy.cc

@@ -5,7 +5,7 @@
 #tmp: mlsstr.exe
 
 # main targets: elkhound, and some examples
-all: elkhound.exe libelkhound.a forbid.gr.gen.cc arith c cc2/cc2.exe
+all: elkhound.exe libelkhound.a forbid.gr.gen.cc examples/arith/arith.exe c/c.tok cc2/cc2.exe
 	@echo BUILD FINISHED
 
 
@@ -341,8 +341,9 @@ cc2/cc2t.exe: $(cc2t-deps) $(LIBS)
 
 
 # ---------------------- Elkhound examples ------------------
-.PHONY: c
-c: elkhound.exe libelkhound.a
+# Running 'make' in the 'c' directory does a lot of things, but the one
+# thing we need here is the file 'c/c.tok'.
+c/c.tok: elkhound.exe libelkhound.a
 	$(MAKE) -C c
 
 c.in/c.in4c: c.in/c.in4b
@@ -358,11 +359,12 @@ c.in/c.in4d: c.in/c.in4c
 	done
 
 # stuff in examples directory
-.PHONY: examples arith
-arith: elkhound.exe libelkhound.a
+.PHONY: examples/arith/arith.exe
+examples/arith/arith.exe: elkhound.exe libelkhound.a c/c.tok
 	$(MAKE) -C examples/arith
 
-examples: all glrmain.o arith gcom
+.PHONY: examples
+examples: all glrmain.o examples/arith/arith.exe gcom
 	$(MAKE) -C examples/cexp
 	$(MAKE) -C examples/cdecl
 	$(MAKE) -C examples/scannerless
