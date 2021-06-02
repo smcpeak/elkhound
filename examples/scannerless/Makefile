@@ -14,7 +14,7 @@ CCFLAGS += -I$(ELKHOUND) -I$(SMBASE)
 LDFLAGS := -g -Wall $(LIBELKHOUND) $(LIBSMBASE)
 
 # default make targets
-all: sless
+all: sless.exe
 
 
 %.o: %.cc
@@ -26,12 +26,15 @@ sless.h sless.cc: sless.gr
 main.o: sless.h
 
 SLESS_OBJS := main.o sless.o
-sless: $(SLESS_OBJS)
+sless.exe: $(SLESS_OBJS)
 	g++ -o $@ $(SLESS_OBJS) $(LDFLAGS)
 
-check:
-	echo "a aa a aaa" | ./sless
+# I get a segfault when running this.  I'm not sure when it broke.
+check: sless.exe
+	echo "TODO: this is broken"
+	exit 2
+	echo "a aa a aaa" | ./sless.exe
 
 clean:
-	rm -f sless *.o sless.h sless.cc
+	rm -f *.exe *.o sless.h sless.cc
 

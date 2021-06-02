@@ -24,7 +24,7 @@ LDFLAGS := $(LIBELKHOUND) $(AST)/libast.a $(SMBASE)/libsmbase.a
 
 # -------- targets --------
 # main target
-all: cdecl
+all: cdecl.exe
 
 # extra object files
 extras := \
@@ -44,9 +44,9 @@ cdecl.gr.gen.cc cdecl.gr.gen.h: cdecl.gr
 
 # link the driver code with the generated parser and lexer;
 # also run it with a test input
-cdecl: $(ELKHOUND)/glrmain.o cdecl.gr.gen.o
+cdecl.exe: $(ELKHOUND)/glrmain.o cdecl.gr.gen.o
 	g++ -g -o $@ $^ $(extras) $(LDFLAGS)
-	./cdecl $(ELKHOUND)/in/cdecl.in1
+	./cdecl.exe $(ELKHOUND)/in/cdecl.in1
 
 clean:
-	rm -f cdecl *.bin *.gen.* *.o gdb.log
+	rm -f *.exe *.bin *.gen.* *.o gdb.log

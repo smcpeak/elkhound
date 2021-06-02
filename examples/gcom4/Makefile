@@ -14,7 +14,7 @@ CCFLAGS += -I$(ELKHOUND) -I$(SMBASE)
 LDFLAGS := -g -Wall $(LIBELKHOUND) $(LIBSMBASE)
 
 # default make targets
-all: lexer parser
+all: lexer.exe parser.exe
 
 
 %.o: %.cc
@@ -23,7 +23,7 @@ all: lexer parser
 tokens.tok: lexer.h $(ELKHOUND)/make-tok
 	perl $(ELKHOUND)/make-tok TokenCode <lexer.h >$@
 
-lexer: lexer.cc
+lexer.exe: lexer.cc
 	g++ -o $@ $(CCFLAGS) -DTEST_LEXER lexer.cc $(LDFLAGS)
 
 gcom.h gcom.cc: gcom.gr tokens.tok
@@ -32,13 +32,13 @@ gcom.h gcom.cc: gcom.gr tokens.tok
 parser.o: gcom.h
 
 PARSER_OBJS := lexer.o parser.o gcom.o
-parser: $(PARSER_OBJS)
+parser.exe: $(PARSER_OBJS)
 	g++ -o $@ $(PARSER_OBJS) $(LDFLAGS)
 
-check:
-	echo "2 + 3" | ./lexer
-	echo "2 + 3" | ./parser
+check: lexer.exe parser.exe
+	echo "2 + 3" | ./lexer.exe
+	echo "2 + 3" | ./parser.exe
 
 clean:
-	rm -f lexer parser *.o tokens.tok gcom.h gcom.cc gmon.out
+	rm -f *.exe *.o tokens.tok gcom.h gcom.cc gmon.out
 

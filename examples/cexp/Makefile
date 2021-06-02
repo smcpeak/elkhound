@@ -38,7 +38,7 @@ LDFLAGS := $(LIBELKHOUND) $(AST)/libast.a $(SMBASE)/libsmbase.a
 
 # -------- targets --------
 # main target
-all: cexp3ast.ast.gen.h cexp3 cexp3b
+all: cexp3ast.ast.gen.h cexp3.exe cexp3b.exe
 
 # extra object files
 extras := \
@@ -54,18 +54,18 @@ cexp3b.gr: cexp3.gr
 	grep -v PREC cexp3.gr >$@
 	chmod a-w $@
 
-cexp3: $(ELKHOUND)/glrmain.o cexp3.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o
+cexp3.exe: $(ELKHOUND)/glrmain.o cexp3.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o
 	g++ -g -o $@ $^ $(extras) $(LDFLAGS)
 	./$@ $(ELKHOUND)/in/cexp3.in1 | tee tmp.out
 	grep 'result: 7' tmp.out
 	rm tmp.out
 
-cexp3b: $(ELKHOUND)/glrmain.o cexp3b.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o
+cexp3b.exe: $(ELKHOUND)/glrmain.o cexp3b.gr.gen.o cexp3mrg.o cexp3ast.ast.gen.o
 	g++ -g -o $@ $^ $(extras) $(LDFLAGS)
-	./$@ $(ELKHOUND)/in/cexp3.in1 | tee tmp.out
-	grep 'result: 7' tmp.out
-	rm tmp.out
+	./$@ $(ELKHOUND)/in/cexp3.in1 | tee tmpb.out
+	grep 'result: 7' tmpb.out
+	rm tmpb.out
 
 
 clean:
-	rm -f cexp3 cexp3b cexp3b.gr *.bin *.gen.* *.o
+	rm -f *.exe cexp3b.gr *.bin *.gen.* *.o
