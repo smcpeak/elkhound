@@ -174,10 +174,25 @@ support-set := \
 # intermediate files for a grammar
 # TRGRAMANL: extra trace flags specified by user; starts with "," if defined
 # ('chmod a-w' is so I don't accidentally edit it)
+#
+# The initial 'test' command is to ensure this rule is not used for
+# cc2/cc2t, which has its own rule, below.
 %.gr.gen.cc %.gr.gen.h %.gr.gen.y: %.gr elkhound.exe
-	rm -f $*.gr.gen.*
+	test "x$*" != "xcc2/cc2t"
+	rm -f $*.gr.gen.h $*.gr.gen.cc
 	./elkhound.exe -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr
 	chmod a-w $*.gr.gen.h $*.gr.gen.cc
+
+# new C++ grammar with treebuilding actions
+#
+# This rule is only for use when "%" is "cc2".  It is written as a
+# pattern rule because multi-target non-pattern rules are broken.
+%/cc2t.gr.gen.cc %/cc2t.gr.gen.h %/cc2t.gr.gen.y: %/cc2.gr c/c.tok elkhound
+	test "x$*" = "xcc2"
+	rm -f cc2/cc2t.gr*
+	sed -e 's/cc2\.gr\.gen\.h/cc2t.gr.gen.h/' <cc2/cc2.gr >cc2/cc2t.gr
+	./elkhound.exe -v -tr treebuild$(TRGRAMANL) -o cc2/cc2t.gr.gen cc2/cc2t.gr
+	chmod a-w cc2/cc2t.gr*
 
 # bison parser from the a given grammar; the 'sed' is because Bison
 # already interpretes 0 as EOF, and if my rule names it explicitly
@@ -236,17 +251,6 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 	@# everything that is in the YYSTYPE union.
 	@#
 	sed -n -e '/enum yytokentype/,/};/p' < $*.tab.h > $*.codes.h
-
-# new C++ grammar with treebuilding actions
-#
-# This rule is only for use when "%" is "cc2".  It is written as a
-# pattern rule because multi-target non-pattern rules are broken.
-%/cc2t.gr.gen.cc %/cc2t.gr.gen.h %/cc2t.gr.gen.y: %/cc2.gr c/c.tok elkhound
-	test "x$*" = "xcc2"
-	rm -f cc2/cc2t*
-	sed -e 's/cc2\.gr\.gen\.h/cc2t.gr.gen.h/' <cc2/cc2.gr >cc2/cc2t.gr
-	./elkhound.exe -v -tr treebuild$(TRGRAMANL) -o cc2/cc2t.gr.gen cc2/cc2t.gr
-	chmod a-w cc2/cc2t.gr*
 
 
 # ----------------- extra dependencies -----------------
