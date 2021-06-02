@@ -2,11 +2,11 @@
 // parser for guarded command example language
 
 verbatim {
-  #include "str.h"        // stringf
-  #include "ast.h"        // AST declarations
+  #include "str.h"           // stringf
+  #include "gcom.ast.gen.h"  // AST declarations
 
-  #include <stdlib.h>     // getenv, atoi, putenv
-  #include <stdio.h>      // printf
+  #include <stdlib.h>        // getenv, atoi, putenv
+  #include <stdio.h>         // printf
 }
 
 // the parser context class is useful in large examples;

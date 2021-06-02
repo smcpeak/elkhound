@@ -16,7 +16,17 @@ CCFLAGS += -I$(ELKHOUND) -I$(AST) -I$(SMBASE)
 LDFLAGS := -g -Wall $(LIBELKHOUND) $(LIBAST) $(LIBSMBASE)
 
 # default make targets
-all: lexer parser
+all: lexer.exe parser.exe
+
+
+# Remove some built-in rules.
+.SUFFIXES:
+
+# Do not delete "intermediate" files.
+.SECONDARY:
+
+# Remove target if recipe fails.
+.DELETE_ON_ERROR:
 
 
 %.o: %.cc
@@ -25,26 +35,26 @@ all: lexer parser
 tokens.tok: lexer.h $(ELKHOUND)/make-tok
 	perl $(ELKHOUND)/make-tok TokenCode <lexer.h >$@
 
-lexer: lexer.cc
+lexer.exe: lexer.cc
 	g++ -o $@ $(CCFLAGS) -DTEST_LEXER lexer.cc $(LDFLAGS)
 
-gcom.h gcom.cc: gcom.gr tokens.tok
-	$(ELKHOUND)/elkhound.exe gcom.gr
+%.gr.gen.h %.gr.gen.cc: %.gr tokens.tok
+	$(ELKHOUND)/elkhound.exe -o $*.gr.gen $*.gr
 
-ast.h ast.cc: gcom.ast
-	$(AST)/astgen.exe -o ast gcom.ast
+%.ast.gen.h %.ast.gen.cc: %.ast
+	$(AST)/astgen.exe -o $*.ast.gen $*.ast
 
-parser.o: gcom.h ast.h
+parser.o: gcom.gr.gen.h gcom.ast.gen.h
 
-PARSER_OBJS := lexer.o parser.o gcom.o ast.o eval.o
-parser: $(PARSER_OBJS)
+PARSER_OBJS := lexer.o parser.o gcom.gr.gen.o gcom.ast.gen.o eval.o
+parser.exe: $(PARSER_OBJS)
 	g++ -o $@ $(PARSER_OBJS) $(LDFLAGS)
 
-check:
-	echo "x := 2 + 3 + 4; print x" | ./lexer
-	echo "x := 2 + 3 + 4; print x" | ./parser -ast
-	echo "x := 2 + 3 + 4; print x" | ./parser -tree
+check: lexer.exe parser.exe
+	echo "x := 2 + 3 + 4; print x" | ./lexer.exe
+	echo "x := 2 + 3 + 4; print x" | ./parser.exe -ast
+	echo "x := 2 + 3 + 4; print x" | ./parser.exe -tree
 
 clean:
-	rm -f lexer parser *.o tokens.tok gcom.h gcom.cc ast.h ast.cc gmon.out
+	rm -f *.exe *.o tokens.tok *.gen.h *.gen.cc gmon.out
 

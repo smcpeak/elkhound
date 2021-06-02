@@ -1,15 +1,15 @@
 // parser.cc
 // driver program for guarded command example
 
-#include "lexer.h"     // Lexer
-#include "gcom.h"      // GCom
-#include "glr.h"       // GLR
-#include "ptreenode.h" // PTreeNode
-#include "ptreeact.h"  // ParseTreeLexer, ParseTreeActions
-#include "ast.h"       // Stmt, etc.
-#include "eval.h"      // Env
+#include "lexer.h"           // Lexer
+#include "gcom.gr.gen.h"     // GCom
+#include "glr.h"             // GLR
+#include "ptreenode.h"       // PTreeNode
+#include "ptreeact.h"        // ParseTreeLexer, ParseTreeActions
+#include "gcom.ast.gen.h"    // Stmt, etc.
+#include "eval.h"            // Env
 
-#include <string.h>    // strcmp
+#include <string.h>          // strcmp
 
 
 int main(int argc, char *argv[])

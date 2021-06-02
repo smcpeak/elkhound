@@ -1,12 +1,12 @@
 // eval.cc
 // implementation of the 'eval' methods declared in gcom.ast
 
-#include "eval.h"        // this module
-#include "ast.h"         // AST declarations
+#include "eval.h"            // this module
+#include "gcom.ast.gen.h"    // AST declarations
 
-#include <stdlib.h>      // exit
-#include <assert.h>      // assert
-#include <stdio.h>       // printf
+#include <stdlib.h>          // exit
+#include <assert.h>          // assert
+#include <stdio.h>           // printf
 
 
 // ------------------- Binding -----------------

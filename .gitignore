@@ -46,8 +46,6 @@ examples/gcom7/ast.cc
 examples/gcom7/ast.h
 examples/gcom7/gcom.cc
 examples/gcom7/gcom.h
-examples/gcom7/lexer
-examples/gcom7/parser
 examples/gcom7/tokens.tok
 examples/scannerless/sless
 examples/scannerless/sless.cc
