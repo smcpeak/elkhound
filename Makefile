@@ -60,9 +60,10 @@ LIBS = $(LIBAST) $(LIBSMBASE)
 LDFLAGS =
 
 # external tools
-PERL   = perl
-AR     = ar
-RANLIB = ranlib
+PYTHON3 = python3
+PERL    = perl
+AR      = ar
+RANLIB  = ranlib
 
 
 # ---- Options within this Makefile ----
@@ -251,16 +252,42 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 # ----------------- extra dependencies -----------------
 # These dependencies ensure that automatically-generated code is
 # created in time to be used by other build processes which need it.
-# I had been maintaining the list by hand, but now I've got a script
-# to build it.  The list may need to be rebuilt from time to time; if
-# you get compile errors after 'make clean' because of missing files
-# that are automatically generated, rebuild extradep.mk after a full
-# compilation succeeds.
 
-extradep.mk:
-	$(PERL) ./find-extra-deps *.d cc2/*.d >$@
+# Creating this .cc file (done with elkhound) requires c/c.tok.
+cc2/cc2.gr.gen.cc: c/c.tok
 
--include extradep.mk
+# Arguments to find-extra-deps.py.
+EXTRADEPS_ARGS :=
+
+# I do not need a dependency on glrconfig.h because ./configure makes it
+# and that is required before running 'make'.
+EXTRADEPS_ARGS += --exclude glrconfig.h
+
+# I have chosen to check these in, but they are generated, so should be
+# included among the generated source dependencies.
+EXTRADEPS_ARGS += --include grampar.codes.h
+EXTRADEPS_ARGS += --include grampar.tab.h
+
+# Pull in the dependency files.
+EXTRADEPS_ARGS += *.d cc2/*.d
+
+.PHONY: remake-extradep
+remake-extradep:
+	$(PYTHON3) $(SMBASE)/find-extra-deps.py $(EXTRADEPS_ARGS) >extradep.mk
+
+include extradep.mk
+
+check: validate-extradep
+
+.PHONY: validate-extradep
+validate-extradep:
+	$(PYTHON3) $(SMBASE)/find-extra-deps.py $(EXTRADEPS_ARGS) >extradep.tmp
+	@echo diff extradep.mk extradep.tmp
+	@if diff extradep.mk extradep.tmp; then true; else \
+	  echo "extradep.mk needs updating; run 'make remake-extradep'"; \
+	  exit 2; \
+	fi
+	rm extradep.tmp
 
 
 # --------------------- test programs ----------------------
