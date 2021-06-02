@@ -214,6 +214,7 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 
 # grammar description AST
 %.ast.gen.cc %.ast.gen.h: %.ast $(ASTGEN)
+	rm -f $*.ast.gen.cc $*.ast.gen.h
 	$(ASTGEN) -o$*.ast.gen $*.ast
 	chmod a-w $*.ast.gen.h $*.ast.gen.cc
 
