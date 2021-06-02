@@ -36,14 +36,20 @@ WARNING_FLAGS =
 # Flags for C++ standard to use.
 CXX_STD_FLAGS = -std=c++11
 
-# Preprocessing flags.
+# -D flags to pass to preprocessor.
+DEFINES =
+
+# -I flags to pass to preprocessor.
 #
 # "-I." is needed so files compiled in subdirectories can include files
 # in the top-level directory.
 #
 # "-Ic" is needed for binaries that use $(support-set).
 #
-CPPFLAGS = -I$(SMBASE) -I$(AST) -I. -Ic
+INCLUDES = -I$(SMBASE) -I$(AST) -I. -Ic
+
+# Preprocessing flags.
+CPPFLAGS = $(INCLUDES) $(DEFINES)
 
 # Flags for the C++ compiler and preprocessor.
 #

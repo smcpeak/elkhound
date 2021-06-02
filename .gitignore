@@ -14,7 +14,6 @@ c.in/c.in4c
 c.in/c.in4d
 config.mk
 config.status
-config.summary
 examples/cdecl/cdecl
 examples/cexp/cexp3
 examples/cexp/cexp3b
@@ -59,7 +58,6 @@ gramlex.yy.h
 grampar.output
 personal.mk
 test-bad-tmp.c
-testcout
 triv/*.gr
 
 # EOF

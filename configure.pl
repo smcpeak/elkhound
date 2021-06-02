@@ -3,45 +3,25 @@
 
 use strict 'subs';
 
-# default location of smbase relative to this package
-$SMBASE = "../smbase";
-$req_smcv = 1.03;            # required sm_config version number
-$thisPackage = "elkhound";
 
-# Silence warning about "main::debug" being a possible typo.  It is
-# set by 'get_sm_config_version()' but perl does not see that.
-$main::debug = 0;
+sub run {
+  my $code = system(@_);
+  checkExitCode($code);
+}
 
-# -------------- BEGIN common block ---------------
-# do an initial argument scan to find if smbase is somewhere else
-for (my $i=0; $i < @ARGV; $i++) {
-  my ($d) = ($ARGV[$i] =~ m/-*smbase=(.*)/);
-  if (defined($d)) {
-    $SMBASE = $d;
+sub checkExitCode {
+  my ($code) = @_;
+  if ($code != 0) {
+    # hopefully the command has already printed a message,
+    # I'll just relay the status code
+    if ($code >> 8) {
+      exit($code >> 8);
+    }
+    else {
+      exit($code & 127);
+    }
   }
 }
-
-# try to load the sm_config module
-eval {
-  push @INC, ($SMBASE, ".");
-  require sm_config;
-};
-if ($@) {
-  die("$@" .     # ends with newline, usually
-      "\n" .
-      "I looked for smbase in \"$SMBASE\".\n" .
-      "\n" .
-      "You can explicitly specify the location of smbase with the -smbase=<dir>\n" .
-      "command-line argument.\n");
-}
-
-# check version number
-$smcv = get_sm_config_version();
-if ($smcv < $req_smcv) {
-  die("This package requires version $req_smcv of sm_config, but found\n" .
-      "only version $smcv.\n");
-}
-# -------------- END common block ---------------
 
 
 # defaults
@@ -55,10 +35,11 @@ if ($smcv < $req_smcv) {
 
   "subconfigure" => 1
 );
-$AST = "../ast";
 
 # arguments to pass to sub-configures
 @c_args = ();
+
+@DEFINES = ();
 
 
 # copy from %flags to individual global variables
@@ -84,12 +65,8 @@ copyFlagsToGlobals();
 
 
 sub usage {
-  standardUsage();
-
   print(<<"EOF");
 package options:
-  -prof              enable profiling
-  -devel             add options useful while developing
   -loc[=0/1]:        enable/disable source location tracking [enabled]
   -action:           enable use of "-tr action" to see parser actions
   -compression[=0/1]:  enable/disable all table compression options [disabled]
@@ -101,12 +78,10 @@ package options:
                      in Bison, for the purpose of performance comparison
                      (note that Elsa will not work in this mode)
   -nosub:            do not invoke subdirectory configure scripts
-  -ast=<dir>:        specify where the ast library is [$AST]
 EOF
 }
 
 
-# -------------- BEGIN common block 2 -------------
 # global variables holding information about the current command-line
 # option being processed
 $option = "";
@@ -121,19 +96,8 @@ foreach $optionAndValue (@ARGV) {
 
   my $arg = $option;
 
-  if (handleStandardOption()) {
+  if (0) {
     # handled by sm_config.pm
-  }
-  # -------------- END common block 2 -------------
-
-  elsif ($arg eq "prof") {
-    push @CCFLAGS, "-pg";
-    push @c_args, $arg;
-  }
-
-  elsif ($arg eq "devel") {
-    push @CCFLAGS, "-Werror";
-    push @c_args, $arg;
   }
 
   elsif ($arg eq "loc") {
@@ -141,7 +105,7 @@ foreach $optionAndValue (@ARGV) {
   }
 
   elsif ($arg eq "action") {
-    push @CCFLAGS, "-DACTION_TRACE=1";
+    push @DEFINES, "-DACTION_TRACE=1";
   }
 
   elsif ($arg eq "fastest") {
@@ -152,8 +116,7 @@ foreach $optionAndValue (@ARGV) {
     # to verify that I'm still within 3% of Bison (at least
     # when compiled with gcc-2.95.3)
     $flags{loc} = 0;
-    $flags{debug} = 0;
-    push @CCFLAGS,
+    push @DEFINES,
       ("-DUSE_RECLASSIFY=0",        # no token reclassification
        "-DUSE_KEEP=0",              # don't call keep() functions
        "-DNDEBUG_NO_ASSERTIONS",    # disable all xassert() calls
@@ -164,16 +127,6 @@ foreach $optionAndValue (@ARGV) {
 
   elsif ($arg eq "nosub") {
     $flags{subconfigure} = 0;
-  }
-
-  elsif ($arg eq "ast") {
-    $AST = getOptArg();
-    if ($AST !~ m|^/|) {
-      push @c_args, "-ast=../$AST";
-    }
-    else {
-      push @c_args, "-ast=$AST";
-    }
   }
 
   elsif ($arg =~ "compression|eef|gcs|gcsc|crs") {
@@ -196,7 +149,6 @@ foreach $optionAndValue (@ARGV) {
 }
 
 copyFlagsToGlobals();
-finishedOptionProcessing();
 
 # summarize compression flags
 @compflags = ();
@@ -214,115 +166,44 @@ else {
   $compflags = "<none>";
 }
 
-# Relay some flags to the sub-configure.
-if ($main::target_platform) {
-  push @c_args, "-target=$main::target_platform";
-}
-
-if ($main::debug) {
-  push @c_args, "-debug";
-}
-
-
-# ------------------ needed components ---------------
-test_smbase_presence();
-
-test_CXX_compiler();
-
-# does the compiler want me to pass "-I."?  unfortunately, some versions
-# of gcc-3 will emit an annoying warning if I pass "-I." when I don't need to
-print("checking whether compiler needs \"-I.\"... ");
-$cmd = "$CXX -c @CCFLAGS cc2/testprog.cc";
-if (0!=system("$cmd >/dev/null 2>&1")) {
-  # failed without "-I.", so try adding it
-  $cmd = "$CXX -c -I. @CCFLAGS cc2/testprog.cc";
-  if (0!=system("$cmd >/dev/null 2>&1")) {
-    my $wd = `pwd`;
-    chomp($wd);
-    die "\n" .
-        "I was unable to compile a simple test program.  I tried:\n" .
-        "  cd $wd\n" .
-        "  $cmd\n" .
-        "Try it yourself to see the error message.  This needs be fixed\n" .
-        "before Elkhound will compile.\n";
-  }
-
-  # adding "-I." fixed the problem
-  print("yes\n");
-  push @CCFLAGS, "-I.";
-}
-else {
-  print("no\n");
-}
-
-
-# ast
-if (! -f "$AST/asthelp.h") {
-  die "I cannot find asthelp.h in `$AST'.\n" .
-      "The ast library is required for elkhound.\n" .
-      "If it's in a different location, use the -ast=<dir> option.\n";
-}
-
-
-# Right now, Elkhound does not work properly when the GCC optimizer
-# is enabled.  I suspect that is due to breaking the strict aliasing
-# rules somewhere.  Therefore, require "-debug".
-if (!$main::debug) {
-  die("Currently Elkhound must be configured in debug mode to work properly.\n" .
-      "Please re-run configure with the \"-debug\" switch.\n");
-}
-
-
-$PERL = get_PERL_variable();
-
-
-# ------------------ config.summary -----------------
-$summary = getStandardConfigSummary();
-
-$summary .= <<"OUTER_EOF";
-cat <<EOF
-  loc:             $loc
-  compression:     $compflags
-EOF
-OUTER_EOF
-
-writeConfigSummary($summary);
-
 
 # ------------------- config.status ------------------
-writeConfigStatus("PERL" => "$PERL",
-                  "AST" => "$AST");
-
-# extend config.status
-open(OUT, ">>config.status") or die("could not append to config.status: $!\n");
+# Write config.status.
+open(OUT, ">config.status") or die("could not open config.status: $!\n");
 print OUT (<<"OUTER_EOF");
+# config.status
+# Created by command: ./configure @ARGV
 
-cat >glrconfig.h.tmp <<EOF
+
+# ---- glrconfig.h ----
+cat >glrconfig.h <<EOF
 // glrconfig.h
-// do not edit; generated by ./configure
+// Do not edit; generated by 'configure'.
 
 EOF
+
+echo "creating glrconfig.h ..."
 
 sed -e "s|\@GLR_SOURCELOC\@|$loc|g" \\
     -e "s|\@eef\@|$eef|g" \\
     -e "s|\@gcs\@|$gcs|g" \\
     -e "s|\@gcsc\@|$gcsc|g" \\
     -e "s|\@crs\@|$crs|g" \\
-  <glrconfig.h.in >>glrconfig.h.tmp
+  <glrconfig.h.in >>glrconfig.h
 
-# see if the new glrconfig.h differs from the old; if not, then
-# leave the old, so 'make' won't think something needs to be rebuilt
-if diff glrconfig.h glrconfig.h.tmp >/dev/null 2>&1; then
-  # leave it
-  echo "glrconfig.h is unchanged"
-  rm glrconfig.h.tmp
-else
-  echo "creating glrconfig.h ..."
 
-  # overwrite it, and make it read-only
-  mv -f glrconfig.h.tmp glrconfig.h
-  chmod a-w glrconfig.h
-fi
+# ---- config.mk ----
+echo "creating config.mk ..."
+
+cat >config.mk <<EOF
+# elkhound/config.mk
+# Do not edit; generated by 'configure'.
+# Instead, create a personal.mk file for custom Makefile settings.
+
+DEFINES = @DEFINES
+
+# EOF
+EOF
 
 
 OUTER_EOF
@@ -336,8 +217,9 @@ chmod 0755, "config.status";
 if ($subconfigure) {
   chdir("c") or die;
   my $tmp = join(' ', ("./configure", @c_args));
-  print("Invoking $tmp in 'c' directory..\n");
+  print("Invoking $tmp in 'c' directory ...\n");
   run("./configure", @c_args);
+  print("Finished in 'c' directory.\n");
   chdir("..") or die;
 }
 
@@ -346,11 +228,6 @@ run("./config.status");
 
 print("\nYou can now run make, usually called 'make' or 'gmake'.\n");
 
-
 exit(0);
-
-
-# silence warnings
-pretendUsed($thisPackage);
 
 # EOF
