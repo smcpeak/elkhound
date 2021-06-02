@@ -279,7 +279,7 @@ mlsstr.exe: mlsstr.cc mlsstr.h
 
 # test grammar for 'forbid' (there is no executable for this, I just look
 # at the Elkhound output)
-forbid.gr.gen.cc: forbid.gr
+forbid.gr.gen.cc: forbid.gr elkhound.exe
 	./elkhound.exe -tr requireExactStats -o forbid.gr.gen forbid.gr
 
 
