@@ -32,8 +32,8 @@ all: arith.exe
 arith.o: arith.gr.gen.h
 
 # invoke the parser generator
-arith.gr.gen.cc arith.gr.gen.h: arith.gr
-	$(ELKHOUND)/elkhound.exe -v -o arith.gr.gen arith.gr
+%.gr.gen.cc %.gr.gen.h: %.gr
+	$(ELKHOUND)/elkhound.exe -v -o $*.gr.gen $*.gr
 
 # invoke the lexer generator
 arithyy.cc: arith.lex
