@@ -850,9 +850,9 @@ void ParseTables::emitMLConstructionCode
       lhsIndex[i] = prodInfo[i].lhsIndex;
     }
 
-    emitMLTable(out, rhsLen.operator int const *(), numProds,
+    emitMLTable(out, rhsLen.ptrC(), numProds,
                 16 /*columns; arbitrary*/, "prodInfo_rhsLen");
-    emitMLTable(out, lhsIndex.operator int const *(), numProds,
+    emitMLTable(out, lhsIndex.ptrC(), numProds,
                 16 /*columns; arbitrary*/, "prodInfo_lhsIndex");
   }
 

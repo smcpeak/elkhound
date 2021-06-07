@@ -553,7 +553,7 @@ void ParseTables::mergeActionColumns()
 
   // color the graph
   Array<int> color(numTerms);      // terminal -> color
-  int numColors = colorTheGraph(color, graph);
+  int numColors = colorTheGraph(color.ptr(), graph);
 
   // build a new, compressed action table; the entries are initialized
   // to 'error', meaning every cell starts as don't-care
@@ -644,7 +644,7 @@ void ParseTables::mergeActionRows()
 
   // color the graph
   Array<int> color(numStates);      // state -> color (equivalence class)
-  int numColors = colorTheGraph(color, graph);
+  int numColors = colorTheGraph(color.ptr(), graph);
 
   // build a new, compressed action table
   ActionEntry *newTable;
@@ -774,7 +774,7 @@ void ParseTables::mergeGotoColumns()
 
   // color the graph
   Array<int> color(numNonterms);      // nonterminal -> color
-  int numColors = colorTheGraph(color, graph);
+  int numColors = colorTheGraph(color.ptr(), graph);
 
   // build a new, compressed goto table; the entries are initialized
   // to 'error', meaning every cell starts as don't-care
@@ -862,7 +862,7 @@ void ParseTables::mergeGotoRows()
 
   // color the graph
   Array<int> color(numStates);      // state -> color (equivalence class)
-  int numColors = colorTheGraph(color, graph);
+  int numColors = colorTheGraph(color.ptr(), graph);
 
   // build a new, compressed goto table
   GotoEntry *newTable;
@@ -940,7 +940,7 @@ int ParseTables::colorTheGraph(int *color, Bit2d &graph)
 
   // node -> # of adjacent nodes
   Array<int> degree(n);
-  memset((int*)degree, 0, n * sizeof(int));
+  memset(degree.ptr(), 0, n * sizeof(int));
 
   // node -> # of adjacent nodes that have colors already
   Array<int> blocked(n);
@@ -1002,7 +1002,7 @@ int ParseTables::colorTheGraph(int *color, Bit2d &graph)
     xassert(adjIndex == bestBlocked);
 
     // sort them
-    qsort((int*)adjColor, bestBlocked, sizeof(int), intCompare);
+    qsort(adjColor.ptr(), bestBlocked, sizeof(int), intCompare);
 
     // select the lowest-numbered color that won't conflict
     int selColor = 0;
@@ -1168,7 +1168,7 @@ void emitOffsetTable(EmitCode &out, EltType **table, EltType *base, int size,
   if (size > 0) {
     out << "  " << tableName << " = new " << typeName << " [" << size << "];\n";
 
-    emitTable(out, (int*)offsets, size, 16, "int", stringc << tableName << "_offsets");
+    emitTable(out, offsets.ptr(), size, 16, "int", stringc << tableName << "_offsets");
 
     // at run time, interpret the offsets table
     out << "  for (int i=0; i < " << size << "; i++) {\n"
