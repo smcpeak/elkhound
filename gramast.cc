@@ -4,7 +4,7 @@
 #error This module is obsolete; use gramast.gen.{cc,h} instead.
 
 #include "gramast.h"      // this module
-#include "macros.h"       // STATIC_ASSERT
+#include "sm-macros.h"    // STATIC_ASSERT
 
 string astTypeToString(int type)
 {
