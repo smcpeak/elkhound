@@ -26,7 +26,10 @@ tokens.tok: lexer.h $(ELKHOUND)/make-tok
 lexer.exe: lexer.cc
 	g++ -o $@ $(CCFLAGS) -DTEST_LEXER lexer.cc $(LDFLAGS)
 
-gcom.h gcom.cc: gcom.gr tokens.tok
+# This is written as a pattern rule because multi-target non-pattern
+# rules are broken.
+%.h %.cc: %.gr tokens.tok
+	test "x$*" = "xgcom"
 	$(ELKHOUND)/elkhound.exe gcom.gr
 
 parser.o: gcom.h
