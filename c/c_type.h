@@ -36,6 +36,26 @@ class Type;
 // static data consistency checker
 void cc_type_checker();
 
+
+// these two are a common idiom in my code for typesafe casts;
+// they are essentially a roll-your-own RTTI
+//
+// I moved them from smbase into this file as it was their ownly user
+// and I consider these macros deficient and obsolete due to returning
+// references instead of pointers.  But elkhound/c is not really
+// maintained so I don't want to do more here than necessary.
+#define CAST_MEMBER_FN(destType)                                                \
+  destType const &as##destType##C() const;                                      \
+  destType &as##destType() { return const_cast<destType&>(as##destType##C()); }
+
+#define CAST_MEMBER_IMPL(inClass, destType)         \
+  destType const &inClass::as##destType##C() const  \
+  {                                                 \
+    xassert(is##destType());                        \
+    return (destType const&)(*this);                \
+  }
+
+
 // --------------------- atomic types --------------------------
 // interface to types that are atomic in the sense that no
 // modifiers can be stripped away; see types.txt
