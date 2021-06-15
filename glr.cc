@@ -111,7 +111,7 @@
 #include "trace.h"       // tracing system
 #include "strutil.h"     // replace
 #include "lexerint.h"    // LexerInterface
-#include "test.h"        // PVAL
+#include "sm-test.h"     // PVAL
 #include "cyctimer.h"    // CycleTimer
 #include "sobjlist.h"    // SObjList
 #include "owner.h"       // Owner

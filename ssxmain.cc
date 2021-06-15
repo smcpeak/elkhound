@@ -3,7 +3,7 @@
 
 #include "trivlex.h"   // trivialLexer
 #include "parssppt.h"  // ParseTreeAndTokens
-#include "test.h"      // ARGS_MAIN
+#include "sm-test.h"   // ARGS_MAIN
 #include "trace.h"     // TRACE_ARGS
 #include "glr.h"       // GLR
 #include "useract.h"   // UserActions

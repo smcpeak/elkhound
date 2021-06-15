@@ -7,7 +7,7 @@
 #endif
 
 #include "trivlex.h"   // trivialLexer
-#include "test.h"      // ARGS_MAIN
+#include "sm-test.h"   // ARGS_MAIN
 #include "trace.h"     // TRACE_ARGS
 #include "useract.h"   // TrivialUserActions
 #include "lexer2.h"    // Lexer2

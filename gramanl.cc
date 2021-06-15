@@ -4866,7 +4866,7 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
 #ifdef GRAMANL_MAIN
 
 #include "bflatten.h"          // BFlatten
-#include "test.h"              // ARGS_MAIN
+#include "sm-test.h"           // ARGS_MAIN
 #include "gramast.ast.gen.h"   // GrammarAST
 
 #include <stdio.h>             // remove
