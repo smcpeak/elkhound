@@ -173,7 +173,7 @@ public:     // data
   int termIndex;
 
 protected:  // funcs
-  virtual void internalPrintDDM(ostream &os) const;
+  virtual void internalPrintDDM(ostream &os) const override;
 
 public:     // funcs
   Terminal(LocString const &name)        // canonical name for terminal class
@@ -188,10 +188,10 @@ public:     // funcs
   Terminal(Flatten &flat);
   void xfer(Flatten &flat);
 
-  virtual void print(ostream &os) const;
+  virtual void print(ostream &os) const override;
   OSTREAM_OPERATOR(Terminal)
 
-  virtual bool anyDDM() const;
+  virtual bool anyDDM() const override;
 
   // return alias if defined, name otherwise
   virtual string toString(bool quoteAliases = false) const;
@@ -286,7 +286,7 @@ public:
   SObjList<Nonterminal> subsets;      // preferred subsets (for scannerless)
 
 protected:  // funcs
-  virtual void internalPrintDDM(ostream &os) const;
+  virtual void internalPrintDDM(ostream &os) const override;
 
 public:     // funcs
   Nonterminal(LocString const &name, bool isEmptyString=false);
@@ -296,10 +296,10 @@ public:     // funcs
   void xfer(Flatten &flat);
   void xferSerfs(Flatten &flat, Grammar &g);
 
-  virtual void print(ostream &os, Grammar const *grammer = NULL) const;
+  virtual void print(ostream &os) const override;
   OSTREAM_OPERATOR(Nonterminal)
 
-  virtual bool anyDDM() const;
+  virtual bool anyDDM() const override;
 
 // ------ annotation ------
 public:     // data

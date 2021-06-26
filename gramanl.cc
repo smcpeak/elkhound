@@ -4317,7 +4317,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
   dcl << "\n"
       << "// the function which makes the parse tables\n"
       << "public:\n"
-      << "  virtual ParseTables *makeTables();\n"
+      << "  virtual ParseTables *makeTables() override;\n"
       << "};\n"
       << "\n"
       << "#endif // " << latchName << "\n"

@@ -281,9 +281,9 @@ public:
   static void nextToken(Lexer2 *ths);
 
   // LexerInterface functions
-  virtual NextTokenFunc getTokenFunc() const;
-  virtual string tokenDesc() const;
-  virtual string tokenKindDesc(int kind) const;
+  virtual NextTokenFunc getTokenFunc() const override;
+  virtual string tokenDesc() const override;
+  virtual string tokenKindDesc(int kind) const override;
 };
 
 

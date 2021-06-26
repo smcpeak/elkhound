@@ -140,32 +140,32 @@ public:
 // for derived classes, the list of functions to be declared
 // (this macro is used by the generated code)
 #define USER_ACTION_FUNCTIONS                                          \
-  virtual ReductionActionFunc getReductionAction();                    \
+  virtual ReductionActionFunc getReductionAction() override;           \
                                                                        \
   virtual SemanticValue duplicateTerminalValue(                        \
-    int termId, SemanticValue sval);                                   \
+    int termId, SemanticValue sval) override;                          \
   virtual SemanticValue duplicateNontermValue(                         \
-    int nontermId, SemanticValue sval);                                \
+    int nontermId, SemanticValue sval) override;                       \
                                                                        \
   virtual void deallocateTerminalValue(                                \
-    int termId, SemanticValue sval);                                   \
+    int termId, SemanticValue sval) override;                          \
   virtual void deallocateNontermValue(                                 \
-    int nontermId, SemanticValue sval);                                \
+    int nontermId, SemanticValue sval) override;                       \
                                                                        \
   virtual SemanticValue mergeAlternativeParses(                        \
     int ntIndex, SemanticValue left, SemanticValue right               \
     SOURCELOCARG( SourceLoc loc )                                      \
-  );                                                                   \
+  ) override;                                                          \
                                                                        \
-  virtual bool keepNontermValue(int nontermId, SemanticValue sval);    \
+  virtual bool keepNontermValue(int nontermId, SemanticValue sval) override;         \
                                                                        \
-  virtual ReclassifyFunc getReclassifier();                            \
+  virtual ReclassifyFunc getReclassifier() override;                   \
                                                                        \
-  virtual string terminalDescription(int termId, SemanticValue sval);  \
-  virtual string nonterminalDescription(int nontermId, SemanticValue sval);  \
+  virtual string terminalDescription(int termId, SemanticValue sval) override;       \
+  virtual string nonterminalDescription(int nontermId, SemanticValue sval) override; \
                                                                        \
-  virtual char const *terminalName(int termId);                        \
-  virtual char const *nonterminalName(int termId);
+  virtual char const *terminalName(int termId) override;               \
+  virtual char const *nonterminalName(int termId) override;
 
 
 // a useraction class which has only trivial actions

@@ -272,7 +272,7 @@ void Nonterminal::xferSerfs(Flatten &flat, Grammar &g)
 }
 
 
-void Nonterminal::print(ostream &os, Grammar const *grammar) const
+void Nonterminal::print(ostream &os) const
 {
   os << "[" << ntIndex << "] ";
   Symbol::print(os);
@@ -282,6 +282,12 @@ void Nonterminal::print(ostream &os, Grammar const *grammar) const
     os << " (cyclic!)";
   }
 
+  // 2021-06-26: The following code no longer compiles because I changed
+  // the signature of 'print' to not accept 'grammar' since I think it
+  // was meant to override 'print' in the base class, and that one lacks
+  // the 'grammar' parameter.  I think it was not used.  Maybe delete
+  // it?
+#if 0
   if (grammar) {
     // first
     os << " first={";
@@ -293,6 +299,7 @@ void Nonterminal::print(ostream &os, Grammar const *grammar) const
     follow.print(os, *grammar);
     os << "}";
   }
+#endif // 0
 }
 
 

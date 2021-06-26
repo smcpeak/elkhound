@@ -42,7 +42,7 @@ private:
 
 // the function which makes the parse tables
 public:
-  virtual ParseTables *makeTables();
+  virtual ParseTables *makeTables() override;
 };
 
 #endif // FFOLLOW_H

@@ -24,11 +24,11 @@ public:
   ParseTreeLexer(LexerInterface *u, UserActions *a);
 
   static void nextToken(LexerInterface *lex);
-  virtual NextTokenFunc getTokenFunc() const
+  virtual NextTokenFunc getTokenFunc() const override
     { return &ParseTreeLexer::nextToken; }
 
-  virtual string tokenDesc() const;
-  virtual string tokenKindDesc(int kind) const;
+  virtual string tokenDesc() const override;
+  virtual string tokenKindDesc(int kind) const override;
 };
 
 
@@ -48,15 +48,15 @@ public:
     int productionId,
     SemanticValue const *svals
     SOURCELOCARG( SourceLoc loc ) );
-  virtual ReductionActionFunc getReductionAction()
+  virtual ReductionActionFunc getReductionAction() override
     { return &ParseTreeActions::reduce; }
 
   virtual SemanticValue mergeAlternativeParses(
     int ntIndex, SemanticValue left, SemanticValue right
-    SOURCELOCARG( SourceLoc loc ) );
+    SOURCELOCARG( SourceLoc loc ) ) override;
 
-  virtual char const *terminalName(int termId);
-  virtual char const *nonterminalName(int termId);
+  virtual char const *terminalName(int termId) override;
+  virtual char const *nonterminalName(int termId) override;
 
   ParseTables *getTables() { return tables; }
 };
