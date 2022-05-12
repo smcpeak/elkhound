@@ -7,7 +7,6 @@
 #include "trace.h"        // traceAddSys
 #include "parssppt.h"     // ParseTreeAndTokens, treeMain
 #include "srcloc.h"       // SourceLocManager
-#include "ckheap.h"       // malloc_stats
 #include "c_env.h"        // Env
 #include "c.ast.gen.h"    // C AST (r)
 #include "strutil.h"      // plural
@@ -22,14 +21,6 @@
 Lexer2Token const *yylval = NULL;
 
 
-void if_malloc_stats()
-{
-  if (tracingSys("malloc_stats")) {
-    malloc_stats();
-  }
-}
-
-
 void doit(int argc, char **argv)
 {
   traceAddSys("progress");
@@ -39,8 +30,6 @@ void doit(int argc, char **argv)
   // doesn't begin with a heading, it collapses the starting messages
   // and doesn't like to show them again
   treeOut(1) << "beginning of output      -*- outline -*-\n";
-
-  if_malloc_stats();
 
   SourceLocManager mgr;
 
@@ -69,7 +58,6 @@ void doit(int argc, char **argv)
 
     if (!treeMain(tree, argc, argv,
           "  additional flags for cparse:\n"
-          "    malloc_stats       print malloc stats every so often\n"
           "    stopAfterParse     stop after parsing\n"
           "    printAST           print AST after parsing\n"
           "    stopAfterTCheck    stop after typechecking\n"
@@ -90,8 +78,6 @@ void doit(int argc, char **argv)
     delete user;
     delete tables;
   }
-
-  checkHeap();
 
   // print abstract syntax tree
   if (tracingSys("printAST")) {
@@ -134,14 +120,9 @@ void doit(int argc, char **argv)
   }
 
 
-  //malloc_stats();
-
   // delete the tree
   delete unit;
   strTable.clear();
-
-  //checkHeap();
-  //malloc_stats();
 
   traceRemoveAll();
 }
@@ -149,8 +130,6 @@ void doit(int argc, char **argv)
 int main(int argc, char **argv)
 {
   doit(argc, argv);
-
-  //malloc_stats();
 
   return 0;
 }

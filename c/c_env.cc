@@ -3,7 +3,6 @@
 
 #include "c_env.h"       // this module
 #include "trace.h"       // tracingSys
-#include "ckheap.h"      // heapCheck
 #include "strtable.h"    // StringTable
 #include "cc_lang.h"     // CCLang
 

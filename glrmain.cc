@@ -8,7 +8,6 @@
 
 #include "trace.h"        // traceAddSys
 #include "parssppt.h"     // ParseTreeAndTokens, treeMain
-#include "ckheap.h"       // malloc_stats
 #include "srcloc.h"       // SourceLocManager
 #include "cc_lang.h"      // CCLang
 #include "parsetables.h"  // ParseTables
@@ -49,8 +48,5 @@ void doit(int argc, char **argv)
 int main(int argc, char **argv)
 {
   doit(argc, argv);
-
-  //malloc_stats();
-
   return 0;
 }

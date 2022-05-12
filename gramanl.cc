@@ -14,7 +14,6 @@
 #include "grampar.h"     // readGrammarFile
 #include "emitcode.h"    // EmitCode
 #include "strutil.h"     // replace
-#include "ckheap.h"      // numMallocCalls
 #include "genml.h"       // emitMLActionCode
 
 #include "sm-fstream.h"  // ofstream
@@ -50,35 +49,12 @@ static bool const LR1 = false;
 static bool const LALR1 = true;
 
 
-#if !defined(NDEBUG)     // track unauthorized malloc's
-  #define TRACK_MALLOC
-#endif
-
-#ifdef TRACK_MALLOC
-  // take initial snapsot
-  #define INITIAL_MALLOC_STATS() \
-    unsigned mallocCt = numMallocCalls();
-
-  // nothing should have been allocated recently; if it has, then
-  // print a warning
-  #define CHECK_MALLOC_STATS(desc)                                              \
-    {                                                                           \
-      unsigned newCt = numMallocCalls();                                        \
-      if (mallocCt != newCt) {                                                  \
-        cout << (newCt - mallocCt) << " malloc calls during " << desc << endl;  \
-        mallocCt = newCt;                                                       \
-        breaker();                                                              \
-      }                                                                         \
-    }
-
-  // some unavoidable allocation just happened, so just update counter
-  #define UPDATE_MALLOC_STATS() \
-    mallocCt = numMallocCalls();
-#else
-  #define INITIAL_MALLOC_STATS()
-  #define CHECK_MALLOC_STATS(desc)
-  #define UPDATE_MALLOC_STATS()
-#endif
+// 2022-05-11: Previously there was some infrastructure to do heap
+// checking, but I've removed that from smbase.  I'm leaving these
+// calls as potential future hooks.
+#define INITIAL_MALLOC_STATS()
+#define CHECK_MALLOC_STATS(desc)
+#define UPDATE_MALLOC_STATS()
 
 
 // ----------------- DottedProduction ------------------
