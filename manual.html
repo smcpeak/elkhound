@@ -89,8 +89,7 @@ arguments (or search for "usage:" in
 </ul>
 <!-- END CONTENTS -->
 
-<a name="lexical"></a>
-<h1>1. Lexical structure</h1>
+<h1 id="lexical">1. Lexical structure</h1>
 
 <p>
 The grammar file format is free-form, meaning that all whitespace is
@@ -105,8 +104,7 @@ include("other_file_name").
 <p>
 Comments can use the C++ "//" syntax or the C "/**/" syntax.
 
-<a name="context_class"></a>
-<h1>2. Context Class</h1>
+<h1 id="context_class">2. Context Class</h1>
 
 <p>
 The parser's action functions are all members of a C++ context
@@ -115,8 +113,7 @@ The class is introduced with the "<tt>context_class</tt>" keyword,
 followed by ordinary C++ syntax for classes (ending with "<tt>};</tt>");
 
 
-<a name="terminals"></a>
-<h1>3. Terminals</h1>
+<h1 id="terminals">3. Terminals</h1>
 
 <p>
 The user must declare of all the tokens, also called terminals.  A
@@ -146,8 +143,7 @@ Normally it's expected the tokens will be described in their own
 file, and the <a href="make-tok">make-tok</a> script will create
 the token list seen above.
 
-<a name="token_types"></a>
-<h2>3.1 Token Types</h2>
+<h2 id="token_types">3.1 Token Types</h2>
 
 <p>
 In addition to declaring the numeric codes and aliases of the tokens,
@@ -170,15 +166,13 @@ or, if specifying terminal functions,
 <p>
 The terminal functions are explained in the next sections.
 
-<a name="token_dup_del"></a>
-<h2>3.2 dup/del</h2>
+<h2 id="token_dup_del">3.2 dup/del</h2>
 
 <p>
 Terminals can have <tt>dup</tt> and <tt>del</tt> functions, just like
 nonterminals.  See <a href="#dup">below</a> for more information.
 
-<a name="token_classify"></a>
-<h2>3.3 classify</h2>
+<h2 id="token_classify">3.3 classify</h2>
 
 <p>
 In some situations, it is convenient to be able to alter the classification
@@ -211,8 +205,7 @@ As a representative example, here is the <tt>classify</tt> function from
   }
 </pre>
 
-<a name="token_prec_assoc"></a>
-<h2>3.4 Precedence/associativity specifications</h2>
+<h2 id="token_prec_assoc">3.4 Precedence/associativity specifications</h2>
 
 <p>
 Inside a block that begins with "<tt>precedence {</tt>" and ends with
@@ -227,8 +220,7 @@ each listed token.  The meaning of such specifications is explained
 in Section&nbsp;7, below.
 
 
-<a name="lexerint"></a>
-<h2>3.5 Lexer Interface</h2>
+<h2 id="lexerint">3.5 Lexer Interface</h2>
 
 <p>
 The terminals specification given in the grammar file is a description
@@ -298,8 +290,7 @@ When there is a parse error, the parser will call these functions
 to obtain descriptions of tokens for use in the error message.
 
 
-<a name="nonterminals"></a>
-<h1>4. Nonterminals</h1>
+<h1 id="nonterminals">4. Nonterminals</h1>
 
 <p>
 Following the terminals, the bulk of the grammar is one or more
@@ -337,8 +328,7 @@ assigning to <tt>$$</tt>.
 <p>
 There are four kinds of nontermial functions, described below.
 
-<a name="dup"></a>
-<h2>4.1 dup</h2>
+<h2 id="dup">4.1 dup</h2>
 
 <p>
 Because of the way the GLR algorithm operates, a semantic value
@@ -379,8 +369,7 @@ Common <tt>dup()</tt> strategies:
     management in use.
 </ul>
 
-<a name="del"></a>
-<h2>4.2 del</h2>
+<h2 id="del">4.2 del</h2>
 
 <p>
 A natural counterpart to <tt>dup()</tt>, <tt>del()</tt> accepts values
@@ -401,8 +390,7 @@ Common <tt>del()</tt> strategies:
     value passed to <tt>del()</tt> can be treated appropriately.
 </ul>
 
-<a name="merge"></a>
-<h2>4.3 merge</h2>
+<h2 id="merge">4.3 merge</h2>
 
 <p>
 An <em>ambiguity</em> is the condition when a single sequence of
@@ -486,8 +474,7 @@ future joins.  Both shift/reduce and reduce/reduce are split points,
 whereas <tt>merge()</tt> is a join.
 
 
-<a name="keep"></a>
-<h2>4.4 keep</h2>
+<h2 id="keep">4.4 keep</h2>
 
 <p>
 Sometimes, a potential ambiguity can be prevented if a semantic value
@@ -520,8 +507,7 @@ Common <tt>keep</tt> strategies:
 </ul>
 
 
-<a name="precedence"></a>
-<h2>4.5 precedence</h2>
+<h2 id="precedence">4.5 precedence</h2>
 
 <p>
 A rule can be annotated with an explicit precedence specification,
@@ -539,8 +525,7 @@ See <a href="#prec_assoc">Section 7</a> for more information on what
 this does.
 
 
-<a name="forbid"></a>
-<h2>4.6 forbid_next</h2>
+<h2 id="forbid">4.6 forbid_next</h2>
 
 <p>
 A rule can also be annotated with one or more <em>forbidden
@@ -556,8 +541,7 @@ This specification means that the rule "<tt>N -&gt; A B C</tt>" can
 not be used to reduce if the next symbol is either "+" or "*".
 
 
-<a name="options"></a>
-<h1>5. Options</h1>
+<h1 id="options">5. Options</h1>
 
 <p>
 A number of variations in parser generator behavior can be requested
@@ -578,8 +562,7 @@ Option processing is implemented in
 function <tt>astParseOptions</tt>.
 The various options are described in the following sections.
 
-<a name="useGCDefaults"></a>
-<h2>5.1 useGCDefaults</h2>
+<h2 id="useGCDefaults">5.1 useGCDefaults</h2>
 
 <p>
 The command
@@ -597,8 +580,7 @@ of specification needed to get started.  The rationale for not making
 <tt>useGCDefaults</tt> the global default is that users should be aware
 that the issue of sharing management is being swept under the carpet.
 
-<a name="defaultMergeAborts"></a>
-<h2>5.2 defaultMergeAborts</h2>
+<h2 id="defaultMergeAborts">5.2 defaultMergeAborts</h2>
 
 <p>
 The command
@@ -610,8 +592,7 @@ instructs the parser generator that if the grammar does not specify a
 and then abort the program.  This is a good idea once it is believed
 that all the ambiguities have been handled by <tt>merge()</tt> functions.
 
-<a name="expected_stats"></a>
-<h2>5.3 Expected conflicts, unreachable symbols</h2>
+<h2 id="expected_stats">5.3 Expected conflicts, unreachable symbols</h2>
 
 <p>
 Nominally, the parser generator expects there to be no shift/reduce
@@ -643,8 +624,7 @@ inaccessible):
   option unreachable_terminals 2;
 </pre>
 
-<a name="allow_continued_nonterminals"></a>
-<h2>5.4 allow_continued_nonterminals</h2>
+<h2 id="allow_continued_nonterminals">5.4 allow_continued_nonterminals</h2>
 
 <p>
 By default, Elkhound will complain if there is more than one
@@ -684,8 +664,7 @@ particularly those created by textually combining elements from
 two or more human-written grammars.
 
 
-<a name="ocaml"></a>
-<h1>6. OCaml</h1>
+<h1 id="ocaml">6. OCaml</h1>
 
 <p>
 By default, Elkhound generates a parser in C++.  By specifying
@@ -702,8 +681,7 @@ support for source location propagation, so there is no <tt>loc</tt>
 field.  Also, since OCaml does not have function pointers, it uses
 an ordinary virtual dispatch to get the next token.
 
-<a name="prec_assoc"></a>
-<h1>7. Precedence and Associativity</h1>
+<h1 id="prec_assoc">7. Precedence and Associativity</h1>
 
 <p>
 Precedence and associativity ("prec/assoc") declarations are a
@@ -718,8 +696,7 @@ familiar with these concepts.  If you are not, Section&nbsp;2 of the
 <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/elkhound.ps">Elkhound
 technical report</a> contains a brief description.
 
-<a name="prec_assoc_meaning"></a>
-<h2>7.1 Meaning of prec/assoc specifications</h2>
+<h2 id="prec_assoc_meaning">7.1 Meaning of prec/assoc specifications</h2>
 
 <p>
 A prec/assoc specification is a precedence number, and an associativity
@@ -763,8 +740,7 @@ the following:
    </tr>
 </table>
 
-<a name="prec_assoc_attach"></a>
-<h2>7.2 Attaching prec/assoc to tokens and productions</h2>
+<h2 id="prec_assoc_attach">7.2 Attaching prec/assoc to tokens and productions</h2>
 
 <p>
 Each token can be associated with a prec/assoc specification.
@@ -786,8 +762,7 @@ at the end of the RHS (just before the action).  This will use the
 precedence of <i>tok</i> instead of the rightmost terminal.
 
 
-<a name="prec_assoc_resolution"></a>
-<h2>7.3 Conflict resolution with prec/assoc specifications</h2>
+<h2 id="prec_assoc_resolution">7.3 Conflict resolution with prec/assoc specifications</h2>
 
 <p>
 The resulting token and rule prec/assoc info is used during parser
@@ -812,8 +787,7 @@ specification, then no resolution is done, and the GLR algorithm will
 split the parse stack at parse time as necessary.
 
 
-<a name="prec_assoc_example_arith"></a>
-<h2>7.4 Example: Arithmetic grammar</h2>
+<h2 id="prec_assoc_example_arith">7.4 Example: Arithmetic grammar</h2>
 
 <p>
 The canonical example of using prec/assoc is to give a grammar for
@@ -898,8 +872,7 @@ One can do similar reasoning for the case of "1 + 2 + 3", which should
 parse as "(1 + 2) + 3", and does so because "+" is declared to be left-associative:
 reduces are preferred to shifts (reduce early instead of reducing late).
 
-<a name="prec_assoc_example_else"></a>
-<h2>7.5 Example: Dangling else</h2>
+<h2 id="prec_assoc_example_else">7.5 Example: Dangling else</h2>
 
 <p>
 As another example of using prec/assoc to resolve grammar ambiguity,
@@ -1009,8 +982,7 @@ and one more reduce yields
 </pre>
 which corresponds to binding the "else" to the innermost "if".
 
-<a name="prec_assoc_further"></a>
-<h2>7.6 Further directions</h2>
+<h2 id="prec_assoc_further">7.6 Further directions</h2>
 
 <p>
 As illustrated in the "dangling else" example, prec/assoc specifications
