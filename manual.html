@@ -1,25 +1,55 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<HTML>
+<!doctype html>
+<html lang="en">
 
 <HEAD>
   <TITLE>Elkhound Manual</TITLE>
-  <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-  <style type="text/css">
+  <meta charset="utf-8">
+  <style>
     H1 { font-size: 150% }
     H2 { font-size: 125% }
     H3 { font-size: 100% }
-    P.title { font-size: 175% }
+    P.title {
+      font-size: 175%;
+      text-align: center;
+    }
     a.toc:link { text-decoration: none }
     a.toc:visited { text-decoration: none }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    th.row2 {
+      border-top: 0;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    td.numeric {
+      text-align: right;
+    }
   </style>
 </HEAD>
 
 <body>
 
-<center>
 <p class="title"><b>Elkhound Manual</b></p>
-</center>
 
 <p>
 This page describes the input format for grammars for the Elkhound
@@ -39,7 +69,7 @@ href="examples/arith/arith.gr">examples/arith/arith.gr</a>, a parser
 for simple arithmetic expressions.
 
 <p>
-To find out how to run the tool, run <tt>./elkhound.exe</tt> without
+To find out how to run the tool, run <code>./elkhound.exe</code> without
 arguments (or search for "usage:" in
 <a href="gramanl.cc">gramanl.cc</a>).
 
@@ -109,8 +139,8 @@ Comments can use the C++ "//" syntax or the C "/**/" syntax.
 <p>
 The parser's action functions are all members of a C++ context
 class.  As the grammar author, you must define the context class.
-The class is introduced with the "<tt>context_class</tt>" keyword,
-followed by ordinary C++ syntax for classes (ending with "<tt>};</tt>");
+The class is introduced with the "<code>context_class</code>" keyword,
+followed by ordinary C++ syntax for classes (ending with "<code>};</code>");
 
 
 <h1 id="terminals">3. Terminals</h1>
@@ -154,13 +184,13 @@ on a right-hand-side includes a label, denoted with a colon ":").
 <p>
 The syntax for declaring a token type is
 <blockquote>
-  <tt>token(</tt><i>type</i><tt>) </tt><i>token_name</i><tt>;</tt>
+  <code>token(</code><i>type</i><code>) </code><i>token_name</i><code>;</code>
 </blockquote>
 or, if specifying terminal functions,
 <blockquote>
-  <tt>token(</tt><i>type</i><tt>) </tt><i>token_name</i><tt> {</tt><br>
+  <code>token(</code><i>type</i><code>) </code><i>token_name</i><code> {</code><br>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>terminal_functions</i><br>
-  <tt>}</tt>
+  <code>}</code>
 </blockquote>
 
 <p>
@@ -169,7 +199,7 @@ The terminal functions are explained in the next sections.
 <h2 id="token_dup_del">3.2 dup/del</h2>
 
 <p>
-Terminals can have <tt>dup</tt> and <tt>del</tt> functions, just like
+Terminals can have <code>dup</code> and <code>del</code> functions, just like
 nonterminals.  See <a href="#dup">below</a> for more information.
 
 <h2 id="token_classify">3.3 classify</h2>
@@ -179,18 +209,18 @@ In some situations, it is convenient to be able to alter the classification
 of a token after it is yielded by the lexer but before the parser sees it,
 in particular before it is compared to lookahead sets.  For this purpose,
 each time a token is yielded from the lexer, it is passed to that token's
-<tt>classify()</tt> function.  <tt>classify</tt> accepts a single argument,
+<code>classify()</code> function.  <code>classify</code> accepts a single argument,
 the semantic value associated with that token.  It returns the token's
 new classification, as a token id.  (It cannot change the semantic value.)
 
 <p>
 The main way it differs from simply modifying the lexer is that the
-<tt>classify</tt> function has access to the parser context class, whereas
+<code>classify</code> function has access to the parser context class, whereas
 the lexer presumably does not.  In any case, it's something of a hack, and
 best used sparingly.
 
 <p>
-As a representative example, here is the <tt>classify</tt> function from
+As a representative example, here is the <code>classify</code> function from
 <a href="c/c.gr">c/c.gr</a>, used to implement the lexer hack for a C parser:
 <pre>
   token(StringRef) L2_NAME {
@@ -208,10 +238,10 @@ As a representative example, here is the <tt>classify</tt> function from
 <h2 id="token_prec_assoc">3.4 Precedence/associativity specifications</h2>
 
 <p>
-Inside a block that begins with "<tt>precedence {</tt>" and ends with
-"<tt>}</tt>", one may list directives of the form
+Inside a block that begins with "<code>precedence {</code>" and ends with
+"<code>}</code>", one may list directives of the form
 <blockquote>
-  <i>dir</i> &nbsp;&nbsp;&nbsp; <i>num</i> &nbsp;&nbsp;&nbsp; <i>tok...</i> &nbsp;&nbsp;&nbsp; <tt>;</tt>
+  <i>dir</i> &nbsp;&nbsp;&nbsp; <i>num</i> &nbsp;&nbsp;&nbsp; <i>tok...</i> &nbsp;&nbsp;&nbsp; <code>;</code>
 </blockquote>
 where <i>dir</i> is a precedence direction, <i>num</i> a precedence
 number, and <i>tok...</i> a sequence of tokens (either token names or
@@ -229,23 +259,23 @@ the lexer provides that output.
 
 <p>
 The parser interacts with the lexer through the API defined in the
-<a href="lexerint.h"><tt>lexerint.h</tt></a> file.  The lexer must
+<a href="lexerint.h"><code>lexerint.h</code></a> file.  The lexer must
 implement (inherit from) LexerInterface.  When the parser asks the
-lexer for a token by invoking its <tt>NextTokenFunc</tt>, the
+lexer for a token by invoking its <code>NextTokenFunc</code>, the
 lexer describes the current token by filling in the three data fields
 of LexerInterface:
 <ul>
-<li><tt>type</tt>: The token code as defined in the <tt>terminals</tt> list
+<li><code>type</code>: The token code as defined in the <code>terminals</code> list
     (Section&nbsp;3).
-<li><tt>sval</tt>: The semantic value, a value of the type given in the
+<li><code>sval</code>: The semantic value, a value of the type given in the
     Token Types specification (Section&nbsp;3.1) for the token whose
-    code is in <tt>type</tt>.
-<li><tt>loc</tt>: The source location of the start of the current token.
+    code is in <code>type</code>.
+<li><code>loc</code>: The source location of the start of the current token.
     You only need to fill this in if you plan on using the value of
-    <tt>loc</tt> from within reduction action functions.
+    <code>loc</code> from within reduction action functions.
 </ul>
 The parser will then do its work by reading these fields, and when it
-is ready for the next token, will invoke the <tt>NextTokenFunc</tt>
+is ready for the next token, will invoke the <code>NextTokenFunc</code>
 again.
 
 <p>
@@ -258,8 +288,8 @@ parser, saving just a few instructions can be significant.
 </blockquote>
 
 <p>
-The actual mechanism for invoking <tt>NextTokenFunc</tt> is a little
-convoluted.  The parser first calls <tt>getTokenFunc()</tt>, a virtual
+The actual mechanism for invoking <code>NextTokenFunc</code> is a little
+convoluted.  The parser first calls <code>getTokenFunc()</code>, a virtual
 method, which returns a function pointer.  This pointer is stored in
 the parser when it first starts up.  The parser then invokes this
 function pointer each time it wants a new token, passing a pointer
@@ -284,8 +314,8 @@ speedup (I no longer remember the exact numbers, I'd guess it was
 </blockquote>
 
 <p>
-Finally, there are two functions, <tt>tokenDesc</tt> and
-<tt>tokenKindDesc</tt>, that are used for diagnostic purposes.
+Finally, there are two functions, <code>tokenDesc</code> and
+<code>tokenKindDesc</code>, that are used for diagnostic purposes.
 When there is a parse error, the parser will call these functions
 to obtain descriptions of tokens for use in the error message.
 
@@ -308,22 +338,22 @@ A simple nonterminal might be:
 
 <p>
 The type of the semantic value yielded by the productions is given
-in parentheses, after the keyword "<tt>nonterm</tt>".  In this case,
-<tt>int</tt> is the type.  The type can be omitted if productions
+in parentheses, after the keyword "<code>nonterm</code>".  In this case,
+<code>int</code> is the type.  The type can be omitted if productions
 do not yield interesting semantic values.
 
 <p>
-In the example, Exp has two productions, <tt>Exp -&gt; Exp "+"
-Exp</tt> and <tt>Exp -&gt; TOK_NUMBER</tt>.  The "<tt>-&gt;</tt>"
+In the example, Exp has two productions, <code>Exp -&gt; Exp "+"
+Exp</code> and <code>Exp -&gt; TOK_NUMBER</code>.  The "<code>-&gt;</code>"
 keyword introduces a production.
 
 <p>
 Right-hand-side symbols can be given names, by putting the name
 before a colon (":") and the symbol.  These names can be used in
 the action functions to refer to the semantic values of the
-subtrees (like Bison's <tt>$1</tt>, <tt>$2</tt>, etc.).  Note that
-action functions <tt>return</tt> their value, as opposed to (say)
-assigning to <tt>$$</tt>.
+subtrees (like Bison's <code>$1</code>, <code>$2</code>, etc.).  Note that
+action functions <code>return</code> their value, as opposed to (say)
+assigning to <code>$$</code>.
 
 <p>
 There are four kinds of nontermial functions, described below.
@@ -345,24 +375,24 @@ then the reference count of a value would need to be increased
 each time it is yielded.
 
 <p>
-The <tt>dup()</tt> nonterminal function is intended to support the
+The <code>dup()</code> nonterminal function is intended to support the
 kind of sharing management alluded to above.  Each time a semantic
 value is to be passed to an action, it first is passed to the
-associated <tt>dup()</tt> function.  The value returned by
-<tt>dup()</tt> is stored back in the parser's data structures,
+associated <code>dup()</code> function.  The value returned by
+<code>dup()</code> is stored back in the parser's data structures,
 for use the next time the value must be passed to an action.
-Effectively, by calling <tt>dup()</tt>, the parser is announcing,
+Effectively, by calling <code>dup()</code>, the parser is announcing,
 "I am about to surrender this value to an action; please give me
 a value to use in its place next time."
 
 <p>
-Common <tt>dup()</tt> strategies:
+Common <code>dup()</code> strategies:
 <ul>
-<li>Return <tt>NULL</tt>.  This is the default.  This expresses the
+<li>Return <code>NULL</code>.  This is the default.  This expresses the
     intent that the value <em>not</em> be passed more than once (since
-    any subsequent actions will receive <tt>NULL</tt> arguments).
+    any subsequent actions will receive <code>NULL</code> arguments).
 <li>Return the argument.  This is the default if the
-    <tt>useGCDefaults</tt> option is specified.  This is useful when
+    <code>useGCDefaults</code> option is specified.  This is useful when
     the semantic values can be shared arbitrarily without special handling.
 <li>Increment a reference count, make a deep copy, etc.  Various
     possibilities exist depending on the particular sharing
@@ -372,22 +402,22 @@ Common <tt>dup()</tt> strategies:
 <h2 id="del">4.2 del</h2>
 
 <p>
-A natural counterpart to <tt>dup()</tt>, <tt>del()</tt> accepts values
+A natural counterpart to <code>dup()</code>, <code>del()</code> accepts values
 that are not going to be passed to any more actions (this happens
 when, for example, one of the potential parsers fails to make further
 progress).  It does not return anything.
 
 <p>
-Common <tt>del()</tt> strategies:
+Common <code>del()</code> strategies:
 <ul>
 <li>Print a warning.  This is the default, since an unhandled
-    <tt>del()</tt> may be the cause of a memory leak, depending
+    <code>del()</code> may be the cause of a memory leak, depending
     on the memory management strategy in use.
-<li>Do nothing.  This is the default if the <tt>useGCDefaults</tt>
+<li>Do nothing.  This is the default if the <code>useGCDefaults</code>
     option is specified.
 <li>Decrement a reference count, deallocate, etc.  Depending on
     the programmer's intended memory management scheme, the
-    value passed to <tt>del()</tt> can be treated appropriately.
+    value passed to <code>del()</code> can be treated appropriately.
 </ul>
 
 <h2 id="merge">4.3 merge</h2>
@@ -397,7 +427,7 @@ An <em>ambiguity</em> is the condition when a single sequence of
 tokens can be parsed as some nonterminal in more than one way.
 During parsing, when an ambiguity is encountered, the semantic
 values from the different parses are passed to the nonterminal's
-<tt>merge()</tt> function, two at a time.
+<code>merge()</code> function, two at a time.
 
 <p>
 Merge accepts two competing semantic value arguments, and returns a
@@ -409,26 +439,26 @@ the nonterminal's usual semantic values.
 If there are more than two parses, the first two will be merged, the
 result of which will be merged with the third, and so on until they
 are all merged.  At each step, the first argument is the one that
-may have resulted from a previous <tt>merge()</tt>, and the second
+may have resulted from a previous <code>merge()</code>, and the second
 argument is not (unless it is the result of merging from further
 down in the parse forest).
 
 <p>
-Common <tt>merge()</tt> strategies:
+Common <code>merge()</code> strategies:
 <ul>
 <li>Print a message to the effect that the ambiguity is unexpected,
     and return one of the arguments arbitrarily.  This is the
     default behavior.
 <li>Abort the program.  This is a more severe response than the
-    first one, and is the default if the <tt>defaultMergeAborts</tt>
+    first one, and is the default if the <code>defaultMergeAborts</code>
     option is specified.
 <li>Examine the two semantic values, and apply some disambiguation
     criteria to choose which to retain.  Then return only the
-    retained value.  Note that <tt>merge()</tt> is being given exclusive
+    retained value.  Note that <code>merge()</code> is being given exclusive
     right to access both values; if it chooses to only return one of
     them for future reductions, then the other should probably be
-    treated similarly to calling <tt>del()</tt> (though in fact, literally
-    calling <tt>del()</tt> is not possible in the current implementation).
+    treated similarly to calling <code>del()</code> (though in fact, literally
+    calling <code>del()</code> is not possible in the current implementation).
 <li>Create some explicit representation of the ambiguity.  This is how
     the Elsa C++ parser handles most of the ambiguities in its C++ grammar,
     due to the type/variable ambiguity.
@@ -439,7 +469,7 @@ Common <tt>merge()</tt> strategies:
 A reduce/reduce conflict happens when
 the top few symbols of the parse stack can be reduced by two different
 rules.  It is not (necessarily) an ambiguity, as the reduced input
-portions are different.  In <tt>merge()</tt>, the merging fragments arise from
+portions are different.  In <code>merge()</code>, the merging fragments arise from
 reductions applied to the *same* sequence of ground terminals.
 
 <p>
@@ -471,7 +501,7 @@ conflicts are split (choice) points and ambiguities are join points.  You
 cannot have a join without a split, but there is no easy way (in fact it's
 undecidable) to compute a precise relationship between splits and possible
 future joins.  Both shift/reduce and reduce/reduce are split points,
-whereas <tt>merge()</tt> is a join.
+whereas <code>merge()</code> is a join.
 
 
 <h2 id="keep">4.4 keep</h2>
@@ -479,31 +509,31 @@ whereas <tt>merge()</tt> is a join.
 <p>
 Sometimes, a potential ambiguity can be prevented if a semantic value
 can be determined to be invalid in isolation (as opposed to waiting to
-see a competing alternative in <tt>merge()</tt>).  To support such
-determination, each nonterminal can have a <tt>keep()</tt> function,
-which returns <tt>true</tt> if its semantic value argument should be
-retained (as usual) or <tt>false</tt> if its argument should be
+see a competing alternative in <code>merge()</code>).  To support such
+determination, each nonterminal can have a <code>keep()</code> function,
+which returns <code>true</code> if its semantic value argument should be
+retained (as usual) or <code>false</code> if its argument should be
 suppressed, as if the reduction never happened.
 
 <p>
-If <tt>keep</tt> returns <tt>false</tt>, the parser does <em>not</em>
-call <tt>del()</tt> on that value; it is regarded as disposed by
-<tt>keep</tt>.
+If <code>keep</code> returns <code>false</code>, the parser does <em>not</em>
+call <code>del()</code> on that value; it is regarded as disposed by
+<code>keep</code>.
 
 <p>
-Common <tt>keep</tt> strategies:
+Common <code>keep</code> strategies:
 <ul>
-<li>Always return <tt>true</tt>.  This is the default.
-<li>Look at the argument, and return <tt>false</tt> if for some reason
+<li>Always return <code>true</code>.  This is the default.
+<li>Look at the argument, and return <code>false</code> if for some reason
     it should be discarded, particularly if it will otherwise lead to
     an ambiguity.  This is the intended usage.
 <li>As a variation of the above, the reduction action itself can make
     the determination of suitability, and return a special value like
-    <tt>NULL</tt> if it wants to cancel the reduction.  Then,
-    <tt>keep()</tt> simply checks for the special value.  In fact,
-    since <tt>keep()</tt> is a somewhat expensive option in terms of
-    performance, I am considering eliminating <tt>keep()</tt> in favor
-    of a built-in <tt>NULL</tt> check.
+    <code>NULL</code> if it wants to cancel the reduction.  Then,
+    <code>keep()</code> simply checks for the special value.  In fact,
+    since <code>keep()</code> is a somewhat expensive option in terms of
+    performance, I am considering eliminating <code>keep()</code> in favor
+    of a built-in <code>NULL</code> check.
 </ul>
 
 
@@ -520,7 +550,7 @@ for example:
 
 <p>
 This specification has the effect of assigning the rule
-"<tt>N -&gt; A B C</tt>" the same precedence level as the terminal "+".
+"<code>N -&gt; A B C</code>" the same precedence level as the terminal "+".
 See <a href="#prec_assoc">Section 7</a> for more information on what
 this does.
 
@@ -537,7 +567,7 @@ lookahead</em> declarations, for example:
 </pre>
 
 <p>
-This specification means that the rule "<tt>N -&gt; A B C</tt>" can
+This specification means that the rule "<code>N -&gt; A B C</code>" can
 not be used to reduce if the next symbol is either "+" or "*".
 
 
@@ -545,21 +575,21 @@ not be used to reduce if the next symbol is either "+" or "*".
 
 <p>
 A number of variations in parser generator behavior can be requested
-through the use of the <tt>option</tt> syntax:
+through the use of the <code>option</code> syntax:
 <blockquote>
-  <tt>option </tt><i>option_name</i><tt>;</tt>
+  <code>option </code><i>option_name</i><code>;</code>
 </blockquote>
 or, for options that accept an argument:
 <blockquote>
-  <tt>option </tt><i>option_name</i> <i>option_argument</i><tt>;</tt>
+  <code>option </code><i>option_name</i> <i>option_argument</i><code>;</code>
 </blockquote>
 The <i>option_name</i> is an identifier from among those listed below,
 and <i>option_argument</i> is an integer.
 
 <p>
 Option processing is implemented in
-<a href="grampar.cc"><tt>grampar.cc</tt></a>,
-function <tt>astParseOptions</tt>.
+<a href="grampar.cc"><code>grampar.cc</code></a>,
+function <code>astParseOptions</code>.
 The various options are described in the following sections.
 
 <h2 id="useGCDefaults">5.1 useGCDefaults</h2>
@@ -577,7 +607,7 @@ default terminal and nonterminal functions appropriately.
 In fact, most users of Elkhound will probably want to specify this
 option during initial grammar development, to reduce the amount
 of specification needed to get started.  The rationale for not making
-<tt>useGCDefaults</tt> the global default is that users should be aware
+<code>useGCDefaults</code> the global default is that users should be aware
 that the issue of sharing management is being swept under the carpet.
 
 <h2 id="defaultMergeAborts">5.2 defaultMergeAborts</h2>
@@ -588,9 +618,9 @@ The command
   option defaultMergeAborts;
 </pre>
 instructs the parser generator that if the grammar does not specify a
-<tt>merge()</tt> function, the supplied default should print a message
+<code>merge()</code> function, the supplied default should print a message
 and then abort the program.  This is a good idea once it is believed
-that all the ambiguities have been handled by <tt>merge()</tt> functions.
+that all the ambiguities have been handled by <code>merge()</code> functions.
 
 <h2 id="expected_stats">5.3 Expected conflicts, unreachable symbols</h2>
 
@@ -655,7 +685,7 @@ The nonterminal types, if specified, must be identical.
 
 <p>
 Since Elkhound just concatenates the bodies, specification functions
-(like <tt>merge()</tt>) must be given at most once across all
+(like <code>merge()</code>) must be given at most once across all
 continuations, and they apply to the whole (concatenated) nonterminal.
 
 <p>
@@ -668,7 +698,7 @@ two or more human-written grammars.
 
 <p>
 By default, Elkhound generates a parser in C++.  By specifying
-"<tt>-ocaml</tt>" on the command line,
+"<code>-ocaml</code>" on the command line,
 the user can request that instead the parser generate OCaml code.
 Please see <a href="ocaml/">ocaml/</a>, probably starting with
 the example driver <a href="ocaml/main.ml">ocaml/main.ml</a>.
@@ -677,7 +707,7 @@ the example driver <a href="ocaml/main.ml">ocaml/main.ml</a>.
 The lexer interface for OCaml is given in
 <a href="ocaml/lexerint.ml">ocaml/lexerint.ml</a>.  It is similar
 to the C++ interface except I have not yet (2005-06-13) implemented
-support for source location propagation, so there is no <tt>loc</tt>
+support for source location propagation, so there is no <code>loc</code>
 field.  Also, since OCaml does not have function pointers, it uses
 an ordinary virtual dispatch to get the next token.
 
@@ -703,7 +733,7 @@ A prec/assoc specification is a precedence number, and an associativity
 direction.  Precedence numbers are integers, where larger integers
 have "higher precedence".  An associativity direction is one of
 the following:
-<table border="2">
+<table>
   <tr>
     <th>Name</th>
     <th>Mnemonic</th>
@@ -745,8 +775,8 @@ the following:
 <p>
 Each token can be associated with a prec/assoc specification.
 By default, a token has no prec/assoc specification.  However, a
-specification can be attached via the <tt>precedence</tt> block of the
-<tt>terminals</tt> section of the grammar file (see Section 3.4, above).
+specification can be attached via the <code>precedence</code> block of the
+<code>terminals</code> section of the grammar file (see Section 3.4, above).
 
 <p>
 Each production can be associated with a precedence number.
@@ -756,7 +786,7 @@ terminal in the RHS; if the rightmost terminal has no prec/assoc
 specification, then the rule has no precedence.  The precedence
 number can also be explicitly supplied by writing
 <blockquote>
-  <tt>precedence (</tt> <i>tok</i> <tt>)</tt>
+  <code>precedence (</code> <i>tok</i> <code>)</code>
 </blockquote>
 at the end of the RHS (just before the action).  This will use the
 precedence of <i>tok</i> instead of the rightmost terminal.
@@ -768,7 +798,7 @@ precedence of <i>tok</i> instead of the rightmost terminal.
 The resulting token and rule prec/assoc info is used during parser
 generation (only), to resolve shift/reduce and reduce/reduce conflicts.
 "Resolving" a conflict means removing one of the possible actions from the
-parse tables.  It is implemented in <tt>GrammarAnalysis::resolveConflicts()</tt>.
+parse tables.  It is implemented in <code>GrammarAnalysis::resolveConflicts()</code>.
 
 <p>
 When a shift/reduce conflict is encountered between token and a rule, if
@@ -817,16 +847,16 @@ Consider parsing the input "1 + 2 * 3".  This should parse like
 comes when the parser sees the "*" in its lookahead.  At that moment,
 the parse stack looks like
 <pre>
-  Expr(2)                       <-- top of stack (most recently shifted)
+  Expr(2)                       &lt;-- top of stack (most recently shifted)
   +
-  Expr(1)                       <-- bottom of stack
+  Expr(1)                       &lt;-- bottom of stack
 </pre>
 
 <p>
-If the parser were to <em>reduce</em>, via the rule "<tt>Expr -&gt; Expr + Expr</tt>",
+If the parser were to <em>reduce</em>, via the rule "<code>Expr -&gt; Expr + Expr</code>",
 then the stack would become
 <pre>
-  Expr(Expr(1)+Expr(2))         <-- top/bottom of stack
+  Expr(Expr(1)+Expr(2))         &lt;-- top/bottom of stack
 </pre>
 which means the final parse would be "(1 + 2) * 3", which is wrong.
 
@@ -846,7 +876,7 @@ Then after one more shift, we have
   +
   Expr(1)                       &lt;-- bottom of stack
 </pre>
-and the only choice is to reduce via "<tt>Expr -&gt; Expr * Expr</tt>", leading to
+and the only choice is to reduce via "<code>Expr -&gt; Expr * Expr</code>", leading to
 the configuration
 <pre>
   Expr(Expr(2)*Expr(3))         &lt;-- top of stack
@@ -861,7 +891,7 @@ which is the desired "1 + (2 * 3)" interpretation.
 
 <p>
 The parsing choice above is a <em>shift/reduce conflict</em>; the parser
-must choose between shifting "*" and reducing via "<tt>Expr -&gt; Expr + Expr</tt>".
+must choose between shifting "*" and reducing via "<code>Expr -&gt; Expr + Expr</code>".
 Now, the prec/assoc spec says that "*" has higher precedence than "+",
 and the rule is (by default) given the precedence of the latter.
 Consequently, the shift is chosen, so that the "*" will ultimately
@@ -949,7 +979,7 @@ At the crucial moment, the lookahead is "else" and the stack is
   "if"                                &lt;-- bottom
 </pre>
 The conflict is between shifting "else" and reducing via
-"<tt>Stmt -&gt; if ( Expr ) Stmt</tt>".  Since the precedence of both
+"<code>Stmt -&gt; if ( Expr ) Stmt</code>".  Since the precedence of both
 the token and the rule is the same, the associativity direction
 of the token is consulted.  That direction is "right", which means
 to reduce late, i.e. shift.  After shifting "else", then the rest of the input,
@@ -968,7 +998,7 @@ and reducing "c=d;", we have
   "if"                                &lt;-- bottom
 </pre>
 Finally, the algorithm reduces via
-"<tt>Stmt -&gt; if ( Expr ) Stmt else Stmt</tt>", yielding
+"<code>Stmt -&gt; if ( Expr ) Stmt else Stmt</code>", yielding
 <pre>
   If(Q, Stmt(a=b;), Stmt(c=d;))       &lt;-- top
   ")"
@@ -1006,7 +1036,7 @@ may be a good way to resolve it, if performance is a concern.
 <p>
 I think the best advice is: if you are not very familiar with LR
 parsing, ignore prec/assoc.  Either write an unambiguous grammar, or
-use Elkhound's <tt>merge</tt> feature to do disambiguation; in either
+use Elkhound's <code>merge</code> feature to do disambiguation; in either
 case, the conflicts only affect performance and so can be ignored.
 If you <em>are</em> familiar with LR parsing, then use your judgment
 as to whether a given situation is right for prec/assoc.  They can
@@ -1014,12 +1044,6 @@ seem appealing since they yield fast parsers, but it can be difficult
 to determine the actual language accepted by an LR parser with prec/assoc.
 
 
-<p>
-  <a href="http://validator.w3.org/check/referer"><img border="0"
-      src="http://www.w3.org/Icons/valid-html401"
-      alt="Valid HTML 4.01!" height="31" width="88"></a>
-</p>
-
 </body>
 
-</HTML>
+</html>
