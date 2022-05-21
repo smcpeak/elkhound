@@ -629,8 +629,8 @@ void ItemSet::getPossibleReductions(ProductionList &reductions,
       // the follow of its LHS must include 'lookahead'
       if (!item->getProd()->left->follow.contains(lookahead->termIndex)) {    // (constness)
         if (parsing && tracingSys("parse")) {
-          trace("parse") << "state " << id
-                         << ", not reducing by "
+          trace("parse") << "state (" << id
+                         << "), not reducing by "
                          << item->getProd()->toString(false /*printType*/)
                          << " because " << lookahead->toString()
                          << " is not in follow of "
@@ -643,8 +643,8 @@ void ItemSet::getPossibleReductions(ProductionList &reductions,
       // the item's lookahead must include 'lookahead'
       if (!item->laContains(lookahead->termIndex)) {
         if (parsing && tracingSys("parse")) {
-          trace("parse") << "state " << id
-                         << ", not reducing by "
+          trace("parse") << "state (" << id
+                         << "), not reducing by "
                          << item->getProd()->toString(false /*printType*/)
                          << " because " << lookahead->toString()
                          << " is not in lookahead" << endl;
@@ -819,7 +819,7 @@ void ItemSet::print(ostream &os, GrammarAnalysis const &g,
         os << "(no transition)";
       }
       else {
-        os << "--> " << is->id;
+        os << "--> (" << is->id << ')';
       }
     }
     os << endl;
@@ -830,14 +830,14 @@ void ItemSet::print(ostream &os, GrammarAnalysis const &g,
   for (int t=0; t<terms; t++) {
     if (termTransition[t]) {
       os << "  on terminal " << g.getTerminal(t)->name
-         << " go to " << termTransition[t]->id << endl;
+         << " go to (" << termTransition[t]->id << ")\n";
     }
   }
 
   for (int n=0; n<nonterms; n++) {
     if (nontermTransition[n]) {
       os << "  on nonterminal " << g.getNonterminal(n)->name
-         << " go to " << nontermTransition[n]->id << endl;
+         << " go to (" << nontermTransition[n]->id << ")\n";
     }
   }
 
@@ -2305,8 +2305,8 @@ void GrammarAnalysis::constructLRItemSets()
     UPDATE_MALLOC_STATS();
 
     if (tr) {
-      trace("lrsets") << "state " << itemSet->id
-                      << ", " << itemSet->kernelItems.count()
+      trace("lrsets") << "state (" << itemSet->id
+                      << "), " << itemSet->kernelItems.count()
                       << " kernel items and "
                       << itemSet->nonkernelItems.count()
                       << " nonkernel items" << endl;
@@ -2520,8 +2520,12 @@ void GrammarAnalysis::constructLRItemSets()
 void GrammarAnalysis::printItemSets(ostream &os, bool nonkernel) const
 {
   FOREACH_OBJLIST(ItemSet, itemSets, itemSet) {
-    os << "State " << itemSet.data()->id
-       << ", sample input: " << sampleInput(itemSet.data()) << "\n"
+    // Everywhere I print a state number in the log output, I print it
+    // inside parentheses in order to make it easier to locate
+    // occurrences with text search.  Without the parens, state numbers
+    // that are substrings of other state numbers are a major pain.
+    os << "State (" << itemSet.data()->id
+       << "), sample input: " << sampleInput(itemSet.data()) << "\n"
        << "  and left context: " << leftContextString(itemSet.data()) << "\n"
        ;
     itemSet.data()->print(os, *this, nonkernel);
@@ -2859,7 +2863,7 @@ void GrammarAnalysis::resolveConflicts(
     // print conflict info
     if (canPrint && !printedConflictHeader) {
       trace("conflict")
-        << "--------- state " << state->id << " ----------\n"
+        << "--------- state (" << state->id << ") ----------\n"
         << "left context: " << leftContextString(state)
         << endl
         << "sample input: " << sampleInput(state)
@@ -2876,7 +2880,8 @@ void GrammarAnalysis::resolveConflicts(
 
     if (shiftDest) {
       if (canPrint) {
-        trace("conflict") << "  shift, and move to state " << shiftDest->id << endl;
+        trace("conflict") << "  shift, and move to state ("
+                          << shiftDest->id << ")\n";
       }
       sr++;                 // shift/reduce conflict
       rr += actions - 2;    // any reduces beyond first are r/r errors
