@@ -191,6 +191,7 @@ testTrivGrammar CAdB 1
 testTrivGrammar EEb 1 2 3
 testTrivGrammar angle 1 2 3 4 5
 testTrivGrammar testRR 1 2
+testTrivGrammar prefer_shift 1
 
 #runTest $MAKE aSEb.gr.exe
 #runTest ./aSEb.gr.exe aSEb.in1

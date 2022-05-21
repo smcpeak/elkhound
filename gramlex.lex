@@ -161,6 +161,9 @@ HWHITE    [ \t\f\v\r]
 
 "terminals"        TOK_UPD_COL;  return TOK_TERMINALS;
 "precedence"       TOK_UPD_COL;  return TOK_PRECEDENCE;
+"precedence_prefer_shift" {
+                   TOK_UPD_COL;  return TOK_PRECEDENCE_PREFER_SHIFT;
+}
 "option"           TOK_UPD_COL;  return TOK_OPTION;
 "expect"           TOK_UPD_COL;  return TOK_EXPECT;
 "subsets"          TOK_UPD_COL;  return TOK_SUBSETS;

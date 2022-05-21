@@ -95,6 +95,7 @@ AssocKind whichKind(LocString * /*owner*/ kind);
 %token TOK_VERBATIM "verbatim"
 %token TOK_IMPL_VERBATIM "impl_verbatim"
 %token TOK_PRECEDENCE "precedence"
+%token TOK_PRECEDENCE_PREFER_SHIFT "precedence_prefer_shift"
 %token TOK_OPTION "option"
 %token TOK_EXPECT "expect"
 %token TOK_CONTEXT_CLASS "context_class"
@@ -336,6 +337,7 @@ RHSElt: TOK_NAME                { $$ = new RH_name(sameloc($1, ""), $1); }
       | TOK_STRING              { $$ = new RH_string(sameloc($1, ""), $1); }
       | TOK_NAME ":" TOK_STRING { $$ = new RH_string($1, $3); }
       | "precedence" "(" NameOrString ")"    { $$ = new RH_prec($3); }
+      | "precedence_prefer_shift"            { $$ = new RH_precedence_prefer_shift(); }
       | "forbid_next" "(" NameOrString ")"   { $$ = new RH_forbid($3); }
       ;
 

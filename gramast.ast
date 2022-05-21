@@ -89,6 +89,10 @@ class RHSElt {
   // assigns a specific precedence level to a rule
   -> RH_prec(LocString tokName);
 
+  // Specify to prefer shifting over reducing by this rule, even if the
+  // token to shift has no precedence declaration.
+  -> RH_precedence_prefer_shift;
+
   // forbids a rule from being used when a given token
   // is next in the input
   -> RH_forbid(LocString tokName);

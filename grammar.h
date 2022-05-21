@@ -52,6 +52,21 @@ typedef LocString LiteralCode;
 extern StringTable grammarStringTable;
 
 
+// ---------------- PrecedenceLevel --------------------
+// Integer code indicating level of precedence for a terminal or rule.
+enum PrecedenceLevel : int {
+  // No precedence specified.  This is the default.
+  PRECEDENCE_NONE = 0,
+
+  // Corresponds to "precedence_prefer_shift" directive, which means
+  // that a rule should not be used to reduce if there is an available
+  // shift action, even if the token to shift has no precedence level.
+  PRECEDENCE_PREFER_SHIFT = -1,
+
+  // The user can assign arbitrary non-negative numeric codes.
+};
+
+
 // ---------------- Symbol --------------------
 // either a nonterminal or terminal symbol
 class Symbol {
@@ -158,7 +173,7 @@ public:     // data
   // occurs between a production and a symbol, both with specified
   // precedence (not 0), then the one with the numerically higher
   // precedence will be used
-  int precedence;
+  PrecedenceLevel precedence;
 
   // if, in the above scenario, the precedence values are the same,
   // then the associativity kind will be used to decide which to use
@@ -179,7 +194,7 @@ public:     // funcs
   Terminal(LocString const &name)        // canonical name for terminal class
     : Symbol(name, true /*terminal*/),
       alias(),
-      precedence(0),
+      precedence(PRECEDENCE_NONE),
       associativity(AK_NONASSOC),
       classifyParam(NULL),
       termIndex(-1)
@@ -350,7 +365,7 @@ public:	    // data
   // fundamental context-free grammar (CFG) component
   Nonterminal * const left;     // (serf) left hand side; must be nonterminal
   ObjList<RHSElt> right;        // right hand side; terminals & nonterminals
-  int precedence;               // precedence level for disambiguation (0 for none specified)
+  PrecedenceLevel precedence;   // precedence level for disambiguation
   TerminalSet *forbid;          // (nullable owner) forbidden next tokens
 
   // user-supplied reduction action code

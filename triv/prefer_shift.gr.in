@@ -1,0 +1,25 @@
+// prefer_shift.gr.in
+// Test the "precedence_prefer_shift" feature.
+
+option useGCDefaults;
+
+terminals {
+  a
+  b
+}
+
+nonterm S {
+  -> A;
+  -> A B;
+}
+
+nonterm A {
+  -> a         precedence_prefer_shift;
+  -> a b;
+}
+
+nonterm B {
+  -> b;
+}
+
+// EOF

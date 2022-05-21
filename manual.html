@@ -97,7 +97,8 @@ arguments (or search for "usage:" in
     <li><a class="toc" href="#merge">4.3 merge</a>
     <li><a class="toc" href="#keep">4.4 keep</a>
     <li><a class="toc" href="#precedence">4.5 precedence</a>
-    <li><a class="toc" href="#forbid">4.6 forbid_next</a>
+    <li><a class="toc" href="#precedence_prefer_shift">4.6. precedence_prefer_shift</a>
+    <li><a class="toc" href="#forbid">4.7 forbid_next</a>
   </ul>
   <li><a class="toc" href="#options">5. Options</a>
   <ul>
@@ -555,7 +556,29 @@ See <a href="#prec_assoc">Section 7</a> for more information on what
 this does.
 
 
-<h2 id="forbid">4.6 forbid_next</h2>
+<h2 id="precedence_prefer_shift">4.6. precedence_prefer_shift</h2>
+
+<p>
+A rule can be annotated with <code>precedence_prefer_shift</code>:
+<pre>
+nonterm A {
+  -&gt; a           precedence_prefer_shift   { /*...*/ }
+  -> a b;
+}
+</pre>
+
+<p>
+This means that if there is ever a shift/reduce conflict where an
+option is to reduce via this rule, use the shift instead, even if
+the token to be shifted does not have any assigned precedence.
+
+<p>
+This feature is meant for cases where a rule has conflicts involving a
+potentially large number of tokens for which it doesn't make sense and
+could be disruptive to assign precedence to all of them.
+
+
+<h2 id="forbid">4.7 forbid_next</h2>
 
 <p>
 A rule can also be annotated with one or more <em>forbidden
@@ -815,6 +838,11 @@ is chosen.
 In both cases, if either conflicting entity does not have any prec/assoc
 specification, then no resolution is done, and the GLR algorithm will
 split the parse stack at parse time as necessary.
+
+<p>
+However, as an exception, if the rule is annotated with
+<code>precedence_prefer_shift</code>, then shift will be selected over
+reduce, even if the token has no precedence specification.
 
 
 <h2 id="prec_assoc_example_arith">7.4 Example: Arithmetic grammar</h2>

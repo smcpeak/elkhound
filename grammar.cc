@@ -165,7 +165,7 @@ void Terminal::xfer(Flatten &flat)
 
   alias.xfer(flat);
 
-  flat.xferInt(precedence);
+  flat.xferInt((int&)precedence);
   xferEnum(flat, associativity);
 
   flat.xferInt(termIndex);
@@ -526,7 +526,7 @@ void Production::RHSElt::xferSerfs(Flatten &flat, Grammar &g)
 Production::Production(Nonterminal *L, char const *Ltag)
   : left(L),
     right(),
-    precedence(0),
+    precedence(PRECEDENCE_NONE),
     forbid(NULL),
     rhsLen(-1),
     prodIndex(-1),
@@ -552,7 +552,7 @@ void Production::xfer(Flatten &flat)
 {
   eh_xferObjList(flat, right);
   action.xfer(flat);
-  flat.xferInt(precedence);
+  flat.xferInt((int&)precedence);
   xferNullableOwnerPtr(flat, forbid);
 
   flat.xferInt(rhsLen);
@@ -1023,7 +1023,7 @@ void Grammar::printAsBison(ostream &os) const
     // first, compute the highest precedence used anywhere in the grammar
     int highMark=0;
     FOREACH_TERMINAL(terminals, iter) {
-      highMark = max(iter.data()->precedence, highMark);
+      highMark = max((int)(iter.data()->precedence), highMark);
     }
 
     // map AssocKind to bison declaration; map stuff bison doesn't
@@ -1100,21 +1100,26 @@ void Grammar::printAsBison(ostream &os) const
 
         // precedence?
         if (prod.data()->precedence) {
-          // search for a terminal with the required precedence level
-          bool found=false;
-          FOREACH_TERMINAL(terminals, iter) {
-            if (iter.data()->precedence == prod.data()->precedence) {
-              // found suitable token
-              os << " %prec " << bisonTokenName(iter.data());
-              found = true;
-              break;
-            }
+          if (prod.data()->precedence == PRECEDENCE_PREFER_SHIFT) {
+            os << " /* precedence_prefer_shift */";
           }
-          if (!found) {
-            cout << "warning: cannot find token for precedence level "
-                 << prod.data()->precedence << endl;
-            os << " /* no token precedence level "/* */
-               << prod.data()->precedence << " */";
+          else {
+            // search for a terminal with the required precedence level
+            bool found=false;
+            FOREACH_TERMINAL(terminals, iter) {
+              if (iter.data()->precedence == prod.data()->precedence) {
+                // found suitable token
+                os << " %prec " << bisonTokenName(iter.data());
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              cout << "warning: cannot find token for precedence level "
+                   << prod.data()->precedence << endl;
+              os << " /* no token precedence level "/* */
+                 << prod.data()->precedence << " */";
+            }
           }
         }
 

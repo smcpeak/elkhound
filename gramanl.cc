@@ -2632,6 +2632,13 @@ void GrammarAnalysis::handleShiftReduceConflict(
     }
   }
 
+  if (prod->precedence == PRECEDENCE_PREFER_SHIFT) {
+    // The point is we do this even if the token has no precedence.
+    trace("prec") << "resolved as REDUCE due to precedence_prefer_shift" << endl;
+    keepShift = false;
+    return;
+  }
+
   if (!( prod->precedence && sym->precedence )) {
     // one of the two doesn't have a precedence specification,
     // so we can do nothing

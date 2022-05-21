@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +30,9 @@
 
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
+
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_GRAMPAR_TAB_H_INCLUDED
 # define YY_YY_GRAMPAR_TAB_H_INCLUDED
@@ -64,22 +68,22 @@ extern int yydebug;
     TOK_VERBATIM = 274,
     TOK_IMPL_VERBATIM = 275,
     TOK_PRECEDENCE = 276,
-    TOK_OPTION = 277,
-    TOK_EXPECT = 278,
-    TOK_CONTEXT_CLASS = 279,
-    TOK_SUBSETS = 280,
-    TOK_DELETE = 281,
-    TOK_REPLACE = 282,
-    TOK_FORBID_NEXT = 283
+    TOK_PRECEDENCE_PREFER_SHIFT = 277,
+    TOK_OPTION = 278,
+    TOK_EXPECT = 279,
+    TOK_CONTEXT_CLASS = 280,
+    TOK_SUBSETS = 281,
+    TOK_DELETE = 282,
+    TOK_REPLACE = 283,
+    TOK_FORBID_NEXT = 284
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
 union YYSTYPE
 {
-#line 113 "grampar.y" /* yacc.c:1909  */
+#line 114 "grampar.y"
 
   int num;
   LocString *str;
@@ -103,9 +107,9 @@ union YYSTYPE
   ASTList<RHSElt> *rhsList;
   RHSElt *rhsElt;
 
-#line 107 "grampar.tab.h" /* yacc.c:1909  */
-};
+#line 111 "grampar.tab.h"
 
+};
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

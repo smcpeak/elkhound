@@ -476,7 +476,7 @@ void astParseTerminals(Environment &env, TF_terminals const &terms)
         }
 
         // apply spec
-        t->precedence = spec.prec;
+        t->precedence = (PrecedenceLevel)(spec.prec);
         t->associativity = spec.kind;
       }
     }
@@ -772,6 +772,12 @@ void astParseProduction(Environment &env, Nonterminal *nonterm,
 
         // apply the specified precedence
         prod->precedence = t->precedence;
+        isAnnotation = true;
+      }
+
+      ASTNEXTC1(RH_precedence_prefer_shift) {
+        // apply the specified precedence
+        prod->precedence = PRECEDENCE_PREFER_SHIFT;
         isAnnotation = true;
       }
 
