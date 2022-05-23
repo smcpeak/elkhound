@@ -229,6 +229,7 @@ Nonterminal::Nonterminal(LocString const &name, bool isEmpty)
     keepCode(),
     maximal(false),
     subsets(),
+    ntForbid(NULL),
     ntIndex(-1),
     cyclic(false),
     first(0),
@@ -245,6 +246,7 @@ Nonterminal::Nonterminal(Flatten &flat)
     mergeParam1(NULL),
     mergeParam2(NULL),
     keepParam(NULL),
+    ntForbid(NULL),
     first(flat),
     follow(flat),
     superset(NULL)
@@ -260,6 +262,10 @@ void Nonterminal::xfer(Flatten &flat)
 
   flattenStrTable->xfer(flat, keepParam);
   keepCode.xfer(flat);
+
+  // TODO: Shouldn't 'maximal' and 'subsets' be serialized too?
+
+  xferNullableOwnerPtr(flat, ntForbid);
 }
 
 void Nonterminal::xferSerfs(Flatten &flat, Grammar &g)
@@ -323,6 +329,23 @@ bool Nonterminal::anyDDM() const
   return Symbol::anyDDM() ||
          mergeCode.isNonNull() ||
          keepCode.isNonNull();
+}
+
+
+// it's somewhat unfortunate that I have to be told the
+// total number of terminals, but oh well
+static void addToTerminalSet(TerminalSet *&set, Terminal *t, int numTerminals)
+{
+  if (!set) {
+    set = new TerminalSet(numTerminals);
+  }
+
+  set->add(t->termIndex);
+}
+
+void Nonterminal::addNTForbid(Terminal *t, int totalNumTerminals)
+{
+  addToTerminalSet(ntForbid, t, totalNumTerminals);
 }
 
 
@@ -726,15 +749,9 @@ DottedProduction const *Production::getDProdC(int dotPlace) const
 #endif // 0
 
 
-// it's somewhat unfortunate that I have to be told the
-// total number of terminals, but oh well
 void Production::addForbid(Terminal *t, int numTerminals)
 {
-  if (!forbid) {
-    forbid = new TerminalSet(numTerminals);
-  }
-
-  forbid->add(t->termIndex);
+  addToTerminalSet(forbid, t, numTerminals);
 }
 
 

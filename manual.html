@@ -593,6 +593,28 @@ lookahead</em> declarations, for example:
 This specification means that the rule "<code>N -&gt; A B C</code>" can
 not be used to reduce if the next symbol is either "+" or "*".
 
+<p>
+Furthermore, an entire nonterminal can be given <code>forbid_next</code>
+directives by including them inside the braces, before the
+<code>-&gt;</code> productions and after special functions like
+<code>dup()</code>, each terminated by a semicolon:
+
+<pre>
+  nonterm N {
+    fun dup()         { /*...*/ }
+
+    forbid_next("+");
+    forbid_next("*");
+
+    -&gt; A B C       { /*...*/ }
+    -&gt; D E F       { /*...*/ }
+  }
+</pre>
+
+<p>
+Such rules apply to all of the productions for the nonterminal, even
+those defined in other files.
+
 
 <h1 id="options">5. Options</h1>
 

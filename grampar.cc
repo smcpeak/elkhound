@@ -688,6 +688,7 @@ void synthesizeStartRule(Grammar &g, GrammarAST *ast)
         LIT_STR("__EarlyStartSymbol").clone(),   // name
         firstNT->type.clone(),                   // type
         NULL,                                    // empty list of functions
+        NULL,                                    // empty forbidNexts
         new ASTList<ProdDecl>(startProd),        // productions
         NULL                                     // subsets
       );
@@ -714,6 +715,15 @@ void astParseNonterm(Environment &env, TF_nonterm const *nt)
 
   // parse dup/del/merge
   astParseDDM(env, nonterm, nt->funcs);
+
+  // nonterminal forbid_next
+  FOREACH_ASTLIST(LocString, nt->ntForbidNexts, iter) {
+    LocString const *ls = iter.data();
+    Terminal *t = astParseToken(env, *ls);
+    if (!t) { break; }                 // Error already reported.
+
+    nonterm->addNTForbid(t, env.g.numTerminals());
+  }
 
   // record subsets
   {

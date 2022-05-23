@@ -1998,6 +1998,9 @@ void GrammarAnalysis
     if (prod.forbid) {
       newItemLA.removeSet(*prod.forbid);
     }
+    if (prod.left->ntForbid) {
+      newItemLA.removeSet(*( prod.left->ntForbid ));
+    }
 
     if (tr) {
       trs << "      built item ";
@@ -4106,6 +4109,11 @@ void GrammarAnalysis::runAnalyses(char const *setsFname)
       Nonterminal const *nt = ntIter.data();
       *setsOutput << "  ";
       nt->print(*setsOutput);
+      if (nt->ntForbid) {
+        *setsOutput << " forbid_next(";
+        nt->ntForbid->print(*setsOutput, *this, "");
+        *setsOutput << ")";
+      }
       *setsOutput << "\n";
     }
 

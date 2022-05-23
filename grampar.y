@@ -153,6 +153,9 @@ AssocKind whichKind(LocString * /*owner*/ kind);
 %type <specFunc> SpecFunc
 %type <stringList> FormalsOpt Formals Subsets
 
+%type <stringList> NTForbidNexts
+%type <str> NTForbidNext
+
 %type <prodDecls> Productions
 %type <prodDecl> Production
 %type <rhsList> RHS
@@ -291,6 +294,18 @@ Formals: TOK_NAME                     { $$ = new ASTList<LocString>($1); }
        ;
 
 
+/* ------ nonterminal-level forbid_nexts ------ */
+/* yields: ASTList<LocString> */
+NTForbidNexts: /* empty */            { $$ = new ASTList<LocString>; }
+               | NTForbidNexts NTForbidNext
+                                      { ($$=$1)->append($2); }
+               ;
+
+/* yields: LocString */
+NTForbidNext: "forbid_next" "(" NameOrString ")" ";"     { $$ = $3; }
+              ;
+
+
 /* ------ nonterminals ------ */
 /*
  * a nonterminal is a grammar symbol that appears on the LHS of forms;
@@ -299,10 +314,10 @@ Formals: TOK_NAME                     { $$ = new ASTList<LocString>($1); }
  */
 /* yields: TopForm (always TF_nonterm) */
 Nonterminal: "nonterm" Type TOK_NAME Production
-               { $$ = new TF_nonterm($3, $2, new ASTList<SpecFunc>,
+               { $$ = new TF_nonterm($3, $2, new ASTList<SpecFunc>, NULL,
                                      new ASTList<ProdDecl>($4), NULL); }
-           | "nonterm" Type TOK_NAME "{" SpecFuncs Productions Subsets "}"
-               { $$ = new TF_nonterm($3, $2, $5, $6, $7); }
+           | "nonterm" Type TOK_NAME "{" SpecFuncs NTForbidNexts Productions Subsets "}"
+               { $$ = new TF_nonterm($3, $2, $5, $6, $7, $8); }
            ;
 
 /* yields: ASTList<ProdDecl> */

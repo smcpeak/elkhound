@@ -1,0 +1,33 @@
+// nt_forbid_next.gr.in
+// Test "forbid_next" applied to a nonterminal.
+
+option useGCDefaults;
+
+terminals {
+  a
+  b
+}
+
+nonterm S {
+  -> A B;
+}
+
+nonterm A {
+  // This effectively makes 'A' use "maximal much" behavior, consuming
+  // all 'a' tokens it can.
+  forbid_next("a");
+
+  -> a A;
+  -> empty;
+}
+
+nonterm B {
+  // Without 'forbid_next', this rule would create an ambiguity because
+  // the last 'a' could be folded into B.  But with it, this rule cannot
+  // be used, at least not from S.
+  -> a b;
+
+  -> b;
+}
+
+// EOF

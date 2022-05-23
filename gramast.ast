@@ -42,6 +42,7 @@ class TopForm {
     LocString name,                    // nonterm name
     LocString type,                    // semantic value type
     ASTList<SpecFunc> funcs,           // special situation action functions
+    ASTList<LocString> ntForbidNexts,  // nonterminal-level forbid_nexts
     ASTList<ProdDecl> productions,     // productions (right-hand side alternatives)
     ASTList<LocString> subsets         // preference subset nonterminals (for scannerless)
   );

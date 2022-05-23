@@ -300,6 +300,8 @@ public:
 
   SObjList<Nonterminal> subsets;      // preferred subsets (for scannerless)
 
+  TerminalSet *ntForbid;    // (nullable owner) forbidden next tokens for all rules
+
 protected:  // funcs
   virtual void internalPrintDDM(ostream &os) const override;
 
@@ -315,6 +317,9 @@ public:     // funcs
   OSTREAM_OPERATOR(Nonterminal)
 
   virtual bool anyDDM() const override;
+
+  // Add a terminal to the 'ntForbid' set.
+  void addNTForbid(Terminal *t, int totalNumTerminals);
 
 // ------ annotation ------
 public:     // data
