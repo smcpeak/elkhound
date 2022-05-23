@@ -13,9 +13,13 @@ nonterm S {
 }
 
 nonterm A {
+  // The grammar extension in nt_forbid_next_ext.gr.in contains this
+  // rule in order to exercise the capability to apply it from an
+  // extension.
+  //
   // This effectively makes 'A' use "maximal much" behavior, consuming
   // all 'a' tokens it can.
-  forbid_next("a");
+  //forbid_next("a");
 
   -> a A;
   -> empty;

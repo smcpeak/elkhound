@@ -1156,6 +1156,12 @@ void mergeNonterminal(GrammarAST *base, TF_nonterm * /*owner*/ ext)
     mergeSpecFunc(exist, ext->funcs.removeFirst());
   }
 
+  // Merge the ntForbidNexts by moving them into 'exist'.  Duplicates
+  // should not be a problem.
+  while (ext->ntForbidNexts.isNotEmpty()) {
+    exist->ntForbidNexts.append(ext->ntForbidNexts.removeFirst());
+  }
+
   // merge the productions
   while (ext->productions.isNotEmpty()) {
     mergeProduction(exist, ext->productions.removeFirst());

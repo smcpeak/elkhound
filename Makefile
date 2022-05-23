@@ -115,6 +115,11 @@ include config.mk
 
 
 # ----------------------------- Rules ------------------------------
+# Import common macros.  Used in this file are:
+#   FILENAME_TO_VARNAME
+include $(SMBASE)/sm-lib.mk
+
+
 # Get rid of (some...) built-in rules.
 .SUFFIXES:
 
@@ -199,7 +204,8 @@ support-set := \
 %.gr.gen.cc %.gr.gen.h %.gr.gen.y: %.gr elkhound.exe
 	test "x$*" != "xcc2/cc2t"
 	rm -f $*.gr.gen.h $*.gr.gen.cc
-	./elkhound.exe -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr
+	./elkhound.exe -v -tr bison,NOconflict$(TRGRAMANL) -o $*.gr.gen $*.gr \
+	  $(OPTIONS_FOR_$(call FILENAME_TO_VARNAME,$*))
 	chmod a-w $*.gr.gen.h $*.gr.gen.cc
 
 # new C++ grammar with treebuilding actions
@@ -570,6 +576,14 @@ triv/DeclExpr.perf.txt:
 	  triv/DeclExpr.gr.exe -tr progress,trivialActions triv/DeclExpr.in$$n 2>&1 | \
 	    sed "s/^/$$n: /" >> $@ ; \
 	done
+
+
+# --------------------------- nt_forbid_next ---------------------------
+# Augment the main grammar with an extension module.
+OPTIONS_FOR_nt_forbid_next := triv/nt_forbid_next_ext.gr
+
+# Indicate the dependence to 'make'.
+triv/nt_forbid_next.gr.exe: triv/nt_forbid_next_ext.gr
 
 
 # ------------------------ documentation -----------------------

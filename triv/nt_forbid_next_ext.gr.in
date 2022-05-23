@@ -1,0 +1,10 @@
+// nt_forbid_next_ext.gr.in
+// Extension module for nt_forbid_next.gr.in.
+
+nonterm A {
+  // This effectively makes 'A' use "maximal much" behavior, consuming
+  // all 'a' tokens it can.
+  forbid_next("a");
+}
+
+// EOF
