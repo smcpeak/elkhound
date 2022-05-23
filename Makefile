@@ -74,6 +74,15 @@ PERL    = perl
 AR      = ar
 RANLIB  = ranlib
 
+# Ensure the directory meant to hold the output file of a recipe exists.
+CREATE_OUTPUT_DIRECTORY = @mkdir -p $(dir $@)
+
+# Script in my scripts repo that validates intra-file HTML links.
+CHECK_INTRAFILE_LINKS = check-intrafile-links
+
+# Script in my scripts repo that runs the 'vnu' HTML syntax checker.
+HTML_VNU_CHECK = html-vnu-check
+
 
 # ---- Options within this Makefile ----
 # This variable is a parameter that can be passed on the 'make' command
@@ -610,6 +619,20 @@ doc: gendoc gendoc/elkhound_dep.png gendoc/glr.png gendoc/configure.txt
 
 # some other random phony targets (I hate this clutter..)
 .PHONY: clean distclean check
+
+
+# ---------------------- checking for HTML files -----------------------
+# Check one HTML file.
+out/%.html.ok: %.html
+	$(CREATE_OUTPUT_DIRECTORY)
+	$(CHECK_INTRAFILE_LINKS) $*.html
+	$(HTML_VNU_CHECK) $*.html
+	touch $@
+
+# Set of HTML validations to perform.  This is not run by 'check'
+# because it relies on two scripts in another repo.
+.PHONY: check-doc
+check-doc: out/manual.html.ok
 
 
 # -------------------- clean, check, etc. ------------------

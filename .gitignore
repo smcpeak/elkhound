@@ -43,6 +43,7 @@ glrconfig.h
 gramlex.yy.cc
 gramlex.yy.h
 grampar.output
+out
 personal.mk
 test-bad-tmp.c
 triv/*.gr
