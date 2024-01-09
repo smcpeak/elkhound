@@ -359,7 +359,12 @@ void printMyTokenDecls()
 // ----------------------- Lexer2Token -------------------------------
 Lexer2Token::Lexer2Token(Lexer2TokenType aType, SourceLoc aLoc)
   : type(aType),
-    intValue(0),     // legal? apparently..
+
+    // Initialize the semantic value union to all-zeroes.  (Previously,
+    // I was only initializing 'intValue', but on a 64-bit platform,
+    // that only initializes half of the bytes.)
+    sval(NULL_SVAL),
+
     loc(aLoc),
     sourceMacro(NULL)
 {}
