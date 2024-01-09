@@ -275,7 +275,22 @@ trivbison-deps := trivbison.o trivlex.o lexer2.o libelkhound.a
 	@# token codes in the lexer without also having to declare
 	@# everything that is in the YYSTYPE union.
 	@#
-	sed -n -e '/enum yytokentype/,/};/p' < $*.tab.h > $*.codes.h
+	@# Explanation of the 'sed' command: The first part:
+	@#
+	@#   /enum yytokentype/,/};/p
+	@#
+	@# will print everything between 'enum yytokentype' and '};',
+	@# inclusive.  That gets the enumeration I want.
+	@#
+	@# The next part:
+	@#
+	@#   /};/q
+	@#
+	@# stops when we see the first '};', since some bison versions
+	@# emit a typedef after it that matches the start sequence,
+	@# which would otherwise cause extra stuff to be printed.
+	@#
+	sed -n -e '/enum yytokentype/,/};/p; /};/q' < $*.tab.h > $*.codes.h
 
 
 # ----------------- extra dependencies -----------------
