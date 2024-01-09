@@ -15,7 +15,7 @@
 #include "useract.h"   // UserActions
 #include "ptreenode.h" // PTreeNode
 #include "cc_lang.h"   // CCLang
-#include "exc.h"       // throw_XOpen
+#include "syserr.h"    // xsyserror
 
 #include <string.h>    // strcmp
 #include <stdlib.h>    // exit
@@ -117,7 +117,7 @@ void entry(int argc, char *argv[])
   {
     FILE *input = fopen(inputFname, "r");
     if (!input) {
-      throw_XOpen(inputFname);
+      xsyserror("open", inputFname);
     }
     fseek(input, 0, SEEK_END);
     inputLen = ftell(input);

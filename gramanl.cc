@@ -4188,7 +4188,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
 {
   EmitCode dcl(hFname);
   if (!dcl) {
-    throw_XOpen(hFname);
+    xsyserror("open", hFname);
   }
 
   string latchName = replace(replace(replace(
@@ -4254,7 +4254,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
 
   EmitCode out(ccFname);
   if (!out) {
-    throw_XOpen(ccFname);
+    xsyserror("open", ccFname);
   }
 
   out << "// " << ccFname << "\n";

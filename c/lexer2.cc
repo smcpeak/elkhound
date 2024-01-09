@@ -7,6 +7,7 @@
 #include "exc.h"         // xformat
 #include "cc_lang.h"     // CCLang
 #include "glrconfig.h"   // SOURCELOC
+#include "syserr.h"      // xsyserror
 
 #include <stdlib.h>      // strtoul
 #include <string.h>      // strlen, strcmp
@@ -707,7 +708,7 @@ Lexer2TokenType lexer2_gettoken()
     lexer1 = new Lexer1(bison_hack_source_fname);
     FILE *fp = fopen(bison_hack_source_fname, "r");
     if (!fp) {
-      throw_XOpen(bison_hack_source_fname);
+      xsyserror("open", bison_hack_source_fname);
     }
     lexer1_lex(*lexer1, fp);
 

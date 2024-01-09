@@ -9,6 +9,7 @@
 #include "parsetables.h" // ParseTables
 #include "exc.h"         // XOpen
 #include "strutil.h"     // replace
+#include "syserr.h"      // xsyserror
 
 
 // NOTE: The as following code is largely copied from elsewhere,
@@ -56,7 +57,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
 {
   EmitCode dcl(mliFname);
   if (!dcl) {
-    throw_XOpen(mliFname);
+    xsyserror("open", mliFname);
   }
 
   // prologue
@@ -118,7 +119,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
 
   EmitCode out(mlFname);
   if (!out) {
-    throw_XOpen(mlFname);
+    xsyserror("open", mlFname);
   }
 
   out << "(* " << mlFname << " *)\n";
