@@ -435,6 +435,9 @@ void Lexer2Token::print() const
 }
 
 
+// Populate 'dest' with the decoded character values from the C string
+// literal syntax in 'src'.  This does *not* add a NUL terminator to the
+// end of the 'dest' array (use its 'length' method instead).
 void quotedUnescape(ArrayStack<char> &dest, rostring src,
                     char delim, bool allowNewlines)
 {
@@ -534,6 +537,10 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
               break;
             }
           }
+
+          // Add a NUL terminator since 'StringTable::add' needs one, as
+          // it does not accept a length parameter.
+          tmp.push('\0');
 
           L2->strValue = dest.idTable.add(tmp.getArray());
           break;
