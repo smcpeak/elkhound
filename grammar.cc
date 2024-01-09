@@ -165,10 +165,10 @@ void Terminal::xfer(Flatten &flat)
 
   alias.xfer(flat);
 
-  flat.xferInt((int&)precedence);
+  flat.xferInt32((int&)precedence);
   xferEnum(flat, associativity);
 
-  flat.xferInt(termIndex);
+  flat.xferInt32(termIndex);
 
   flattenStrTable->xfer(flat, classifyParam);
   classifyCode.xfer(flat);
@@ -271,7 +271,7 @@ void Nonterminal::xfer(Flatten &flat)
 void Nonterminal::xferSerfs(Flatten &flat, Grammar &g)
 {
   // annotation
-  flat.xferInt(ntIndex);
+  flat.xferInt32(ntIndex);
   flat.xferBool(cyclic);
   first.xfer(flat);
   follow.xfer(flat);
@@ -397,7 +397,7 @@ TerminalSet::TerminalSet(Flatten&)
 
 void TerminalSet::xfer(Flatten &flat)
 {
-  flat.xferInt(bitmapLen);
+  flat.xferInt32(bitmapLen);
 
   if (bitmapLen > 0) {
     if (flat.reading()) {
@@ -575,11 +575,11 @@ void Production::xfer(Flatten &flat)
 {
   eh_xferObjList(flat, right);
   action.xfer(flat);
-  flat.xferInt((int&)precedence);
+  flat.xferInt32((int&)precedence);
   xferNullableOwnerPtr(flat, forbid);
 
-  flat.xferInt(rhsLen);
-  flat.xferInt(prodIndex);
+  flat.xferInt32(rhsLen);
+  flat.xferInt32(prodIndex);
   firstSet.xfer(flat);
 }
 
@@ -862,7 +862,7 @@ Grammar::~Grammar()
 void Grammar::xfer(Flatten &flat)
 {
   // owners
-  flat.checkpoint(0xC7AB4D86);
+  flat.checkpoint32(0xC7AB4D86);
   eh_xferObjList(flat, nonterminals);
   eh_xferObjList(flat, terminals);
   eh_xferObjList(flat, productions);
@@ -880,13 +880,13 @@ void Grammar::xfer(Flatten &flat)
   flat.xferBool(useGCDefaults);
   flat.xferBool(defaultMergeAborts);
 
-  flat.xferInt(expectedSR);
-  flat.xferInt(expectedRR);
-  flat.xferInt(expectedUNRNonterms);
-  flat.xferInt(expectedUNRTerms);
+  flat.xferInt32(expectedSR);
+  flat.xferInt32(expectedRR);
+  flat.xferInt32(expectedUNRNonterms);
+  flat.xferInt32(expectedUNRTerms);
 
   // serfs
-  flat.checkpoint(0x8580AAD2);
+  flat.checkpoint32(0x8580AAD2);
 
   MUTATE_EACH_OBJLIST(Nonterminal, nonterminals, nt) {
     nt.data()->xferSerfs(flat, *this);
@@ -897,7 +897,7 @@ void Grammar::xfer(Flatten &flat)
 
   xferSerfPtrToList(flat, startSymbol, nonterminals);
 
-  flat.checkpoint(0x2874DB95);
+  flat.checkpoint32(0x2874DB95);
 }
 
 

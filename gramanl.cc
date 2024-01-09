@@ -18,6 +18,7 @@
 
 #include "sm-fstream.h"  // ofstream
 #include "sm-stdint.h"   // intptr_t
+
 #include <stdlib.h>      // getenv
 #include <stdio.h>       // printf
 
@@ -184,14 +185,14 @@ void LRItem::xfer(Flatten &flat)
 void LRItem::xferSerfs(Flatten &flat, GrammarAnalysis &g)
 {
   if (flat.writing()) {
-    flat.writeInt(prodIndex());
-    flat.writeInt(getDot());
+    flat.writeInt32(prodIndex());
+    flat.writeInt32(getDot());
   }
   else {
     // originally had these directly in the argument list,
     // but order of eval is undefined!
-    int idx = flat.readInt();
-    int d = flat.readInt();
+    int idx = flat.readInt32();
+    int d = flat.readInt32();
     dprod = g.getDProdIndex(idx, d);
   }
 }
@@ -330,15 +331,15 @@ void ItemSet::xfer(Flatten &flat)
   eh_xferObjList(flat, kernelItems);
   eh_xferObjList(flat, nonkernelItems);
 
-  flat.xferInt(terms);
-  flat.xferInt(nonterms);
+  flat.xferInt32(terms);
+  flat.xferInt32(nonterms);
 
   // numDotsAtEnd and kernelItemsCRC are computed from
   // other data
   // NEW: but computing them requires the items, which I'm omitting
 
-  flat.xferInt(numDotsAtEnd);
-  flat.xferLong((long&)kernelItemsCRC);
+  flat.xferInt32(numDotsAtEnd);
+  flat.xferLong64((long&)kernelItemsCRC);
 
   xferEnum(flat, id);
 }
@@ -981,7 +982,7 @@ void GrammarAnalysis::xfer(Flatten &flat)
   // delay indexed[Non]Terms, productionsByLHS,
   // and initialized
 
-  flat.xferInt(nextItemSetId);
+  flat.xferInt32(nextItemSetId);
 
   eh_xferObjList(flat, itemSets);
   xferSerfPtrToList(flat, startState, itemSets);

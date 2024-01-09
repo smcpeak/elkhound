@@ -67,7 +67,7 @@ template <class T>
 void eh_xferObjList(Flatten &flat, ObjList <T> &list)
 {
   if (flat.writing()) {
-    flat.writeInt(list.count());
+    flat.writeInt32(list.count());
 
     MUTATE_EACH_OBJLIST(T, list, iter) {
       iter.data()->xfer(flat);
@@ -75,7 +75,7 @@ void eh_xferObjList(Flatten &flat, ObjList <T> &list)
     }
   }
   else {
-    int listLen = flat.readInt();
+    int listLen = flat.readInt32();
 
     ObjListMutator<T> mut(list);
     while (listLen--) {
@@ -100,7 +100,7 @@ template <class T>
 void xferObjList_readObj(Flatten &flat, ObjList <T> &list)
 {
   if (flat.writing()) {
-    flat.writeInt(list.count());
+    flat.writeInt32(list.count());
 
     MUTATE_EACH_OBJLIST(T, list, iter) {
       iter.data()->xfer(flat);
@@ -108,7 +108,7 @@ void xferObjList_readObj(Flatten &flat, ObjList <T> &list)
     }
   }
   else {
-    int listLen = flat.readInt();
+    int listLen = flat.readInt32();
 
     ObjListMutator<T> mut(list);
     while (listLen--) {
@@ -133,10 +133,10 @@ void xferSObjList_multi(Flatten &flat, SObjList<T> &list,
 {
   // be sure the same number of master lists are used at
   // read and write time
-  flat.checkpoint(numMasters);
+  flat.checkpoint32(numMasters);
 
   if (flat.writing()) {
-    flat.writeInt(list.count());
+    flat.writeInt32(list.count());
 
     SMUTATE_EACH_OBJLIST(T, list, iter) {
       // determine which master list it's in
@@ -146,9 +146,9 @@ void xferSObjList_multi(Flatten &flat, SObjList<T> &list,
         if (index != -1) {
           // we found it -- encode the list and its index
           if (numMasters > 1) {
-            flat.writeInt(master);    // only do this if multiple masters
+            flat.writeInt32(master);    // only do this if multiple masters
           }
-          flat.writeInt(index);
+          flat.writeInt32(index);
           break;
         }
       }
@@ -161,16 +161,16 @@ void xferSObjList_multi(Flatten &flat, SObjList<T> &list,
   }
 
   else {
-    int listLen = flat.readInt();
+    int listLen = flat.readInt32();
 
     SObjListMutator<T> mut(list);
     while (listLen--) {
       int master = 0;               // assume just 1 master
       if (numMasters > 1) {
-        master = flat.readInt();    // then refine
+        master = flat.readInt32();  // then refine
       }
 
-      mut.append(masterLists[master]->nth(flat.readInt()));
+      mut.append(masterLists[master]->nth(flat.readInt32()));
     }
   }
 }
@@ -190,10 +190,10 @@ template <class T>
 void xferSerfPtrToList(Flatten &flat, T *&ptr, ObjList<T> &masterList)
 {
   if (flat.writing()) {
-    flat.writeInt(masterList.indexOfF(ptr));
+    flat.writeInt32(masterList.indexOfF(ptr));
   }
   else {
-    ptr = masterList.nth(flat.readInt());
+    ptr = masterList.nth(flat.readInt32());
   }
 }
 
@@ -202,10 +202,10 @@ template <class T>
 void xferNullableSerfPtrToList(Flatten &flat, T *&ptr, ObjList<T> &masterList)
 {
   if (flat.writing()) {
-    flat.writeInt(masterList.indexOf(ptr));
+    flat.writeInt32(masterList.indexOf(ptr));
   }
   else {
-    int index = flat.readInt();
+    int index = flat.readInt32();
     if (index >= 0) {
       ptr = masterList.nth(index);
     }
@@ -257,8 +257,8 @@ void xferSerfPtr_twoLevelAccess(
         Leaf *second = getNthLeaf(first, index2);
         if (second == leaf) {
           // found it; encode both indices
-          flat.writeInt(index1);
-          flat.writeInt(index2);
+          flat.writeInt32(index1);
+          flat.writeInt32(index2);
           return;
         }
         if (second == NULL) {
@@ -271,8 +271,8 @@ void xferSerfPtr_twoLevelAccess(
 
   else /*reading*/ {
     // read both indicies
-    int index1 = flat.readInt();
-    int index2 = flat.readInt();
+    int index1 = flat.readInt32();
+    int index2 = flat.readInt32();
 
     // follow the access path
     FirstLevel *first = getNthFirst(root, index1);
@@ -321,7 +321,7 @@ void xferSObjList_twoLevelAccess(
 {
   if (flat.writing()) {
     // length of list
-    flat.writeInt(serfList.count());
+    flat.writeInt32(serfList.count());
 
     // iterate over list
     SMUTATE_EACH_OBJLIST(Leaf, serfList, iter) {
@@ -333,7 +333,7 @@ void xferSObjList_twoLevelAccess(
     }
   }
   else {
-    int length = flat.readInt();
+    int length = flat.readInt32();
 
     SObjListMutator<Leaf> mut(serfList);
     while (length--) {
