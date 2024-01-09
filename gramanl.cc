@@ -915,11 +915,11 @@ GrammarAnalysis::GrammarAnalysis()
 GrammarAnalysis::~GrammarAnalysis()
 {
   if (indexedNonterms != NULL) {
-    delete indexedNonterms;
+    delete[] indexedNonterms;
   }
 
   if (indexedTerms != NULL) {
-    delete indexedTerms;
+    delete[] indexedTerms;
   }
 
   if (productionsByLHS != NULL) {
