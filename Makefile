@@ -583,7 +583,7 @@ triv/DeclExpr.perf.txt:
 OPTIONS_FOR_nt_forbid_next := triv/nt_forbid_next_ext.gr
 
 # Indicate the dependence to 'make'.
-triv/nt_forbid_next.gr.exe: triv/nt_forbid_next_ext.gr
+triv/nt_forbid_next.gr.gen.cc: triv/nt_forbid_next_ext.gr
 
 
 # ------------------------ documentation -----------------------
