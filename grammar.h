@@ -209,7 +209,10 @@ public:     // funcs
   virtual bool anyDDM() const override;
 
   // return alias if defined, name otherwise
-  virtual string toString(bool quoteAliases = false) const;
+  virtual string toString() const override;
+
+  // Provide the option to quote the aliases.
+  string toStringQA(bool quoteAliases) const;
 };
 
 typedef SObjList<Terminal> TerminalList;

@@ -203,7 +203,13 @@ bool Terminal::anyDDM() const
 }
 
 
-string Terminal::toString(bool quoteAliases) const
+string Terminal::toString() const
+{
+  return toStringQA(false /*quoteAliases*/);
+}
+
+
+string Terminal::toStringQA(bool quoteAliases) const
 {
   if (alias.length() > 0) {
     if (quoteAliases) {
@@ -803,7 +809,7 @@ string Production::rhsString(bool printTags, bool quoteAliases) const
       }
       else {
         // print terminals as aliases if possible
-        symName = elt.sym->asTerminalC().toString(quoteAliases);
+        symName = elt.sym->asTerminalC().toStringQA(quoteAliases);
       }
 
       if (printTags) {
