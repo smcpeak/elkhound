@@ -1232,7 +1232,7 @@ GrammarAST *parseGrammarFile(rostring origFname, bool useML)
   else {
     in = new ifstream(fname.c_str());
     if (!*in) {
-      xsyserror("open", stringc << "error opening input file " << fname);
+      xsyserror("open", fname);
     }
   }
 
