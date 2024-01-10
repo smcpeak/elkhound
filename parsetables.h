@@ -201,7 +201,7 @@ protected:  // data
   // --------------------- table compression ----------------------
 
   // table compression techniques taken from:
-  //   [DDH] Peter Dencker, Karl Dürre, and Johannes Heuft.
+  //   [DDH] Peter Dencker, Karl Duerre, and Johannes Heuft.
   //   Optimization of Parser Tables for Portable Compilers.
   //   In ACM TOPLAS, 6, 4 (1984) 546-572.
   //   http://citeseer.nj.nec.com/context/27540/0 (not in database)
