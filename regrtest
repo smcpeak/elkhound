@@ -213,6 +213,7 @@ fi
 
 # make sure Elkhound doesn't segfault on the following
 runTest ./elkhound.exe examples/crash1.gr
+runTest ./elkhound.exe -v examples/postgresql16.gr
 
 
 # ------------ test the C grammar and parser -------------

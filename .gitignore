@@ -37,6 +37,8 @@ examples/gcom7/ast.h
 examples/gcom7/gcom.cc
 examples/gcom7/gcom.h
 examples/gcom7/tokens.tok
+examples/postgresql16.cc
+examples/postgresql16.h
 examples/scannerless/sless.cc
 examples/scannerless/sless.h
 glrconfig.h
