@@ -244,7 +244,11 @@ Nonterminal::Nonterminal(LocString const &name, bool isEmpty)
 {}
 
 Nonterminal::~Nonterminal()
-{}
+{
+  if (ntForbid) {
+    delete ntForbid;
+  }
+}
 
 
 Nonterminal::Nonterminal(Flatten &flat)
