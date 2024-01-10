@@ -18,6 +18,8 @@ config.status
 examples/cexp/cexp3b.gr
 examples/crash1.cc
 examples/crash1.h
+examples/ffollow.cc
+examples/ffollow.h
 examples/gcom/ast.cc
 examples/gcom/ast.h
 examples/gcom/gcom.cc

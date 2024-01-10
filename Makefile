@@ -683,6 +683,7 @@ clean: gcom-clean
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
 	rm -f examples/crash1.cc examples/crash1.h
+	rm -f examples/ffollow.cc examples/ffollow.h
 	rm -f examples/postgresql16.cc examples/postgresql16.h
 	rm -f c.in/c.in4c c.in/c.in4d
 	cd cc2; rm -f $(CLEAN_PATTERNS)
