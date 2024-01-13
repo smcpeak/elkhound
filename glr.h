@@ -46,6 +46,7 @@
 #include "objlist.h"       // ObjList
 #include "srcloc.h"        // SourceLoc
 #include "sobjlist.h"      // SObjList
+#include "sm-macros.h"     // NO_OBJECT_COPIES
 
 #include <stdio.h>         // FILE
 #include "sm-iostream.h"   // ostream
@@ -65,6 +66,8 @@ class GLR;                 // main class for GLR parsing
 // parse stack sense); also has a link to the parse graph
 // we're constructing
 class SiblingLink {
+  NO_OBJECT_COPIES(SiblingLink);
+
 public:
   // the stack node being pointed-at; it was created eariler
   // than the one doing the pointing
@@ -109,6 +112,8 @@ public:
 // stack because choice points (real or potential ambiguities)
 // are represented as multiple left-siblings
 class StackNode {
+  NO_OBJECT_COPIES(StackNode);
+
 public:
   // the LR state the parser is in when this node is at the
   // top ("at the top" means that nothing, besides perhaps itself,
@@ -227,6 +232,8 @@ public:     // funcs
 // reduce, maintained such that we can select paths in an order which
 // will avoid yield-then-merge
 class ReductionPathQueue {
+  NO_OBJECT_COPIES(ReductionPathQueue);
+
 public:       // types
   // a single path in the stack
   class Path {
@@ -290,7 +297,7 @@ private:      // funcs
   bool goesBefore(Path const *p1, Path const *p2) const;
 
 public:       // funcs
-  ReductionPathQueue(ParseTables *t);
+  explicit ReductionPathQueue(ParseTables *t);
   ~ReductionPathQueue();
 
   // get another Path object, inited with these values
@@ -316,6 +323,8 @@ public:       // funcs
 // each GLR object is a parser for a specific grammar, but can be
 // used to parse multiple token streams
 class GLR {
+  NO_OBJECT_COPIES(GLR);
+
 public:
   // ---- grammar-wide data ----
   // user-specified actions
