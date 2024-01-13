@@ -4386,6 +4386,24 @@ bool isEnumType(char const *type)
 }
 
 
+// Return code for an assertion that 'varName' is a valid terminal ID.
+// There is no whitespace at the start or end of the returned string.
+static string assertValidTermId(Grammar const &g,
+                                char const *varName)
+{
+  return stringb("assert(0 <= " << varName << " && " <<
+                 varName << " < " << g.numTerminals() << ");");
+}
+
+// Same as above but for a nonterminal ID.
+static string assertValidNontermId(Grammar const &g,
+                                   char const *varName)
+{
+  return stringb("assert(0 <= " << varName << " && " <<
+                 varName << " < " << g.numNonterminals() << ");");
+}
+
+
 void emitDescriptions(GrammarAnalysis const &g, EmitCode &out)
 {
   // emit a map of terminal ids to their names
@@ -4414,6 +4432,7 @@ void emitDescriptions(GrammarAnalysis const &g, EmitCode &out)
   out << "string " << g.actionClassName
       << "::terminalDescription(int termId, SemanticValue sval)\n"
       << "{\n"
+      << "  " << assertValidTermId(g, "termId") << "\n"
       << "  return stringc << termNames[termId]\n"
       << "                 << \"(\" << (sval % 100000) << \")\";\n"
       << "}\n"
@@ -4442,6 +4461,7 @@ void emitDescriptions(GrammarAnalysis const &g, EmitCode &out)
   out << "string " << g.actionClassName
       << "::nonterminalDescription(int nontermId, SemanticValue sval)\n"
       << "{\n"
+      << "  " << assertValidNontermId(g, "nontermId") << "\n"
       << "  return stringc << nontermNames[nontermId]\n"
       << "                 << \"(\" << (sval % 100000) << \")\";\n"
       << "}\n"
@@ -4453,12 +4473,14 @@ void emitDescriptions(GrammarAnalysis const &g, EmitCode &out)
   out << "char const *" << g.actionClassName
       << "::terminalName(int termId)\n"
       << "{\n"
+      << "  " << assertValidTermId(g, "termId") << "\n"
       << "  return termNames[termId];\n"
       << "}\n"
       << "\n"
       << "char const *" << g.actionClassName
       << "::nonterminalName(int nontermId)\n"
       << "{\n"
+      << "  " << assertValidNontermId(g, "nontermId") << "\n"
       << "  return nontermNames[nontermId];\n"
       << "}\n"
       << "\n"
@@ -4814,11 +4836,13 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
         // warn about unspec'd del, since it's probably a memory leak
         if (syms.firstC()->isNonterminal()) {
           // use the nonterminal map
+          out << "      " << assertValidNontermId(g, switchVar) << "\n";
           out << "      cout << \"WARNING: there is no action to deallocate nonterm \"\n"
                  "           << nontermNames[" << switchVar << "] << endl;\n";
         }
         else {
           // use the terminal map
+          out << "      " << assertValidTermId(g, switchVar) << "\n";
           out << "      cout << \"WARNING: there is no action to deallocate terminal \"\n"
                  "           << termNames[" << switchVar << "] << endl;\n";
         }
@@ -4830,6 +4854,8 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
       break;
 
     case 2: {  // unspecified merge: warn, but then use left (arbitrarily)
+      out << "      " << assertValidNontermId(g, switchVar) << "\n";
+
       char const *w = g.defaultMergeAborts? "error: " : "WARNING: ";
       out << "      cout << toString(loc)\n"
           << "           << \": " << w << "there is no action to merge nonterm \"\n"
