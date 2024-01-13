@@ -62,6 +62,16 @@ class PendingShift;        // for postponing shifts.. may remove
 class GLR;                 // main class for GLR parsing
 
 
+// Manually enableable printouts related to reference counts.  These are
+// not controlled with the usual "-tr" option because they are too
+// expensive for normal operation.
+#if 0
+  #define DEBUG_REFCT(stuff) std::cout << stuff << "\n" /* user ; */
+#else
+  #define DEBUG_REFCT(stuff) /* nothing */
+#endif
+
+
 // a pointer from a stacknode to one 'below' it (in the LR
 // parse stack sense); also has a link to the parse graph
 // we're constructing
@@ -177,7 +187,7 @@ private:    // funcs
 
 public:     // funcs
   StackNode();
-  ~StackNode();
+  ~StackNode() noexcept;
 
   // ctor/dtor from point of view of the object pool user
   void init(StateId state, GLR *glr);
@@ -203,7 +213,11 @@ public:     // funcs
   SymbolId getSymbolC() const;
 
   // reference count stuff
-  void incRefCt() { referenceCount++; }
+  void incRefCt()
+  {
+    DEBUG_REFCT("incrementing node " << state << " to " << referenceCount+1);
+    referenceCount++;
+  }
   void decRefCt();
 
   // sibling count queries (each one answerable in constant time)

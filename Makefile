@@ -25,9 +25,6 @@ DEBUG_FLAGS = -g
 GENDEPS_FLAGS = -MMD
 
 # Flags to control optimization.
-#
-# TODO: I previously identified a problem with enabling optimization.
-# I doubt that has been fixed.  Investigate.
 OPTIMIZATION_FLAGS =
 
 # Flags to control compiler warnings.
