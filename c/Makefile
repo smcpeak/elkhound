@@ -161,7 +161,7 @@ tcheck.d: c.ast.gen.h
 
 # parser binary
 cparse.exe: $(CPARSE_OBJS) $(LIBS)
-	$(CXX) -o $@ $(CPARSE_OBJS) $(LDFLAGS) $(LIBS)
+	$(CXX) -o $@ $(CXXFLAGS) $(CPARSE_OBJS) $(LDFLAGS) $(LIBS)
 	./$@ $(ELKHOUND)/c.in/c.in1
 
 
