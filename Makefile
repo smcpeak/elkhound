@@ -710,11 +710,11 @@ check: all mlsstr.exe
 	@echo "Regression tests passed."
 
 # remake the generated config.mk if its inputs have changed
-config.mk: config.mk.in config.status
+config.mk: config.status
 	./config.status
 
 # reconfigure if the configure script has changed
-config.status: configure.pl sm_config.pm
+config.status: configure.pl
 	./config.status -reconfigure
 
 

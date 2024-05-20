@@ -1,6 +1,0 @@
-# elkhound/config.mk.in
-# Processed by ./configure to create config.mk.
-
-DEFINES = @DEFINES@
-
-# EOF
