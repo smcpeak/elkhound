@@ -76,6 +76,9 @@ public:     // funcs
   // must be defined in child class
   virtual Type const *err(char const *str)=0;
 
+  // Accept a 'string' to try to accomodate code using 'stringc'.
+  Type const *err(string const &str);
+
   // manipulate a stack of lists of nodes whose 'next' link
   // needs to be set
   void pushNexts();          // push an empty top
@@ -239,6 +242,7 @@ public:     // funcs
   // ------------------ error/warning reporting -----------------
   // report an error ('str' should *not* have a newline)
   virtual Type const *err(char const *str);    // returns fixed(ST_ERROR)
+  Type const *err(string const &str) { return CFGEnv::err(str); }
   void warn(char const *str);
 
   // versions which explicitly specify a location
@@ -250,6 +254,8 @@ public:     // funcs
 
   // if 'condition' is true, report error 'str' and also throw an exception
   void errIf(bool condition, char const *str);
+  void errIf(bool condition, string const &str)
+    { errIf(condition, str.c_str()); }
 
   // # reported errors
   int getErrors() const { return errors; }

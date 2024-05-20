@@ -1215,7 +1215,7 @@ void GrammarAnalysis::computeIndexedTerms()
        !sym.isDone(); sym.adv()) {
     int index = sym.data()->termIndex;   // map: symbol to index
     if (indexedTerms[index] != NULL) {
-      xfailure(stringc << "terminal index collision at index " << index);
+      xfailure_stringbc("terminal index collision at index " << index);
     }
     indexedTerms[index] = sym.data();    // map: index to symbol
   }
@@ -1517,7 +1517,7 @@ void GrammarAnalysis::computeSupersets()
 
       // for now, only handle 'super' as a partial function
       if (sub->superset != NULL) {
-        xfailure(stringc << sub->name << " has more than one superset");
+        xfailure_stringbc(sub->name << " has more than one superset");
       }
       sub->superset = super;
     }
@@ -4187,7 +4187,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
                     rostring ccFname, rostring srcFname)
 {
   EmitCode dcl(hFname);
-  if (!dcl) {
+  if (dcl.failed()) {
     xsyserror("open", hFname);
   }
 
@@ -4253,7 +4253,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
       ;
 
   EmitCode out(ccFname);
-  if (!out) {
+  if (out.failed()) {
     xsyserror("open", ccFname);
   }
 
@@ -4694,7 +4694,7 @@ void emitDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
 // emit both the function decl for the .h file, and the beginning of
 // the function definition for the .cc file
 void emitFuncDecl(Grammar const &g, EmitCode &out, EmitCode &dcl,
-                  char const *rettype, char const *params)
+                  char const *rettype, string params)
 {
   out << "inline " << rettype << " " << g.actionClassName
       << "::" << params;

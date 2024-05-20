@@ -100,7 +100,7 @@ void Lexer1::emit(Lexer1TokenType toktype, char const *tokenText, int length)
 
   // illegal tokens should be noted
   if (toktype == L1_ILLEGAL) {
-    error(stringb("illegal token: `" << tokenText << "'"));
+    error(stringbc("illegal token: `" << tokenText << "'"));
   }
 
   // add it to our running list of tokens

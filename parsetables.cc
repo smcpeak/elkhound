@@ -233,7 +233,7 @@ ActionEntry makeAE(ActionEntryKind k, int index)
     // ok
   }
   else {
-    xfailure(stringc << "index " << index << " truncated!");
+    xfailure_stringbc("index " << index << " truncated!");
   }
 
   if (k == AE_ERROR) {

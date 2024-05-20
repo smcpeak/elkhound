@@ -20,6 +20,9 @@ public:      // funcs
 
   string const &getFname() const { return fname; }
 
+  // True if the stream failed, particularly when opening the output.
+  bool failed() const { return os.fail(); }
+
   // get current line number; flushes internally
   int getLine();
 

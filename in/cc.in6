@@ -248,7 +248,7 @@ void GrammarAnalysis::initializeAuxData()
        !sym.isDone(); sym.adv()) {
     int index = sym.data()->termIndex;   // map: symbol to index
     if (indexedTerms[index] != NULL) {
-      xfailure(stringc << "terminal index collision at index " << index);
+      xfailure_stringbc("terminal index collision at index " << index);
     }
     indexedTerms[index] = sym.data();    // map: index to symbol
   }

@@ -56,7 +56,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
                       rostring mlFname, rostring srcFname)
 {
   EmitCode dcl(mliFname);
-  if (!dcl) {
+  if (dcl.failed()) {
     xsyserror("open", mliFname);
   }
 
@@ -118,7 +118,7 @@ void emitMLActionCode(GrammarAnalysis const &g, rostring mliFname,
   dcl << "val " << g.actionClassName << "UserActions: Useract.tUserActions\n";
 
   EmitCode out(mlFname);
-  if (!out) {
+  if (out.failed()) {
     xsyserror("open", mlFname);
   }
 
@@ -524,7 +524,7 @@ void emitMLDupDelMerge(GrammarAnalysis const &g, EmitCode &out, EmitCode &dcl)
 // emit both the function decl for the .h file, and the beginning of
 // the function definition for the .cc file
 void emitMLFuncDecl(Grammar const &g, EmitCode &out, EmitCode &dcl,
-                    char const *rettype, char const *params)
+                    char const *rettype, string params)
 {
   out << "(*inline*) let " << params << ": " << rettype << " =";
 }
