@@ -18,7 +18,7 @@ class Bit2d;              // bit2d.h
 
 // integer id for an item-set DFA state; I'm using an 'enum' to
 // prevent any other integers from silently flowing into it
-enum StateId { STATE_INVALID=-1 };
+enum StateId : int { STATE_INVALID=-1 };
 
 inline ostream& operator<< (ostream &os, StateId id)
   { return os << (int)id; }
@@ -26,17 +26,25 @@ inline ostream& operator<< (ostream &os, StateId id)
 
 // encodes an action in 'action' table; see 'actionTable'
 #if ENABLE_CRS_COMPRESSION
+  // 2024-01-10: In the original Elkhound release, 'ActionEntry' and
+  // 'TermIndex' were encoded using 8 bits when using CRS.  That's fine
+  // for small-ish grammars, but not for larger ones, especially when
+  // the number of tokens is more than 255.  Rather than add a
+  // configuration switch, I'm just making them 16 bits always for
+  // simplicity, but a switch (or automatic detection) could be added in
+  // the future to enable the old behavior and resulting smaller tables.
+
   // high bits encoding
   enum ActionEntryKind {
-    AE_MASK      = 0xC0,    // selection mask
-    AE_SHIFT     = 0x00,    // 00 = shift
-    AE_REDUCE    = 0x40,    // 01 = reduce
-    AE_AMBIGUOUS = 0x80,    // 10 = ambiguous
-    AE_ERROR     = 0xC0,    // 11 = error (if EEF is off)
-    AE_MAXINDEX  = 63       // maximum value of lower bits
+    AE_MASK      = 0xC000,    // selection mask
+    AE_SHIFT     = 0x0000,    // 00 = shift
+    AE_REDUCE    = 0x4000,    // 01 = reduce
+    AE_AMBIGUOUS = 0x8000,    // 10 = ambiguous
+    AE_ERROR     = 0xC000,    // 11 = error (if EEF is off)
+    AE_MAXINDEX  = 0x3FFF     // maximum value of lower bits
   };
 
-  // remaining 6 bits:
+  // remaining 14 bits:
   //
   //   shift: desination state, encoded as an offset from the
   //   first state that that terminal can reach
@@ -47,7 +55,7 @@ inline ostream& operator<< (ostream &os, StateId id)
   //   ambiguous: for each state, have an array of ActionEntries.
   //   ambiguous entries index into this array.  first indexed
   //   entry is the count of how many actions follow
-  typedef unsigned char ActionEntry;
+  typedef unsigned short ActionEntry;
   ActionEntry makeAE(ActionEntryKind k, int index);
   #define errorActionEntry ((ActionEntry)AE_ERROR)
 #else
@@ -75,7 +83,7 @@ inline ostream& operator<< (ostream &os, StateId id)
 
 
 // name a terminal using an index
-typedef unsigned char TermIndex;
+typedef unsigned short TermIndex;
 
 // name a nonterminal using an index
 typedef unsigned short NtIndex;
@@ -201,7 +209,7 @@ protected:  // data
   // --------------------- table compression ----------------------
 
   // table compression techniques taken from:
-  //   [DDH] Peter Dencker, Karl Dürre, and Johannes Heuft.
+  //   [DDH] Peter Dencker, Karl Duerre, and Johannes Heuft.
   //   Optimization of Parser Tables for Portable Compilers.
   //   In ACM TOPLAS, 6, 4 (1984) 546-572.
   //   http://citeseer.nj.nec.com/context/27540/0 (not in database)

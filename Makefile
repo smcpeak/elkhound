@@ -25,9 +25,6 @@ DEBUG_FLAGS = -g
 GENDEPS_FLAGS = -MMD
 
 # Flags to control optimization.
-#
-# TODO: I previously identified a problem with enabling optimization.
-# I doubt that has been fixed.  Investigate.
 OPTIMIZATION_FLAGS =
 
 # Flags to control compiler warnings.
@@ -683,6 +680,8 @@ clean: gcom-clean
 	rm -f libelkhound.a
 	rm -f gdb.log gprof.out gmon.out test-bad-tmp.c *.tmp
 	rm -f examples/crash1.cc examples/crash1.h
+	rm -f examples/ffollow.cc examples/ffollow.h
+	rm -f examples/postgresql16.cc examples/postgresql16.h
 	rm -f c.in/c.in4c c.in/c.in4d
 	cd cc2; rm -f $(CLEAN_PATTERNS)
 	cd triv; rm -f $(CLEAN_PATTERNS) *.y *.gr

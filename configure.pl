@@ -23,6 +23,21 @@ sub checkExitCode {
   }
 }
 
+# for a boolean option:
+#   -foo       -> true
+#   -foo=1     -> true
+#   -foo=0     -> false
+sub getBoolArg {
+  if ($value eq "" || $value eq "1") {
+    return 1;
+  }
+  elsif ($value eq "0") {
+    return 0;
+  }
+  else {
+    die("option $option expects either no argument, or arg 0 or 1\n");
+  }
+}
 
 # defaults
 %flags = (

@@ -165,7 +165,7 @@ void Terminal::xfer(Flatten &flat)
 
   alias.xfer(flat);
 
-  flat.xferInt32((int&)precedence);
+  xferEnum(flat, precedence);
   xferEnum(flat, associativity);
 
   flat.xferInt32(termIndex);
@@ -244,7 +244,11 @@ Nonterminal::Nonterminal(LocString const &name, bool isEmpty)
 {}
 
 Nonterminal::~Nonterminal()
-{}
+{
+  if (ntForbid) {
+    delete ntForbid;
+  }
+}
 
 
 Nonterminal::Nonterminal(Flatten &flat)
@@ -581,7 +585,7 @@ void Production::xfer(Flatten &flat)
 {
   eh_xferObjList(flat, right);
   action.xfer(flat);
-  flat.xferInt32((int&)precedence);
+  xferEnum(flat, precedence);
   xferNullableOwnerPtr(flat, forbid);
 
   flat.xferInt32(rhsLen);

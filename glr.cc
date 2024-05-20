@@ -106,11 +106,14 @@
 
 
 #include "glr.h"         // this module
+
+#include "dev-warning.h" // g_abortUponDevWarning
 #include "strtokp.h"     // StrtokParse
 #include "syserr.h"      // xsyserror
 #include "trace.h"       // tracing system
 #include "strutil.h"     // replace
 #include "lexerint.h"    // LexerInterface
+#include "sm-macros.h"   // Restorer
 #include "sm-test.h"     // PVAL
 #include "cyctimer.h"    // CycleTimer
 #include "sobjlist.h"    // SObjList
@@ -308,9 +311,59 @@ StackNode::StackNode()
   // the interesting stuff happens in init()
 }
 
-StackNode::~StackNode()
+// Remove all sibling links from 'node' and everything it can reach,
+// recursively, taking care not to get caught in a cycle.
+static void detachSiblings(StackNode *node)
 {
-  // the interesting stuff happens in deinit()
+  // Nullify each link before recursively following it.
+  StackNode *tmp = node->firstSib.sib;
+  node->firstSib.sib = NULL;
+  if (tmp != NULL && tmp != node) {
+    detachSiblings(tmp);
+  }
+
+  while (node->leftSiblings.isNotEmpty()) {
+    Owner<SiblingLink> link(node->leftSiblings.removeFirst());
+
+    tmp = link->sib;
+    link->sib = NULL;
+    if (tmp != NULL && tmp != node) {
+      detachSiblings(tmp);
+    }
+  }
+}
+
+
+StackNode::~StackNode() noexcept
+{
+  GENERIC_CATCH_BEGIN
+
+  // Most of the interesting stuff happens in deinit(), which should be
+  // called before the destructor runs.
+
+  DEBUG_REFCT("in ~StackNode, state=" << state << ", refct=" << referenceCount);
+
+  // There is a fundamental problem with the current GLR implementation:
+  // I'm using reference counting, but cyclic grammars (such as
+  // triv/ESb.gr) can lead to cycles in the parse node graph, and I have
+  // no mechanism for detecting and disposing of cycles.  Consequently,
+  // it is possible to get here with a non-zero reference count, which
+  // would fail the assertion below--but the real problem is leaking the
+  // cycle.  Eventually I should add something that properly deals with
+  // cycles, but until then, I will forcibly detach siblings now rather
+  // than let the assertion fail.
+  //
+  // TODO: Implement a real fix for cyclic parse node graphs.
+  //
+  // TODO: There's likely also a problem (infinite loop?) with executing
+  // parse actions if there is a cycle when we reduce.
+  detachSiblings(this);
+
+  // By the time we get here, we should not have any outstanding
+  // references.
+  xassert(referenceCount == 0);
+
+  GENERIC_CATCH_END
 }
 
 
@@ -319,7 +372,7 @@ inline void StackNode::init(StateId st, GLR *g)
   state = st;
   xassertdb(leftSiblings.isEmpty());
   xassertdb(hasZeroSiblings());
-  referenceCount = 0;
+  xassertdb(referenceCount == 0);
   determinDepth = 1;    // 0 siblings now, so this node is unambiguous
   glr = g;
 
@@ -452,9 +505,13 @@ SiblingLink *StackNode::
 // and the effect is significant (~10%) for GLR-only parser
 inline void StackNode::decRefCt()
 {
-  xassert(referenceCount > 0);
+  DEBUG_REFCT("decrementing node " << state << " to " << referenceCount-1);
 
-  //printf("decrementing node %d to %d\n", state, referenceCount-1);
+  // This is called from the destructor of RCPtr, making it unsafe to
+  // throw an exception.
+  GENERIC_CATCH_BEGIN
+    xassert(referenceCount > 0);
+  GENERIC_CATCH_END
 
   if (--referenceCount == 0) {
     glr->stackNodePool->dealloc(this);
@@ -520,19 +577,28 @@ inline void StackNode::checkLocalInvariants() const
 
 
 // ------------- stack node list ops ----------------
-void decParserList(ArrayStack<StackNode*> &list)
+static void cleanupParserList(ArrayStack<StackNode*> &list)
 {
+  // Do an initial pass, removing sibling links.  This discards the
+  // semantic values too, despite them being owner pointers.  In
+  // 'cleanupAfterParse', called upon a successful parse, we deal with
+  // those properly.  However, in the case of a failed parse, they are
+  // simply leaked.
+  //
+  // TODO: Pass them to the user-provided deallocation function.
+  for (int i=0; i < list.length(); i++) {
+    detachSiblings(list[i]);
+  }
+
+  // Now decrement the reference counts arising from 'list'.
   for (int i=0; i < list.length(); i++) {
     list[i]->decRefCt();
   }
+
+  // For good measure, clear the list too.
+  list.clear();
 }
 
-void incParserList(ArrayStack<StackNode*> &list)
-{
-  for (int i=0; i < list.length(); i++) {
-    list[i]->incRefCt();
-  }
-}
 
 // candidate for adding to ArrayStack.. but I'm hesitant for some reason
 bool parserListContains(ArrayStack<StackNode*> &list, StackNode *node)
@@ -617,7 +683,7 @@ GLR::~GLR()
     delete[] parserIndex;
   }
 
-  // NOTE: must not delete 'tables' until after the 'decParserList'
+  // NOTE: must not delete 'tables' until after the 'cleanupParserList'
   // calls above, because they refer to the tables!
 }
 
@@ -787,6 +853,10 @@ void GLR::buildParserIndex()
 
 bool GLR::glrParse(LexerInterface &lexer, SemanticValue &treeTop)
 {
+  // While the parser is running, ensure we abort if there are serious
+  // problems that cannot be reported as exceptions.
+  //Restorer<bool> restoreAbort(g_abortUponDevWarning, true);
+
   #if !ACTION_TRACE
     // tell the user why "-tr action" doesn't do anything, if
     // they specified that
@@ -1125,10 +1195,13 @@ STATICDEF bool GLR
             xassertdb(prev->referenceCount==1);
             // expand "prev->decRefCt();"             // deinit 'prev', dealloc 'sib'
             {
-              // I don't actually decrement the reference count on 'prev'
-              // because it will be reset to 0 anyway when it is inited
-              // the next time it is used
-              //prev->referenceCount = 0;
+              // 2024-01-13: Historically, this reset was omitted
+              // because the count was also set to 0 in
+              // 'StackNode::init'.  But that makes debugging reference
+              // count issues significantly harder, so now we set it to
+              // 0 here, and in 'init', merely assert that it is already
+              // 0.
+              prev->referenceCount = 0;
 
               // adjust the global count of stack nodes
               prev->decrementAllocCounter();
@@ -1494,8 +1567,8 @@ bool GLR::cleanupAfterParse(SemanticValue &treeTop)
   // to add a special exception for the case of the reduce which
   // finishes the parse
 
-  // these also must be done before the pool goes away..
-  decParserList(topmostParsers);
+  // This also must be done before the pool goes away.
+  cleanupParserList(topmostParsers);
 
   return true;
 }
@@ -1639,7 +1712,11 @@ string GLR::stackSummary() const
 
 void GLR::nodeSummary(stringBuilder &sb, StackNode const *node) const
 {
-  sb << node->state << "[" << node->referenceCount << "]";
+  sb << "{"
+     //<< "a=" << (void*)node << ","
+     << "s=" << node->state
+     << ",r=" << node->referenceCount
+     << "}";
 }
 
 void GLR::innerStackSummary(stringBuilder &sb, SObjList<StackNode const> &printed,

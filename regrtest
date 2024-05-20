@@ -207,12 +207,13 @@ testTrivGrammar nt_forbid_next 1
 # (for now) is only in Elsa, so don't try it unless that script is
 # in a usual place
 if [ -x ../elsa/multitest.pl ]; then
-  runTest perl ../elsa/multitest.pl ./elkhound.exe ffollow.gr ffollow_ext.gr
+  runTest perl ../elsa/multitest.pl ./elkhound.exe examples/ffollow.gr examples/ffollow_ext.gr
 fi
 
 
 # make sure Elkhound doesn't segfault on the following
 runTest ./elkhound.exe examples/crash1.gr
+runTest ./elkhound.exe -v examples/postgresql16.gr
 
 
 # ------------ test the C grammar and parser -------------

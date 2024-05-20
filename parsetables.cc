@@ -90,19 +90,11 @@ void ParseTables::alloc(int t, int nt, int s, int p, StateId start, int final)
 
   bigProductionListSize = 0;
   bigProductionList = NULL;
-  if (ENABLE_CRS_COMPRESSION) {
-    allocZeroArray(productionsForState, numStates);
-  }
-  else {
-    productionsForState = NULL;
-  }
 
-  if (ENABLE_CRS_COMPRESSION) {
-    allocZeroArray(ambigStateTable, numStates);
-  }
-  else {
-    ambigStateTable = NULL;
-  }
+  // Even when 'ENABLE_CRS_COMPRESSION' is true, these are set to NULL
+  // here because they are allocated and populated in 'finishTables'.
+  productionsForState = NULL;
+  ambigStateTable = NULL;
 
   // # of bytes, but rounded up to nearest 32-bit boundary
   errorBitsRowSize = ((numTerms+31) >> 5) * 4;
@@ -395,6 +387,10 @@ void copyArray(int &len, T *&dest, ArrayStack<T> const &src)
 template <class T>
 void copyIndexPtrArray(int len, T **&dest, T *base, ArrayStack<int> const &src)
 {
+  // The destination pointer should not yet point at anything (otherwise
+  // we would be about to leak it).
+  xassert(dest == NULL);
+
   dest = new T* [len];
   for (int i=0; i<len; i++) {
     if (src[i] != UNASSIGNED) {

@@ -1,0 +1,5965 @@
+// postgresql16.gr
+// PostgreSQL-16 grammar contributed by user mingodad.
+
+// /usr/bin/time ../elkhound/elkhound.exe postgresql16.gr
+
+context_class PostgreSQL : public UserActions {
+public:
+  // there's nothing to put in the context for this example
+};
+
+terminals {
+  // there's always an explicit EOF token
+  0 : TOK_EOF;
+
+  1 : IDENT;
+//  2 : UIDENT;
+  3 : FCONST;
+  4 : SCONST;
+//  5 : USCONST;
+  6 : BCONST;
+  7 : XCONST;
+  8 : Op;
+  9 : ICONST;
+  10 : PARAM;
+  11 : TYPECAST;
+//  12 : DOT_DOT;
+  13 : COLON_EQUALS;
+  14 : EQUALS_GREATER;
+  15 : LESS_EQUALS;
+  16 : GREATER_EQUALS;
+  17 : NOT_EQUALS;
+  18 : ABORT_P;
+  19 : ABSENT;
+  20 : ABSOLUTE_P;
+  21 : ACCESS;
+  22 : ACTION;
+  23 : ADD_P;
+  24 : ADMIN;
+  25 : AFTER;
+  26 : AGGREGATE;
+  27 : ALL;
+  28 : ALSO;
+  29 : ALTER;
+  30 : ALWAYS;
+  31 : ANALYSE;
+  32 : ANALYZE;
+  33 : AND;
+  34 : ANY;
+  35 : ARRAY;
+  36 : AS;
+  37 : ASC;
+  38 : ASENSITIVE;
+  39 : ASSERTION;
+  40 : ASSIGNMENT;
+  41 : ASYMMETRIC;
+  42 : ATOMIC;
+  43 : AT;
+  44 : ATTACH;
+  45 : ATTRIBUTE;
+  46 : AUTHORIZATION;
+  47 : BACKWARD;
+  48 : BEFORE;
+  49 : BEGIN_P;
+  50 : BETWEEN;
+  51 : BIGINT;
+  52 : BINARY;
+  53 : BIT;
+  54 : BOOLEAN_P;
+  55 : BOTH;
+  56 : BREADTH;
+  57 : BY;
+  58 : CACHE;
+  59 : CALL;
+  60 : CALLED;
+  61 : CASCADE;
+  62 : CASCADED;
+  63 : CASE;
+  64 : CAST;
+  65 : CATALOG_P;
+  66 : CHAIN;
+  67 : CHAR_P;
+  68 : CHARACTER;
+  69 : CHARACTERISTICS;
+  70 : CHECK;
+  71 : CHECKPOINT;
+  72 : CLASS;
+  73 : CLOSE;
+  74 : CLUSTER;
+  75 : COALESCE;
+  76 : COLLATE;
+  77 : COLLATION;
+  78 : COLUMN;
+  79 : COLUMNS;
+  80 : COMMENT;
+  81 : COMMENTS;
+  82 : COMMIT;
+  83 : COMMITTED;
+  84 : COMPRESSION;
+  85 : CONCURRENTLY;
+  86 : CONFIGURATION;
+  87 : CONFLICT;
+  88 : CONNECTION;
+  89 : CONSTRAINT;
+  90 : CONSTRAINTS;
+  91 : CONTENT_P;
+  92 : CONTINUE_P;
+  93 : CONVERSION_P;
+  94 : COPY;
+  95 : COST;
+  96 : CREATE;
+  97 : CROSS;
+  98 : CSV;
+  99 : CUBE;
+  100 : CURRENT_P;
+  101 : CURRENT_CATALOG;
+  102 : CURRENT_DATE;
+  103 : CURRENT_ROLE;
+  104 : CURRENT_SCHEMA;
+  105 : CURRENT_TIME;
+  106 : CURRENT_TIMESTAMP;
+  107 : CURRENT_USER;
+  108 : CURSOR;
+  109 : CYCLE;
+  110 : DATA_P;
+  111 : DATABASE;
+  112 : DAY_P;
+  113 : DEALLOCATE;
+  114 : DEC;
+  115 : DECIMAL_P;
+  116 : DECLARE;
+  117 : DEFAULT;
+  118 : DEFAULTS;
+  119 : DEFERRABLE;
+  120 : DEFERRED;
+  121 : DEFINER;
+  122 : DELETE_P;
+  123 : DELIMITER;
+  124 : DELIMITERS;
+  125 : DEPENDS;
+  126 : DEPTH;
+  127 : DESC;
+  128 : DETACH;
+  129 : DICTIONARY;
+  130 : DISABLE_P;
+  131 : DISCARD;
+  132 : DISTINCT;
+  133 : DO;
+  134 : DOCUMENT_P;
+  135 : DOMAIN_P;
+  136 : DOUBLE_P;
+  137 : DROP;
+  138 : EACH;
+  139 : ELSE;
+  140 : ENABLE_P;
+  141 : ENCODING;
+  142 : ENCRYPTED;
+  143 : END_P;
+  144 : ENUM_P;
+  145 : ESCAPE;
+  146 : EVENT;
+  147 : EXCEPT;
+  148 : EXCLUDE;
+  149 : EXCLUDING;
+  150 : EXCLUSIVE;
+  151 : EXECUTE;
+  152 : EXISTS;
+  153 : EXPLAIN;
+  154 : EXPRESSION;
+  155 : EXTENSION;
+  156 : EXTERNAL;
+  157 : EXTRACT;
+  158 : FALSE_P;
+  159 : FAMILY;
+  160 : FETCH;
+  161 : FILTER;
+  162 : FINALIZE;
+  163 : FIRST_P;
+  164 : FLOAT_P;
+  165 : FOLLOWING;
+  166 : FOR;
+  167 : FORCE;
+  168 : FOREIGN;
+  169 : FORMAT;
+  170 : FORWARD;
+  171 : FREEZE;
+  172 : FROM;
+  173 : FULL;
+  174 : FUNCTION;
+  175 : FUNCTIONS;
+  176 : GENERATED;
+  177 : GLOBAL;
+  178 : GRANT;
+  179 : GRANTED;
+  180 : GREATEST;
+  181 : GROUP_P;
+  182 : GROUPING;
+  183 : GROUPS;
+  184 : HANDLER;
+  185 : HAVING;
+  186 : HEADER_P;
+  187 : HOLD;
+  188 : HOUR_P;
+  189 : IDENTITY_P;
+  190 : IF_P;
+  191 : ILIKE;
+  192 : IMMEDIATE;
+  193 : IMMUTABLE;
+  194 : IMPLICIT_P;
+  195 : IMPORT_P;
+  196 : IN_P;
+  197 : INCLUDE;
+  198 : INCLUDING;
+  199 : INCREMENT;
+  200 : INDENT;
+  201 : INDEX;
+  202 : INDEXES;
+  203 : INHERIT;
+  204 : INHERITS;
+  205 : INITIALLY;
+  206 : INLINE_P;
+  207 : INNER_P;
+  208 : INOUT;
+  209 : INPUT_P;
+  210 : INSENSITIVE;
+  211 : INSERT;
+  212 : INSTEAD;
+  213 : INT_P;
+  214 : INTEGER;
+  215 : INTERSECT;
+  216 : INTERVAL;
+  217 : INTO;
+  218 : INVOKER;
+  219 : IS;
+  220 : ISNULL;
+  221 : ISOLATION;
+  222 : JOIN;
+  223 : JSON;
+  224 : JSON_ARRAY;
+  225 : JSON_ARRAYAGG;
+  226 : JSON_OBJECT;
+  227 : JSON_OBJECTAGG;
+  228 : KEY;
+  229 : KEYS;
+  230 : LABEL;
+  231 : LANGUAGE;
+  232 : LARGE_P;
+  233 : LAST_P;
+  234 : LATERAL_P;
+  235 : LEADING;
+  236 : LEAKPROOF;
+  237 : LEAST;
+  238 : LEFT;
+  239 : LEVEL;
+  240 : LIKE;
+  241 : LIMIT;
+  242 : LISTEN;
+  243 : LOAD;
+  244 : LOCAL;
+  245 : LOCALTIME;
+  246 : LOCALTIMESTAMP;
+  247 : LOCATION;
+  248 : LOCK_P;
+  249 : LOCKED;
+  250 : LOGGED;
+  251 : MAPPING;
+  252 : MATCH;
+  253 : MATCHED;
+  254 : MATERIALIZED;
+  255 : MAXVALUE;
+  256 : MERGE;
+  257 : METHOD;
+  258 : MINUTE_P;
+  259 : MINVALUE;
+  260 : MODE;
+  261 : MONTH_P;
+  262 : MOVE;
+  263 : NAME_P;
+  264 : NAMES;
+  265 : NATIONAL;
+  266 : NATURAL;
+  267 : NCHAR;
+  268 : NEW;
+  269 : NEXT;
+  270 : NFC;
+  271 : NFD;
+  272 : NFKC;
+  273 : NFKD;
+  274 : NO;
+  275 : NONE;
+  276 : NORMALIZE;
+  277 : NORMALIZED;
+  278 : NOT;
+  279 : NOTHING;
+  280 : NOTIFY;
+  281 : NOTNULL;
+  282 : NOWAIT;
+  283 : NULL_P;
+  284 : NULLIF;
+  285 : NULLS_P;
+  286 : NUMERIC;
+  287 : OBJECT_P;
+  288 : OF;
+  289 : OFF;
+  290 : OFFSET;
+  291 : OIDS;
+  292 : OLD;
+  293 : ON;
+  294 : ONLY;
+  295 : OPERATOR;
+  296 : OPTION;
+  297 : OPTIONS;
+  298 : OR;
+  299 : ORDER;
+  300 : ORDINALITY;
+  301 : OTHERS;
+  302 : OUT_P;
+  303 : OUTER_P;
+  304 : OVER;
+  305 : OVERLAPS;
+  306 : OVERLAY;
+  307 : OVERRIDING;
+  308 : OWNED;
+  309 : OWNER;
+  310 : PARALLEL;
+  311 : PARAMETER;
+  312 : PARSER;
+  313 : PARTIAL;
+  314 : PARTITION;
+  315 : PASSING;
+  316 : PASSWORD;
+  317 : PLACING;
+  318 : PLANS;
+  319 : POLICY;
+  320 : POSITION;
+  321 : PRECEDING;
+  322 : PRECISION;
+  323 : PRESERVE;
+  324 : PREPARE;
+  325 : PREPARED;
+  326 : PRIMARY;
+  327 : PRIOR;
+  328 : PRIVILEGES;
+  329 : PROCEDURAL;
+  330 : PROCEDURE;
+  331 : PROCEDURES;
+  332 : PROGRAM;
+  333 : PUBLICATION;
+  334 : QUOTE;
+  335 : RANGE;
+  336 : READ;
+  337 : REAL;
+  338 : REASSIGN;
+  339 : RECHECK;
+  340 : RECURSIVE;
+  341 : REF_P;
+  342 : REFERENCES;
+  343 : REFERENCING;
+  344 : REFRESH;
+  345 : REINDEX;
+  346 : RELATIVE_P;
+  347 : RELEASE;
+  348 : RENAME;
+  349 : REPEATABLE;
+  350 : REPLACE;
+  351 : REPLICA;
+  352 : RESET;
+  353 : RESTART;
+  354 : RESTRICT;
+  355 : RETURN;
+  356 : RETURNING;
+  357 : RETURNS;
+  358 : REVOKE;
+  359 : RIGHT;
+  360 : ROLE;
+  361 : ROLLBACK;
+  362 : ROLLUP;
+  363 : ROUTINE;
+  364 : ROUTINES;
+  365 : ROW;
+  366 : ROWS;
+  367 : RULE;
+  368 : SAVEPOINT;
+  369 : SCALAR;
+  370 : SCHEMA;
+  371 : SCHEMAS;
+  372 : SCROLL;
+  373 : SEARCH;
+  374 : SECOND_P;
+  375 : SECURITY;
+  376 : SELECT;
+  377 : SEQUENCE;
+  378 : SEQUENCES;
+  379 : SERIALIZABLE;
+  380 : SERVER;
+  381 : SESSION;
+  382 : SESSION_USER;
+  383 : SET;
+  384 : SETS;
+  385 : SETOF;
+  386 : SHARE;
+  387 : SHOW;
+  388 : SIMILAR;
+  389 : SIMPLE;
+  390 : SKIP;
+  391 : SMALLINT;
+  392 : SNAPSHOT;
+  393 : SOME;
+  394 : SQL_P;
+  395 : STABLE;
+  396 : STANDALONE_P;
+  397 : START;
+  398 : STATEMENT;
+  399 : STATISTICS;
+  400 : STDIN;
+  401 : STDOUT;
+  402 : STORAGE;
+  403 : STORED;
+  404 : STRICT_P;
+  405 : STRIP_P;
+  406 : SUBSCRIPTION;
+  407 : SUBSTRING;
+  408 : SUPPORT;
+  409 : SYMMETRIC;
+  410 : SYSID;
+  411 : SYSTEM_P;
+  412 : SYSTEM_USER;
+  413 : TABLE;
+  414 : TABLES;
+  415 : TABLESAMPLE;
+  416 : TABLESPACE;
+  417 : TEMP;
+  418 : TEMPLATE;
+  419 : TEMPORARY;
+  420 : TEXT_P;
+  421 : THEN;
+  422 : TIES;
+  423 : TIME;
+  424 : TIMESTAMP;
+  425 : TO;
+  426 : TRAILING;
+  427 : TRANSACTION;
+  428 : TRANSFORM;
+  429 : TREAT;
+  430 : TRIGGER;
+  431 : TRIM;
+  432 : TRUE_P;
+  433 : TRUNCATE;
+  434 : TRUSTED;
+  435 : TYPE_P;
+  436 : TYPES_P;
+  437 : UESCAPE;
+  438 : UNBOUNDED;
+  439 : UNCOMMITTED;
+  440 : UNENCRYPTED;
+  441 : UNION;
+  442 : UNIQUE;
+  443 : UNKNOWN;
+  444 : UNLISTEN;
+  445 : UNLOGGED;
+  446 : UNTIL;
+  447 : UPDATE;
+  448 : USER;
+  449 : USING;
+  450 : VACUUM;
+  451 : VALID;
+  452 : VALIDATE;
+  453 : VALIDATOR;
+  454 : VALUE_P;
+  455 : VALUES;
+  456 : VARCHAR;
+  457 : VARIADIC;
+  458 : VARYING;
+  459 : VERBOSE;
+  460 : VERSION_P;
+  461 : VIEW;
+  462 : VIEWS;
+  463 : VOLATILE;
+  464 : WHEN;
+  465 : WHERE;
+  466 : WHITESPACE_P;
+  467 : WINDOW;
+  468 : WITH;
+  469 : WITHIN;
+  470 : WITHOUT;
+  471 : WORK;
+  472 : WRAPPER;
+  473 : WRITE;
+  474 : XML_P;
+  475 : XMLATTRIBUTES;
+  476 : XMLCONCAT;
+  477 : XMLELEMENT;
+  478 : XMLEXISTS;
+  479 : XMLFOREST;
+  480 : XMLNAMESPACES;
+  481 : XMLPARSE;
+  482 : XMLPI;
+  483 : XMLROOT;
+  484 : XMLSERIALIZE;
+  485 : XMLTABLE;
+  486 : YEAR_P;
+  487 : YES_P;
+  488 : ZONE;
+  489 : FORMAT_LA;
+  490 : NOT_LA;
+  491 : NULLS_LA;
+  492 : WITH_LA;
+  493 : WITHOUT_LA;
+  494 : MODE_TYPE_NAME;
+  495 : MODE_PLPGSQL_EXPR;
+  496 : MODE_PLPGSQL_ASSIGN1;
+  497 : MODE_PLPGSQL_ASSIGN2;
+  498 : MODE_PLPGSQL_ASSIGN3;
+  499 : TK_LT "<";
+  500 : TK_GT ">";
+  501 : TK_EQ "=";
+  502 : TK_PLUS "+";
+  503 : TK_MINUS "-";
+  504 : TK_TIMES "*";
+  505 : TK_DIVIDE "/";
+  506 : TK_MOD "%";
+  507 : TK_HAT "^";
+  508 : UMINUS;
+  509 : TK_LBR "[";
+  510 : TK_RBR "]";
+  511 : TK_LPAR "(";
+  512 : TK_RPAR ")";
+  513 : TK_DOT ".";
+  514 : TK_SEMI ";";
+  515 : TK_COMMA ",";
+  516 : TK_COLON ":";
+
+  precedence {
+    // low precedence
+
+	nonassoc 1 SET ;
+	left 2 EXCEPT UNION ;
+	left 3 INTERSECT ;
+	left 4 OR ;
+	left 5 AND ;
+	right 6 NOT ;
+	nonassoc 7 IS ISNULL NOTNULL ;
+	nonassoc 8 LESS_EQUALS GREATER_EQUALS NOT_EQUALS "<" ">" "=" ;
+	nonassoc 9 BETWEEN ILIKE IN_P LIKE SIMILAR NOT_LA ;
+	nonassoc 10 ESCAPE ;
+	nonassoc 11 JSON UNIQUE ;
+	nonassoc 12 KEYS OBJECT_P SCALAR VALUE_P ;
+	nonassoc 13 WITH WITHOUT ;
+	nonassoc 14 UNBOUNDED ;
+	nonassoc 15 IDENT CUBE FOLLOWING GROUPS PARTITION PRECEDING RANGE ROLLUP ROWS ;
+	left 16 Op OPERATOR ;
+	left 17 "+" "-" ;
+	left 18 "*" "/" "%" ;
+	left 19 "^" ;
+	left 20 AT ;
+	left 21 COLLATE ;
+	right 22 UMINUS ;
+	left 23 "[" "]" ;
+	left 24 "(" ")" ;
+	left 25 TYPECAST ;
+	left 26 "." ;
+	left 27 CROSS FULL INNER_P JOIN LEFT NATURAL RIGHT ;
+
+    // high precedence
+  }
+}
+
+nonterm() parse_toplevel {
+	/*YYEOF*/
+	//-> TOK_EOF {}
+	-> stmtmulti	{}
+	-> MODE_TYPE_NAME Typename	{}
+	-> MODE_PLPGSQL_EXPR PLpgSQL_Expr	{}
+	-> MODE_PLPGSQL_ASSIGN1 PLAssignStmt	{}
+	-> MODE_PLPGSQL_ASSIGN2 PLAssignStmt	{}
+	-> MODE_PLPGSQL_ASSIGN3 PLAssignStmt	{}
+}
+
+nonterm() stmtmulti {
+	-> stmtmulti ";" toplevel_stmt	{}
+	-> toplevel_stmt	{}
+}
+
+nonterm() toplevel_stmt {
+	-> stmt	{}
+	-> TransactionStmtLegacy	{}
+}
+
+nonterm() stmt {
+	-> AlterEventTrigStmt	{}
+	-> AlterCollationStmt	{}
+	-> AlterDatabaseStmt	{}
+	-> AlterDatabaseSetStmt	{}
+	-> AlterDefaultPrivilegesStmt	{}
+	-> AlterDomainStmt	{}
+	-> AlterEnumStmt	{}
+	-> AlterExtensionStmt	{}
+	-> AlterExtensionContentsStmt	{}
+	-> AlterFdwStmt	{}
+	-> AlterForeignServerStmt	{}
+	-> AlterFunctionStmt	{}
+	-> AlterGroupStmt	{}
+	-> AlterObjectDependsStmt	{}
+	-> AlterObjectSchemaStmt	{}
+	-> AlterOwnerStmt	{}
+	-> AlterOperatorStmt	{}
+	-> AlterTypeStmt	{}
+	-> AlterPolicyStmt	{}
+	-> AlterSeqStmt	{}
+	-> AlterSystemStmt	{}
+	-> AlterTableStmt	{}
+	-> AlterTblSpcStmt	{}
+	-> AlterCompositeTypeStmt	{}
+	-> AlterPublicationStmt	{}
+	-> AlterRoleSetStmt	{}
+	-> AlterRoleStmt	{}
+	-> AlterSubscriptionStmt	{}
+	-> AlterStatsStmt	{}
+	-> AlterTSConfigurationStmt	{}
+	-> AlterTSDictionaryStmt	{}
+	-> AlterUserMappingStmt	{}
+	-> AnalyzeStmt	{}
+	-> CallStmt	{}
+	-> CheckPointStmt	{}
+	-> ClosePortalStmt	{}
+	-> ClusterStmt	{}
+	-> CommentStmt	{}
+	-> ConstraintsSetStmt	{}
+	-> CopyStmt	{}
+	-> CreateAmStmt	{}
+	-> CreateAsStmt	{}
+	-> CreateAssertionStmt	{}
+	-> CreateCastStmt	{}
+	-> CreateConversionStmt	{}
+	-> CreateDomainStmt	{}
+	-> CreateExtensionStmt	{}
+	-> CreateFdwStmt	{}
+	-> CreateForeignServerStmt	{}
+	-> CreateForeignTableStmt	{}
+	-> CreateFunctionStmt	{}
+	-> CreateGroupStmt	{}
+	-> CreateMatViewStmt	{}
+	-> CreateOpClassStmt	{}
+	-> CreateOpFamilyStmt	{}
+	-> CreatePublicationStmt	{}
+	-> AlterOpFamilyStmt	{}
+	-> CreatePolicyStmt	{}
+	-> CreatePLangStmt	{}
+	-> CreateSchemaStmt	{}
+	-> CreateSeqStmt	{}
+	-> CreateStmt	{}
+	-> CreateSubscriptionStmt	{}
+	-> CreateStatsStmt	{}
+	-> CreateTableSpaceStmt	{}
+	-> CreateTransformStmt	{}
+	-> CreateTrigStmt	{}
+	-> CreateEventTrigStmt	{}
+	-> CreateRoleStmt	{}
+	-> CreateUserStmt	{}
+	-> CreateUserMappingStmt	{}
+	-> CreatedbStmt	{}
+	-> DeallocateStmt	{}
+	-> DeclareCursorStmt	{}
+	-> DefineStmt	{}
+	-> DeleteStmt	{}
+	-> DiscardStmt	{}
+	-> DoStmt	{}
+	-> DropCastStmt	{}
+	-> DropOpClassStmt	{}
+	-> DropOpFamilyStmt	{}
+	-> DropOwnedStmt	{}
+	-> DropStmt	{}
+	-> DropSubscriptionStmt	{}
+	-> DropTableSpaceStmt	{}
+	-> DropTransformStmt	{}
+	-> DropRoleStmt	{}
+	-> DropUserMappingStmt	{}
+	-> DropdbStmt	{}
+	-> ExecuteStmt	{}
+	-> ExplainStmt	{}
+	-> FetchStmt	{}
+	-> GrantStmt	{}
+	-> GrantRoleStmt	{}
+	-> ImportForeignSchemaStmt	{}
+	-> IndexStmt	{}
+	-> InsertStmt	{}
+	-> ListenStmt	{}
+	-> RefreshMatViewStmt	{}
+	-> LoadStmt	{}
+	-> LockStmt	{}
+	-> MergeStmt	{}
+	-> NotifyStmt	{}
+	-> PrepareStmt	{}
+	-> ReassignOwnedStmt	{}
+	-> ReindexStmt	{}
+	-> RemoveAggrStmt	{}
+	-> RemoveFuncStmt	{}
+	-> RemoveOperStmt	{}
+	-> RenameStmt	{}
+	-> RevokeStmt	{}
+	-> RevokeRoleStmt	{}
+	-> RuleStmt	{}
+	-> SecLabelStmt	{}
+	-> SelectStmt	{}
+	-> TransactionStmt	{}
+	-> TruncateStmt	{}
+	-> UnlistenStmt	{}
+	-> UpdateStmt	{}
+	-> VacuumStmt	{}
+	-> VariableResetStmt	{}
+	-> VariableSetStmt	{}
+	-> VariableShowStmt	{}
+	-> ViewStmt	{}
+	-> empty	{}
+}
+
+nonterm() opt_single_name {
+	-> ColId	{}
+	-> empty	{}
+}
+
+nonterm() opt_qualified_name {
+	-> any_name	{}
+	-> empty	{}
+}
+
+nonterm() opt_concurrently {
+	-> CONCURRENTLY	{}
+	-> empty	{}
+}
+
+nonterm() opt_drop_behavior {
+	-> CASCADE	{}
+	-> RESTRICT	{}
+	-> empty	{}
+}
+
+nonterm() CallStmt {
+	-> CALL func_application	{}
+}
+
+nonterm() CreateRoleStmt {
+	-> CREATE ROLE RoleId opt_with OptRoleList	{}
+}
+
+nonterm() opt_with {
+	-> WITH /*13N*/	{}
+	-> WITH_LA	{}
+	-> empty	{}
+}
+
+nonterm() OptRoleList {
+	-> OptRoleList CreateOptRoleElem	{}
+	-> empty	{}
+}
+
+nonterm() AlterOptRoleList {
+	-> AlterOptRoleList AlterOptRoleElem	{}
+	-> empty	{}
+}
+
+nonterm() AlterOptRoleElem {
+	-> PASSWORD Sconst	{}
+	-> PASSWORD NULL_P	{}
+	-> ENCRYPTED PASSWORD Sconst	{}
+	-> UNENCRYPTED PASSWORD Sconst	{}
+	-> INHERIT	{}
+	-> CONNECTION LIMIT SignedIconst	{}
+	-> VALID UNTIL Sconst	{}
+	-> USER role_list	{}
+	-> IDENT /*15N*/	{}
+}
+
+nonterm() CreateOptRoleElem {
+	-> AlterOptRoleElem	{}
+	-> SYSID Iconst	{}
+	-> ADMIN role_list	{}
+	-> ROLE role_list	{}
+	-> IN_P /*9N*/ ROLE role_list	{}
+	-> IN_P /*9N*/ GROUP_P role_list	{}
+}
+
+nonterm() CreateUserStmt {
+	-> CREATE USER RoleId opt_with OptRoleList	{}
+}
+
+nonterm() AlterRoleStmt {
+	-> ALTER ROLE RoleSpec opt_with AlterOptRoleList	{}
+	-> ALTER USER RoleSpec opt_with AlterOptRoleList	{}
+}
+
+nonterm() opt_in_database {
+	-> empty {}
+	-> IN_P /*9N*/ DATABASE name	{}
+}
+
+nonterm() AlterRoleSetStmt {
+	-> ALTER ROLE RoleSpec opt_in_database SetResetClause	{}
+	-> ALTER ROLE ALL opt_in_database SetResetClause	{}
+	-> ALTER USER RoleSpec opt_in_database SetResetClause	{}
+	-> ALTER USER ALL opt_in_database SetResetClause	{}
+}
+
+nonterm() DropRoleStmt {
+	-> DROP ROLE role_list	{}
+	-> DROP ROLE IF_P EXISTS role_list	{}
+	-> DROP USER role_list	{}
+	-> DROP USER IF_P EXISTS role_list	{}
+	-> DROP GROUP_P role_list	{}
+	-> DROP GROUP_P IF_P EXISTS role_list	{}
+}
+
+nonterm() CreateGroupStmt {
+	-> CREATE GROUP_P RoleId opt_with OptRoleList	{}
+}
+
+nonterm() AlterGroupStmt {
+	-> ALTER GROUP_P RoleSpec add_drop USER role_list	{}
+}
+
+nonterm() add_drop {
+	-> ADD_P	{}
+	-> DROP	{}
+}
+
+nonterm() CreateSchemaStmt {
+	-> CREATE SCHEMA opt_single_name AUTHORIZATION RoleSpec OptSchemaEltList	{}
+	-> CREATE SCHEMA ColId OptSchemaEltList	{}
+	-> CREATE SCHEMA IF_P NOT /*6R*/ EXISTS opt_single_name AUTHORIZATION RoleSpec OptSchemaEltList	{}
+	-> CREATE SCHEMA IF_P NOT /*6R*/ EXISTS ColId OptSchemaEltList	{}
+}
+
+nonterm() OptSchemaEltList {
+	-> OptSchemaEltList schema_stmt	{}
+	-> empty	{}
+}
+
+nonterm() schema_stmt {
+	-> CreateStmt	{}
+	-> IndexStmt	{}
+	-> CreateSeqStmt	{}
+	-> CreateTrigStmt	{}
+	-> GrantStmt	{}
+	-> ViewStmt	{}
+}
+
+nonterm() VariableSetStmt {
+	-> SET /*1N*/ set_rest	{}
+	-> SET /*1N*/ LOCAL set_rest	{}
+	-> SET /*1N*/ SESSION set_rest	{}
+}
+
+nonterm() set_rest {
+	-> TRANSACTION transaction_mode_list	{}
+	-> SESSION CHARACTERISTICS AS TRANSACTION transaction_mode_list	{}
+	-> set_rest_more	{}
+}
+
+nonterm() generic_set {
+	-> var_name TO var_list	{}
+	-> var_name "=" /*8N*/ var_list	{}
+	-> var_name TO DEFAULT	{}
+	-> var_name "=" /*8N*/ DEFAULT	{}
+}
+
+nonterm() set_rest_more {
+	-> generic_set	{}
+	-> var_name FROM CURRENT_P	{}
+	-> TIME ZONE zone_value	{}
+	-> CATALOG_P Sconst	{}
+	-> SCHEMA Sconst	{}
+	-> NAMES opt_encoding	{}
+	-> ROLE NonReservedWord_or_Sconst	{}
+	-> SESSION AUTHORIZATION NonReservedWord_or_Sconst	{}
+	-> SESSION AUTHORIZATION DEFAULT	{}
+	-> XML_P OPTION document_or_content	{}
+	-> TRANSACTION SNAPSHOT Sconst	{}
+}
+
+nonterm() var_name {
+	-> ColId	{}
+	-> var_name "." /*26L*/ ColId	{}
+}
+
+nonterm() var_list {
+	-> var_value	{}
+	-> var_list "," var_value	{}
+}
+
+nonterm() var_value {
+	-> opt_boolean_or_string	{}
+	-> NumericOnly	{}
+}
+
+nonterm() iso_level {
+	-> READ UNCOMMITTED	{}
+	-> READ COMMITTED	{}
+	-> REPEATABLE READ	{}
+	-> SERIALIZABLE	{}
+}
+
+nonterm() opt_boolean_or_string {
+	-> TRUE_P	{}
+	-> FALSE_P	{}
+	-> ON	{}
+	-> NonReservedWord_or_Sconst	{}
+}
+
+nonterm() zone_value {
+	-> Sconst	{}
+	-> IDENT /*15N*/	{}
+	-> ConstInterval Sconst opt_interval	{}
+	-> ConstInterval "(" /*24L*/ Iconst ")" /*24L*/ Sconst	{}
+	-> NumericOnly	{}
+	-> DEFAULT	{}
+	-> LOCAL	{}
+}
+
+nonterm() opt_encoding {
+	-> Sconst	{}
+	-> DEFAULT	{}
+	-> empty	{}
+}
+
+nonterm() NonReservedWord_or_Sconst {
+	-> NonReservedWord	{}
+	-> Sconst	{}
+}
+
+nonterm() VariableResetStmt {
+	-> RESET reset_rest	{}
+}
+
+nonterm() reset_rest {
+	-> generic_reset	{}
+	-> TIME ZONE	{}
+	-> TRANSACTION ISOLATION LEVEL	{}
+	-> SESSION AUTHORIZATION	{}
+}
+
+nonterm() generic_reset {
+	-> var_name	{}
+	-> ALL	{}
+}
+
+nonterm() SetResetClause {
+	-> SET /*1N*/ set_rest	{}
+	-> VariableResetStmt	{}
+}
+
+nonterm() FunctionSetResetClause {
+	-> SET /*1N*/ set_rest_more	{}
+	-> VariableResetStmt	{}
+}
+
+nonterm() VariableShowStmt {
+	-> SHOW var_name	{}
+	-> SHOW TIME ZONE	{}
+	-> SHOW TRANSACTION ISOLATION LEVEL	{}
+	-> SHOW SESSION AUTHORIZATION	{}
+	-> SHOW ALL	{}
+}
+
+nonterm() ConstraintsSetStmt {
+	-> SET /*1N*/ CONSTRAINTS constraints_set_list constraints_set_mode	{}
+}
+
+nonterm() constraints_set_list {
+	-> ALL	{}
+	-> qualified_name_list	{}
+}
+
+nonterm() constraints_set_mode {
+	-> DEFERRED	{}
+	-> IMMEDIATE	{}
+}
+
+nonterm() CheckPointStmt {
+	-> CHECKPOINT	{}
+}
+
+nonterm() DiscardStmt {
+	-> DISCARD ALL	{}
+	-> DISCARD TEMP	{}
+	-> DISCARD TEMPORARY	{}
+	-> DISCARD PLANS	{}
+	-> DISCARD SEQUENCES	{}
+}
+
+nonterm() AlterTableStmt {
+	-> ALTER TABLE relation_expr alter_table_cmds	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr alter_table_cmds	{}
+	-> ALTER TABLE relation_expr partition_cmd	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr partition_cmd	{}
+	-> ALTER TABLE ALL IN_P /*9N*/ TABLESPACE name SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER TABLE ALL IN_P /*9N*/ TABLESPACE name OWNED BY role_list SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER INDEX qualified_name alter_table_cmds	{}
+	-> ALTER INDEX IF_P EXISTS qualified_name alter_table_cmds	{}
+	-> ALTER INDEX qualified_name index_partition_cmd	{}
+	-> ALTER INDEX ALL IN_P /*9N*/ TABLESPACE name SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER INDEX ALL IN_P /*9N*/ TABLESPACE name OWNED BY role_list SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER SEQUENCE qualified_name alter_table_cmds	{}
+	-> ALTER SEQUENCE IF_P EXISTS qualified_name alter_table_cmds	{}
+	-> ALTER VIEW qualified_name alter_table_cmds	{}
+	-> ALTER VIEW IF_P EXISTS qualified_name alter_table_cmds	{}
+	-> ALTER MATERIALIZED VIEW qualified_name alter_table_cmds	{}
+	-> ALTER MATERIALIZED VIEW IF_P EXISTS qualified_name alter_table_cmds	{}
+	-> ALTER MATERIALIZED VIEW ALL IN_P /*9N*/ TABLESPACE name SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER MATERIALIZED VIEW ALL IN_P /*9N*/ TABLESPACE name OWNED BY role_list SET /*1N*/ TABLESPACE name opt_nowait	{}
+	-> ALTER FOREIGN TABLE relation_expr alter_table_cmds	{}
+	-> ALTER FOREIGN TABLE IF_P EXISTS relation_expr alter_table_cmds	{}
+}
+
+nonterm() alter_table_cmds {
+	-> alter_table_cmd	{}
+	-> alter_table_cmds "," alter_table_cmd	{}
+}
+
+nonterm() partition_cmd {
+	-> ATTACH PARTITION /*15N*/ qualified_name PartitionBoundSpec	{}
+	-> DETACH PARTITION /*15N*/ qualified_name opt_concurrently	{}
+	-> DETACH PARTITION /*15N*/ qualified_name FINALIZE	{}
+}
+
+nonterm() index_partition_cmd {
+	-> ATTACH PARTITION /*15N*/ qualified_name	{}
+}
+
+nonterm() alter_table_cmd {
+	-> ADD_P columnDef	{}
+	-> ADD_P IF_P NOT /*6R*/ EXISTS columnDef	{}
+	-> ADD_P COLUMN columnDef	{}
+	-> ADD_P COLUMN IF_P NOT /*6R*/ EXISTS columnDef	{}
+	-> ALTER opt_column ColId alter_column_default	{}
+	-> ALTER opt_column ColId DROP NOT /*6R*/ NULL_P	{}
+	-> ALTER opt_column ColId SET /*1N*/ NOT /*6R*/ NULL_P	{}
+	-> ALTER opt_column ColId DROP EXPRESSION	{}
+	-> ALTER opt_column ColId DROP EXPRESSION IF_P EXISTS	{}
+	-> ALTER opt_column ColId SET /*1N*/ STATISTICS SignedIconst	{}
+	-> ALTER opt_column Iconst SET /*1N*/ STATISTICS SignedIconst	{}
+	-> ALTER opt_column ColId SET /*1N*/ reloptions	{}
+	-> ALTER opt_column ColId RESET reloptions	{}
+	-> ALTER opt_column ColId SET /*1N*/ column_storage	{}
+	-> ALTER opt_column ColId SET /*1N*/ column_compression	{}
+	-> ALTER opt_column ColId ADD_P GENERATED generated_when AS IDENTITY_P OptParenthesizedSeqOptList	{}
+	-> ALTER opt_column ColId alter_identity_column_option_list	{}
+	-> ALTER opt_column ColId DROP IDENTITY_P	{}
+	-> ALTER opt_column ColId DROP IDENTITY_P IF_P EXISTS	{}
+	-> DROP opt_column IF_P EXISTS ColId opt_drop_behavior	{}
+	-> DROP opt_column ColId opt_drop_behavior	{}
+	-> ALTER opt_column ColId opt_set_data TYPE_P Typename opt_collate_clause alter_using	{}
+	-> ALTER opt_column ColId alter_generic_options	{}
+	-> ADD_P TableConstraint	{}
+	-> ALTER CONSTRAINT name ConstraintAttributeSpec	{}
+	-> VALIDATE CONSTRAINT name	{}
+	-> DROP CONSTRAINT IF_P EXISTS name opt_drop_behavior	{}
+	-> DROP CONSTRAINT name opt_drop_behavior	{}
+	-> SET /*1N*/ WITHOUT /*13N*/ OIDS	{}
+	-> CLUSTER ON name	{}
+	-> SET /*1N*/ WITHOUT /*13N*/ CLUSTER	{}
+	-> SET /*1N*/ LOGGED	{}
+	-> SET /*1N*/ UNLOGGED	{}
+	-> ENABLE_P TRIGGER name	{}
+	-> ENABLE_P ALWAYS TRIGGER name	{}
+	-> ENABLE_P REPLICA TRIGGER name	{}
+	-> ENABLE_P TRIGGER ALL	{}
+	-> ENABLE_P TRIGGER USER	{}
+	-> DISABLE_P TRIGGER name	{}
+	-> DISABLE_P TRIGGER ALL	{}
+	-> DISABLE_P TRIGGER USER	{}
+	-> ENABLE_P RULE name	{}
+	-> ENABLE_P ALWAYS RULE name	{}
+	-> ENABLE_P REPLICA RULE name	{}
+	-> DISABLE_P RULE name	{}
+	-> INHERIT qualified_name	{}
+	-> NO INHERIT qualified_name	{}
+	-> OF any_name	{}
+	-> NOT /*6R*/ OF	{}
+	-> OWNER TO RoleSpec	{}
+	-> SET /*1N*/ ACCESS METHOD name	{}
+	-> SET /*1N*/ TABLESPACE name	{}
+	-> SET /*1N*/ reloptions	{}
+	-> RESET reloptions	{}
+	-> REPLICA IDENTITY_P replica_identity	{}
+	-> ENABLE_P ROW LEVEL SECURITY	{}
+	-> DISABLE_P ROW LEVEL SECURITY	{}
+	-> FORCE ROW LEVEL SECURITY	{}
+	-> NO FORCE ROW LEVEL SECURITY	{}
+	-> alter_generic_options	{}
+}
+
+nonterm() alter_column_default {
+	-> SET /*1N*/ DEFAULT a_expr	{}
+	-> DROP DEFAULT	{}
+}
+
+nonterm() opt_collate_clause {
+	-> COLLATE /*21L*/ any_name	{}
+	-> empty	{}
+}
+
+nonterm() alter_using {
+	-> USING a_expr	{}
+	-> empty	{}
+}
+
+nonterm() replica_identity {
+	-> NOTHING	{}
+	-> FULL /*27L*/	{}
+	-> DEFAULT	{}
+	-> USING INDEX name	{}
+}
+
+nonterm() reloptions {
+	-> "(" /*24L*/ reloption_list ")" /*24L*/	{}
+}
+
+nonterm() opt_reloptions {
+	-> WITH /*13N*/ reloptions	{}
+	-> empty	{}
+}
+
+nonterm() reloption_list {
+	-> reloption_elem	{}
+	-> reloption_list "," reloption_elem	{}
+}
+
+nonterm() reloption_elem {
+	-> ColLabel "=" /*8N*/ def_arg	{}
+	-> ColLabel	{}
+	-> ColLabel "." /*26L*/ ColLabel "=" /*8N*/ def_arg	{}
+	-> ColLabel "." /*26L*/ ColLabel	{}
+}
+
+nonterm() alter_identity_column_option_list {
+	-> alter_identity_column_option	{}
+	-> alter_identity_column_option_list alter_identity_column_option	{}
+}
+
+nonterm() alter_identity_column_option {
+	-> RESTART	{}
+	-> RESTART opt_with NumericOnly	{}
+	-> SET /*1N*/ SeqOptElem	{}
+	-> SET /*1N*/ GENERATED generated_when	{}
+}
+
+nonterm() PartitionBoundSpec {
+	-> FOR VALUES WITH /*13N*/ "(" /*24L*/ hash_partbound ")" /*24L*/	{}
+	-> FOR VALUES IN_P /*9N*/ "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> FOR VALUES FROM "(" /*24L*/ expr_list ")" /*24L*/ TO "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> DEFAULT	{}
+}
+
+nonterm() hash_partbound_elem {
+	-> NonReservedWord Iconst	{}
+}
+
+nonterm() hash_partbound {
+	-> hash_partbound_elem	{}
+	-> hash_partbound "," hash_partbound_elem	{}
+}
+
+nonterm() AlterCompositeTypeStmt {
+	-> ALTER TYPE_P any_name alter_type_cmds	{}
+}
+
+nonterm() alter_type_cmds {
+	-> alter_type_cmd	{}
+	-> alter_type_cmds "," alter_type_cmd	{}
+}
+
+nonterm() alter_type_cmd {
+	-> ADD_P ATTRIBUTE TableFuncElement opt_drop_behavior	{}
+	-> DROP ATTRIBUTE IF_P EXISTS ColId opt_drop_behavior	{}
+	-> DROP ATTRIBUTE ColId opt_drop_behavior	{}
+	-> ALTER ATTRIBUTE ColId opt_set_data TYPE_P Typename opt_collate_clause opt_drop_behavior	{}
+}
+
+nonterm() ClosePortalStmt {
+	-> CLOSE cursor_name	{}
+	-> CLOSE ALL	{}
+}
+
+nonterm() CopyStmt {
+	-> COPY opt_binary qualified_name opt_column_list copy_from opt_program copy_file_name copy_delimiter opt_with copy_options where_clause	{}
+	-> COPY "(" /*24L*/ PreparableStmt ")" /*24L*/ TO opt_program copy_file_name opt_with copy_options	{}
+}
+
+nonterm() copy_from {
+	-> FROM	{}
+	-> TO	{}
+}
+
+nonterm() opt_program {
+	-> PROGRAM	{}
+	-> empty	{}
+}
+
+nonterm() copy_file_name {
+	-> Sconst	{}
+	-> STDIN	{}
+	-> STDOUT	{}
+}
+
+nonterm() copy_options {
+	-> copy_opt_list	{}
+	-> "(" /*24L*/ copy_generic_opt_list ")" /*24L*/	{}
+}
+
+nonterm() copy_opt_list {
+	-> copy_opt_list copy_opt_item	{}
+	-> empty	{}
+}
+
+nonterm() copy_opt_item {
+	-> BINARY	{}
+	-> FREEZE	{}
+	-> DELIMITER opt_as Sconst	{}
+	-> NULL_P opt_as Sconst	{}
+	-> CSV	{}
+	-> HEADER_P	{}
+	-> QUOTE opt_as Sconst	{}
+	-> ESCAPE /*10N*/ opt_as Sconst	{}
+	-> FORCE QUOTE columnList	{}
+	-> FORCE QUOTE "*" /*18L*/	{}
+	-> FORCE NOT /*6R*/ NULL_P columnList	{}
+	-> FORCE NULL_P columnList	{}
+	-> ENCODING Sconst	{}
+}
+
+nonterm() opt_binary {
+	-> BINARY	{}
+	-> empty	{}
+}
+
+nonterm() copy_delimiter {
+	-> opt_using DELIMITERS Sconst	{}
+	-> empty	{}
+}
+
+nonterm() opt_using {
+	-> USING	{}
+	-> empty	{}
+}
+
+nonterm() copy_generic_opt_list {
+	-> copy_generic_opt_elem	{}
+	-> copy_generic_opt_list "," copy_generic_opt_elem	{}
+}
+
+nonterm() copy_generic_opt_elem {
+	-> ColLabel copy_generic_opt_arg	{}
+}
+
+nonterm() copy_generic_opt_arg {
+	-> opt_boolean_or_string	{}
+	-> NumericOnly	{}
+	-> "*" /*18L*/	{}
+	-> "(" /*24L*/ copy_generic_opt_arg_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() copy_generic_opt_arg_list {
+	-> copy_generic_opt_arg_list_item	{}
+	-> copy_generic_opt_arg_list "," copy_generic_opt_arg_list_item	{}
+}
+
+nonterm() copy_generic_opt_arg_list_item {
+	-> opt_boolean_or_string	{}
+}
+
+nonterm() CreateStmt {
+	-> CREATE OptTemp TABLE qualified_name "(" /*24L*/ OptTableElementList ")" /*24L*/ OptInherit OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+	-> CREATE OptTemp TABLE IF_P NOT /*6R*/ EXISTS qualified_name "(" /*24L*/ OptTableElementList ")" /*24L*/ OptInherit OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+	-> CREATE OptTemp TABLE qualified_name OF any_name OptTypedTableElementList OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+	-> CREATE OptTemp TABLE IF_P NOT /*6R*/ EXISTS qualified_name OF any_name OptTypedTableElementList OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+	-> CREATE OptTemp TABLE qualified_name PARTITION /*15N*/ OF qualified_name OptTypedTableElementList PartitionBoundSpec OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+	-> CREATE OptTemp TABLE IF_P NOT /*6R*/ EXISTS qualified_name PARTITION /*15N*/ OF qualified_name OptTypedTableElementList PartitionBoundSpec OptPartitionSpec table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+}
+
+nonterm() OptTemp {
+	-> TEMPORARY	{}
+	-> TEMP	{}
+	-> LOCAL TEMPORARY	{}
+	-> LOCAL TEMP	{}
+	-> GLOBAL TEMPORARY	{}
+	-> GLOBAL TEMP	{}
+	-> UNLOGGED	{}
+	-> empty	{}
+}
+
+nonterm() OptTableElementList {
+	-> TableElementList	{}
+	-> empty	{}
+}
+
+nonterm() OptTypedTableElementList {
+	-> "(" /*24L*/ TypedTableElementList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() TableElementList {
+	-> TableElement	{}
+	-> TableElementList "," TableElement	{}
+}
+
+nonterm() TypedTableElementList {
+	-> TypedTableElement	{}
+	-> TypedTableElementList "," TypedTableElement	{}
+}
+
+nonterm() TableElement {
+	-> columnDef	{}
+	-> TableLikeClause	{}
+	-> TableConstraint	{}
+}
+
+nonterm() TypedTableElement {
+	-> columnOptions	{}
+	-> TableConstraint	{}
+}
+
+nonterm() columnDef {
+	-> ColId Typename opt_column_storage opt_column_compression create_generic_options ColQualList	{}
+}
+
+nonterm() columnOptions {
+	-> ColId ColQualList	{}
+	-> ColId WITH /*13N*/ OPTIONS ColQualList	{}
+}
+
+nonterm() column_compression {
+	-> COMPRESSION ColId	{}
+	-> COMPRESSION DEFAULT	{}
+}
+
+nonterm() opt_column_compression {
+	-> column_compression	{}
+	-> empty	{}
+}
+
+nonterm() column_storage {
+	-> STORAGE ColId	{}
+	-> STORAGE DEFAULT	{}
+}
+
+nonterm() opt_column_storage {
+	-> column_storage	{}
+	-> empty	{}
+}
+
+nonterm() ColQualList {
+	-> ColQualList ColConstraint	{}
+	-> empty	{}
+}
+
+nonterm() ColConstraint {
+	-> CONSTRAINT name ColConstraintElem	{}
+	-> ColConstraintElem	{}
+	-> ConstraintAttr	{}
+	-> COLLATE /*21L*/ any_name	{}
+}
+
+nonterm() ColConstraintElem {
+	-> NOT /*6R*/ NULL_P	{}
+	-> NULL_P	{}
+	-> UNIQUE /*11N*/ opt_unique_null_treatment opt_definition OptConsTableSpace	{}
+	-> PRIMARY KEY opt_definition OptConsTableSpace	{}
+	-> CHECK "(" /*24L*/ a_expr ")" /*24L*/ opt_no_inherit	{}
+	-> DEFAULT b_expr	{}
+	-> GENERATED generated_when AS IDENTITY_P OptParenthesizedSeqOptList	{}
+	-> GENERATED generated_when AS "(" /*24L*/ a_expr ")" /*24L*/ STORED	{}
+	-> REFERENCES qualified_name opt_column_list key_match key_actions	{}
+}
+
+nonterm() opt_unique_null_treatment {
+	-> NULLS_P DISTINCT	{}
+	-> NULLS_P NOT /*6R*/ DISTINCT	{}
+	-> empty	{}
+}
+
+nonterm() generated_when {
+	-> ALWAYS	{}
+	-> BY DEFAULT	{}
+}
+
+nonterm() ConstraintAttr {
+	-> DEFERRABLE	{}
+	-> NOT /*6R*/ DEFERRABLE	{}
+	-> INITIALLY DEFERRED	{}
+	-> INITIALLY IMMEDIATE	{}
+}
+
+nonterm() TableLikeClause {
+	-> LIKE /*9N*/ qualified_name TableLikeOptionList	{}
+}
+
+nonterm() TableLikeOptionList {
+	-> TableLikeOptionList INCLUDING TableLikeOption	{}
+	-> TableLikeOptionList EXCLUDING TableLikeOption	{}
+	-> empty	{}
+}
+
+nonterm() TableLikeOption {
+	-> COMMENTS	{}
+	-> COMPRESSION	{}
+	-> CONSTRAINTS	{}
+	-> DEFAULTS	{}
+	-> IDENTITY_P	{}
+	-> GENERATED	{}
+	-> INDEXES	{}
+	-> STATISTICS	{}
+	-> STORAGE	{}
+	-> ALL	{}
+}
+
+nonterm() TableConstraint {
+	-> CONSTRAINT name ConstraintElem	{}
+	-> ConstraintElem	{}
+}
+
+nonterm() ConstraintElem {
+	-> CHECK "(" /*24L*/ a_expr ")" /*24L*/ ConstraintAttributeSpec	{}
+	-> UNIQUE /*11N*/ opt_unique_null_treatment "(" /*24L*/ columnList ")" /*24L*/ opt_c_include opt_definition OptConsTableSpace ConstraintAttributeSpec	{}
+	-> UNIQUE /*11N*/ ExistingIndex ConstraintAttributeSpec	{}
+	-> PRIMARY KEY "(" /*24L*/ columnList ")" /*24L*/ opt_c_include opt_definition OptConsTableSpace ConstraintAttributeSpec	{}
+	-> PRIMARY KEY ExistingIndex ConstraintAttributeSpec	{}
+	-> EXCLUDE access_method_clause "(" /*24L*/ ExclusionConstraintList ")" /*24L*/ opt_c_include opt_definition OptConsTableSpace OptWhereClause ConstraintAttributeSpec	{}
+	-> FOREIGN KEY "(" /*24L*/ columnList ")" /*24L*/ REFERENCES qualified_name opt_column_list key_match key_actions ConstraintAttributeSpec	{}
+}
+
+nonterm() opt_no_inherit {
+	-> NO INHERIT	{}
+	-> empty	{}
+}
+
+nonterm() opt_column_list {
+	-> "(" /*24L*/ columnList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() columnList {
+	-> columnElem	{}
+	-> columnList "," columnElem	{}
+}
+
+nonterm() columnElem {
+	-> ColId	{}
+}
+
+nonterm() opt_c_include {
+	-> INCLUDE "(" /*24L*/ columnList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() key_match {
+	-> MATCH FULL /*27L*/	{}
+	-> MATCH PARTIAL	{}
+	-> MATCH SIMPLE	{}
+	-> empty	{}
+}
+
+nonterm() ExclusionConstraintList {
+	-> ExclusionConstraintElem	{}
+	-> ExclusionConstraintList "," ExclusionConstraintElem	{}
+}
+
+nonterm() ExclusionConstraintElem {
+	-> index_elem WITH /*13N*/ any_operator	{}
+	-> index_elem WITH /*13N*/ OPERATOR /*16L*/ "(" /*24L*/ any_operator ")" /*24L*/	{}
+}
+
+nonterm() OptWhereClause {
+	-> WHERE "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() key_actions {
+	-> key_update	{}
+	-> key_delete	{}
+	-> key_update key_delete	{}
+	-> key_delete key_update	{}
+	-> empty	{}
+}
+
+nonterm() key_update {
+	-> ON UPDATE key_action	{}
+}
+
+nonterm() key_delete {
+	-> ON DELETE_P key_action	{}
+}
+
+nonterm() key_action {
+	-> NO ACTION	{}
+	-> RESTRICT	{}
+	-> CASCADE	{}
+	-> SET /*1N*/ NULL_P opt_column_list	{}
+	-> SET /*1N*/ DEFAULT opt_column_list	{}
+}
+
+nonterm() OptInherit {
+	-> INHERITS "(" /*24L*/ qualified_name_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() OptPartitionSpec {
+	-> PartitionSpec	{}
+	-> empty	{}
+}
+
+nonterm() PartitionSpec {
+	-> PARTITION /*15N*/ BY ColId "(" /*24L*/ part_params ")" /*24L*/	{}
+}
+
+nonterm() part_params {
+	-> part_elem	{}
+	-> part_params "," part_elem	{}
+}
+
+nonterm() part_elem {
+	-> ColId opt_collate opt_qualified_name	{}
+	-> func_expr_windowless opt_collate opt_qualified_name	{}
+	-> "(" /*24L*/ a_expr ")" /*24L*/ opt_collate opt_qualified_name	{}
+}
+
+nonterm() table_access_method_clause {
+	-> USING name	{}
+	-> empty	{}
+}
+
+nonterm() OptWith {
+	-> WITH /*13N*/ reloptions	{}
+	-> WITHOUT /*13N*/ OIDS	{}
+	-> empty	{}
+}
+
+nonterm() OnCommitOption {
+	-> ON COMMIT DROP	{}
+	-> ON COMMIT DELETE_P ROWS /*15N*/	{}
+	-> ON COMMIT PRESERVE ROWS /*15N*/	{}
+	-> empty	{}
+}
+
+nonterm() OptTableSpace {
+	-> TABLESPACE name	{}
+	-> empty	{}
+}
+
+nonterm() OptConsTableSpace {
+	-> USING INDEX TABLESPACE name	{}
+	-> empty	{}
+}
+
+nonterm() ExistingIndex {
+	-> USING INDEX name	{}
+}
+
+nonterm() CreateStatsStmt {
+	-> CREATE STATISTICS opt_qualified_name opt_name_list ON stats_params FROM from_list	{}
+	-> CREATE STATISTICS IF_P NOT /*6R*/ EXISTS any_name opt_name_list ON stats_params FROM from_list	{}
+}
+
+nonterm() stats_params {
+	-> stats_param	{}
+	-> stats_params "," stats_param	{}
+}
+
+nonterm() stats_param {
+	-> ColId	{}
+	-> func_expr_windowless	{}
+	-> "(" /*24L*/ a_expr ")" /*24L*/	{}
+}
+
+nonterm() AlterStatsStmt {
+	-> ALTER STATISTICS any_name SET /*1N*/ STATISTICS SignedIconst	{}
+	-> ALTER STATISTICS IF_P EXISTS any_name SET /*1N*/ STATISTICS SignedIconst	{}
+}
+
+nonterm() CreateAsStmt {
+	-> CREATE OptTemp TABLE create_as_target AS SelectStmt opt_with_data	{}
+	-> CREATE OptTemp TABLE IF_P NOT /*6R*/ EXISTS create_as_target AS SelectStmt opt_with_data	{}
+}
+
+nonterm() create_as_target {
+	-> qualified_name opt_column_list table_access_method_clause OptWith OnCommitOption OptTableSpace	{}
+}
+
+nonterm() opt_with_data {
+	-> WITH /*13N*/ DATA_P	{}
+	-> WITH /*13N*/ NO DATA_P	{}
+	-> empty	{}
+}
+
+nonterm() CreateMatViewStmt {
+	-> CREATE OptNoLog MATERIALIZED VIEW create_mv_target AS SelectStmt opt_with_data	{}
+	-> CREATE OptNoLog MATERIALIZED VIEW IF_P NOT /*6R*/ EXISTS create_mv_target AS SelectStmt opt_with_data	{}
+}
+
+nonterm() create_mv_target {
+	-> qualified_name opt_column_list table_access_method_clause opt_reloptions OptTableSpace	{}
+}
+
+nonterm() OptNoLog {
+	-> UNLOGGED	{}
+	-> empty	{}
+}
+
+nonterm() RefreshMatViewStmt {
+	-> REFRESH MATERIALIZED VIEW opt_concurrently qualified_name opt_with_data	{}
+}
+
+nonterm() CreateSeqStmt {
+	-> CREATE OptTemp SEQUENCE qualified_name OptSeqOptList	{}
+	-> CREATE OptTemp SEQUENCE IF_P NOT /*6R*/ EXISTS qualified_name OptSeqOptList	{}
+}
+
+nonterm() AlterSeqStmt {
+	-> ALTER SEQUENCE qualified_name SeqOptList	{}
+	-> ALTER SEQUENCE IF_P EXISTS qualified_name SeqOptList	{}
+}
+
+nonterm() OptSeqOptList {
+	-> SeqOptList	{}
+	-> empty	{}
+}
+
+nonterm() OptParenthesizedSeqOptList {
+	-> "(" /*24L*/ SeqOptList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() SeqOptList {
+	-> SeqOptElem	{}
+	-> SeqOptList SeqOptElem	{}
+}
+
+nonterm() SeqOptElem {
+	-> AS SimpleTypename	{}
+	-> CACHE NumericOnly	{}
+	-> CYCLE	{}
+	-> NO CYCLE	{}
+	-> INCREMENT opt_by NumericOnly	{}
+	-> MAXVALUE NumericOnly	{}
+	-> MINVALUE NumericOnly	{}
+	-> NO MAXVALUE	{}
+	-> NO MINVALUE	{}
+	-> OWNED BY any_name	{}
+	-> SEQUENCE NAME_P any_name	{}
+	-> START opt_with NumericOnly	{}
+	-> RESTART	{}
+	-> RESTART opt_with NumericOnly	{}
+}
+
+nonterm() opt_by {
+	-> BY	{}
+	-> empty	{}
+}
+
+nonterm() NumericOnly {
+	-> FCONST	{}
+	-> "+" /*17L*/ FCONST	{}
+	-> "-" /*17L*/ FCONST	{}
+	-> SignedIconst	{}
+}
+
+nonterm() NumericOnly_list {
+	-> NumericOnly	{}
+	-> NumericOnly_list "," NumericOnly	{}
+}
+
+nonterm() CreatePLangStmt {
+	-> CREATE opt_or_replace opt_trusted opt_procedural LANGUAGE name	{}
+	-> CREATE opt_or_replace opt_trusted opt_procedural LANGUAGE name HANDLER handler_name opt_inline_handler opt_validator	{}
+}
+
+nonterm() opt_trusted {
+	-> TRUSTED	{}
+	-> empty	{}
+}
+
+nonterm() handler_name {
+	-> name	{}
+	-> name attrs	{}
+}
+
+nonterm() opt_inline_handler {
+	-> INLINE_P handler_name	{}
+	-> empty	{}
+}
+
+nonterm() validator_clause {
+	-> VALIDATOR handler_name	{}
+	-> NO VALIDATOR	{}
+}
+
+nonterm() opt_validator {
+	-> validator_clause	{}
+	-> empty	{}
+}
+
+nonterm() opt_procedural {
+	-> PROCEDURAL	{}
+	-> empty	{}
+}
+
+nonterm() CreateTableSpaceStmt {
+	-> CREATE TABLESPACE name OptTableSpaceOwner LOCATION Sconst opt_reloptions	{}
+}
+
+nonterm() OptTableSpaceOwner {
+	-> OWNER RoleSpec	{}
+	-> empty	{}
+}
+
+nonterm() DropTableSpaceStmt {
+	-> DROP TABLESPACE name	{}
+	-> DROP TABLESPACE IF_P EXISTS name	{}
+}
+
+nonterm() CreateExtensionStmt {
+	-> CREATE EXTENSION name opt_with create_extension_opt_list	{}
+	-> CREATE EXTENSION IF_P NOT /*6R*/ EXISTS name opt_with create_extension_opt_list	{}
+}
+
+nonterm() create_extension_opt_list {
+	-> create_extension_opt_list create_extension_opt_item	{}
+	-> empty	{}
+}
+
+nonterm() create_extension_opt_item {
+	-> SCHEMA name	{}
+	-> VERSION_P NonReservedWord_or_Sconst	{}
+	-> FROM NonReservedWord_or_Sconst	{}
+	-> CASCADE	{}
+}
+
+nonterm() AlterExtensionStmt {
+	-> ALTER EXTENSION name UPDATE alter_extension_opt_list	{}
+}
+
+nonterm() alter_extension_opt_list {
+	-> alter_extension_opt_list alter_extension_opt_item	{}
+	-> empty	{}
+}
+
+nonterm() alter_extension_opt_item {
+	-> TO NonReservedWord_or_Sconst	{}
+}
+
+nonterm() AlterExtensionContentsStmt {
+	-> ALTER EXTENSION name add_drop object_type_name name	{}
+	-> ALTER EXTENSION name add_drop object_type_any_name any_name	{}
+	-> ALTER EXTENSION name add_drop AGGREGATE aggregate_with_argtypes	{}
+	-> ALTER EXTENSION name add_drop CAST "(" /*24L*/ Typename AS Typename ")" /*24L*/	{}
+	-> ALTER EXTENSION name add_drop DOMAIN_P Typename	{}
+	-> ALTER EXTENSION name add_drop FUNCTION function_with_argtypes	{}
+	-> ALTER EXTENSION name add_drop OPERATOR /*16L*/ operator_with_argtypes	{}
+	-> ALTER EXTENSION name add_drop OPERATOR /*16L*/ CLASS any_name USING name	{}
+	-> ALTER EXTENSION name add_drop OPERATOR /*16L*/ FAMILY any_name USING name	{}
+	-> ALTER EXTENSION name add_drop PROCEDURE function_with_argtypes	{}
+	-> ALTER EXTENSION name add_drop ROUTINE function_with_argtypes	{}
+	-> ALTER EXTENSION name add_drop TRANSFORM FOR Typename LANGUAGE name	{}
+	-> ALTER EXTENSION name add_drop TYPE_P Typename	{}
+}
+
+nonterm() CreateFdwStmt {
+	-> CREATE FOREIGN DATA_P WRAPPER name opt_fdw_options create_generic_options	{}
+}
+
+nonterm() fdw_option {
+	-> HANDLER handler_name	{}
+	-> NO HANDLER	{}
+	-> VALIDATOR handler_name	{}
+	-> NO VALIDATOR	{}
+}
+
+nonterm() fdw_options {
+	-> fdw_option	{}
+	-> fdw_options fdw_option	{}
+}
+
+nonterm() opt_fdw_options {
+	-> fdw_options	{}
+	-> empty	{}
+}
+
+nonterm() AlterFdwStmt {
+	-> ALTER FOREIGN DATA_P WRAPPER name opt_fdw_options alter_generic_options	{}
+	-> ALTER FOREIGN DATA_P WRAPPER name fdw_options	{}
+}
+
+nonterm() create_generic_options {
+	-> OPTIONS "(" /*24L*/ generic_option_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() generic_option_list {
+	-> generic_option_elem	{}
+	-> generic_option_list "," generic_option_elem	{}
+}
+
+nonterm() alter_generic_options {
+	-> OPTIONS "(" /*24L*/ alter_generic_option_list ")" /*24L*/	{}
+}
+
+nonterm() alter_generic_option_list {
+	-> alter_generic_option_elem	{}
+	-> alter_generic_option_list "," alter_generic_option_elem	{}
+}
+
+nonterm() alter_generic_option_elem {
+	-> generic_option_elem	{}
+	-> SET /*1N*/ generic_option_elem	{}
+	-> ADD_P generic_option_elem	{}
+	-> DROP generic_option_name	{}
+}
+
+nonterm() generic_option_elem {
+	-> generic_option_name generic_option_arg	{}
+}
+
+nonterm() generic_option_name {
+	-> ColLabel	{}
+}
+
+nonterm() generic_option_arg {
+	-> Sconst	{}
+}
+
+nonterm() CreateForeignServerStmt {
+	-> CREATE SERVER name opt_type opt_foreign_server_version FOREIGN DATA_P WRAPPER name create_generic_options	{}
+	-> CREATE SERVER IF_P NOT /*6R*/ EXISTS name opt_type opt_foreign_server_version FOREIGN DATA_P WRAPPER name create_generic_options	{}
+}
+
+nonterm() opt_type {
+	-> TYPE_P Sconst	{}
+	-> empty	{}
+}
+
+nonterm() foreign_server_version {
+	-> VERSION_P Sconst	{}
+	-> VERSION_P NULL_P	{}
+}
+
+nonterm() opt_foreign_server_version {
+	-> foreign_server_version	{}
+	-> empty	{}
+}
+
+nonterm() AlterForeignServerStmt {
+	-> ALTER SERVER name foreign_server_version alter_generic_options	{}
+	-> ALTER SERVER name foreign_server_version	{}
+	-> ALTER SERVER name alter_generic_options	{}
+}
+
+nonterm() CreateForeignTableStmt {
+	-> CREATE FOREIGN TABLE qualified_name "(" /*24L*/ OptTableElementList ")" /*24L*/ OptInherit SERVER name create_generic_options	{}
+	-> CREATE FOREIGN TABLE IF_P NOT /*6R*/ EXISTS qualified_name "(" /*24L*/ OptTableElementList ")" /*24L*/ OptInherit SERVER name create_generic_options	{}
+	-> CREATE FOREIGN TABLE qualified_name PARTITION /*15N*/ OF qualified_name OptTypedTableElementList PartitionBoundSpec SERVER name create_generic_options	{}
+	-> CREATE FOREIGN TABLE IF_P NOT /*6R*/ EXISTS qualified_name PARTITION /*15N*/ OF qualified_name OptTypedTableElementList PartitionBoundSpec SERVER name create_generic_options	{}
+}
+
+nonterm() ImportForeignSchemaStmt {
+	-> IMPORT_P FOREIGN SCHEMA name import_qualification FROM SERVER name INTO name create_generic_options	{}
+}
+
+nonterm() import_qualification_type {
+	-> LIMIT TO	{}
+	-> EXCEPT /*2L*/	{}
+}
+
+nonterm() import_qualification {
+	-> import_qualification_type "(" /*24L*/ relation_expr_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() CreateUserMappingStmt {
+	-> CREATE USER MAPPING FOR auth_ident SERVER name create_generic_options	{}
+	-> CREATE USER MAPPING IF_P NOT /*6R*/ EXISTS FOR auth_ident SERVER name create_generic_options	{}
+}
+
+nonterm() auth_ident {
+	-> RoleSpec	{}
+	-> USER	{}
+}
+
+nonterm() DropUserMappingStmt {
+	-> DROP USER MAPPING FOR auth_ident SERVER name	{}
+	-> DROP USER MAPPING IF_P EXISTS FOR auth_ident SERVER name	{}
+}
+
+nonterm() AlterUserMappingStmt {
+	-> ALTER USER MAPPING FOR auth_ident SERVER name alter_generic_options	{}
+}
+
+nonterm() CreatePolicyStmt {
+	-> CREATE POLICY name ON qualified_name RowSecurityDefaultPermissive RowSecurityDefaultForCmd RowSecurityDefaultToRole RowSecurityOptionalExpr RowSecurityOptionalWithCheck	{}
+}
+
+nonterm() AlterPolicyStmt {
+	-> ALTER POLICY name ON qualified_name RowSecurityOptionalToRole RowSecurityOptionalExpr RowSecurityOptionalWithCheck	{}
+}
+
+nonterm() RowSecurityOptionalExpr {
+	-> USING "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() RowSecurityOptionalWithCheck {
+	-> WITH /*13N*/ CHECK "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() RowSecurityDefaultToRole {
+	-> TO role_list	{}
+	-> empty	{}
+}
+
+nonterm() RowSecurityOptionalToRole {
+	-> TO role_list	{}
+	-> empty	{}
+}
+
+nonterm() RowSecurityDefaultPermissive {
+	-> AS IDENT /*15N*/	{}
+	-> empty	{}
+}
+
+nonterm() RowSecurityDefaultForCmd {
+	-> FOR row_security_cmd	{}
+	-> empty	{}
+}
+
+nonterm() row_security_cmd {
+	-> ALL	{}
+	-> SELECT	{}
+	-> INSERT	{}
+	-> UPDATE	{}
+	-> DELETE_P	{}
+}
+
+nonterm() CreateAmStmt {
+	-> CREATE ACCESS METHOD name TYPE_P am_type HANDLER handler_name	{}
+}
+
+nonterm() am_type {
+	-> INDEX	{}
+	-> TABLE	{}
+}
+
+nonterm() CreateTrigStmt {
+	-> CREATE opt_or_replace TRIGGER name TriggerActionTime TriggerEvents ON qualified_name TriggerReferencing TriggerForSpec TriggerWhen EXECUTE FUNCTION_or_PROCEDURE func_name "(" /*24L*/ TriggerFuncArgs ")" /*24L*/	{}
+	-> CREATE opt_or_replace CONSTRAINT TRIGGER name AFTER TriggerEvents ON qualified_name OptConstrFromTable ConstraintAttributeSpec FOR EACH ROW TriggerWhen EXECUTE FUNCTION_or_PROCEDURE func_name "(" /*24L*/ TriggerFuncArgs ")" /*24L*/	{}
+}
+
+nonterm() TriggerActionTime {
+	-> BEFORE	{}
+	-> AFTER	{}
+	-> INSTEAD OF	{}
+}
+
+nonterm() TriggerEvents {
+	-> TriggerOneEvent	{}
+	-> TriggerEvents OR /*4L*/ TriggerOneEvent	{}
+}
+
+nonterm() TriggerOneEvent {
+	-> INSERT	{}
+	-> DELETE_P	{}
+	-> UPDATE	{}
+	-> UPDATE OF columnList	{}
+	-> TRUNCATE	{}
+}
+
+nonterm() TriggerReferencing {
+	-> REFERENCING TriggerTransitions	{}
+	-> empty	{}
+}
+
+nonterm() TriggerTransitions {
+	-> TriggerTransition	{}
+	-> TriggerTransitions TriggerTransition	{}
+}
+
+nonterm() TriggerTransition {
+	-> TransitionOldOrNew TransitionRowOrTable opt_as TransitionRelName	{}
+}
+
+nonterm() TransitionOldOrNew {
+	-> NEW	{}
+	-> OLD	{}
+}
+
+nonterm() TransitionRowOrTable {
+	-> TABLE	{}
+	-> ROW	{}
+}
+
+nonterm() TransitionRelName {
+	-> ColId	{}
+}
+
+nonterm() TriggerForSpec {
+	-> FOR TriggerForOptEach TriggerForType	{}
+	-> empty	{}
+}
+
+nonterm() TriggerForOptEach {
+	-> EACH	{}
+	-> empty	{}
+}
+
+nonterm() TriggerForType {
+	-> ROW	{}
+	-> STATEMENT	{}
+}
+
+nonterm() TriggerWhen {
+	-> WHEN "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() FUNCTION_or_PROCEDURE {
+	-> FUNCTION	{}
+	-> PROCEDURE	{}
+}
+
+nonterm() TriggerFuncArgs {
+	-> TriggerFuncArg	{}
+	-> TriggerFuncArgs "," TriggerFuncArg	{}
+	-> empty	{}
+}
+
+nonterm() TriggerFuncArg {
+	-> Iconst	{}
+	-> FCONST	{}
+	-> Sconst	{}
+	-> ColLabel	{}
+}
+
+nonterm() OptConstrFromTable {
+	-> FROM qualified_name	{}
+	-> empty	{}
+}
+
+nonterm() ConstraintAttributeSpec {
+	-> empty	{}
+	-> ConstraintAttributeSpec ConstraintAttributeElem	{}
+}
+
+nonterm() ConstraintAttributeElem {
+	-> NOT /*6R*/ DEFERRABLE	{}
+	-> DEFERRABLE	{}
+	-> INITIALLY IMMEDIATE	{}
+	-> INITIALLY DEFERRED	{}
+	-> NOT /*6R*/ VALID	{}
+	-> NO INHERIT	{}
+}
+
+nonterm() CreateEventTrigStmt {
+	-> CREATE EVENT TRIGGER name ON ColLabel EXECUTE FUNCTION_or_PROCEDURE func_name "(" /*24L*/ ")" /*24L*/	{}
+	-> CREATE EVENT TRIGGER name ON ColLabel WHEN event_trigger_when_list EXECUTE FUNCTION_or_PROCEDURE func_name "(" /*24L*/ ")" /*24L*/	{}
+}
+
+nonterm() event_trigger_when_list {
+	-> event_trigger_when_item	{}
+	-> event_trigger_when_list AND /*5L*/ event_trigger_when_item	{}
+}
+
+nonterm() event_trigger_when_item {
+	-> ColId IN_P /*9N*/ "(" /*24L*/ event_trigger_value_list ")" /*24L*/	{}
+}
+
+nonterm() event_trigger_value_list {
+	-> SCONST	{}
+	-> event_trigger_value_list "," SCONST	{}
+}
+
+nonterm() AlterEventTrigStmt {
+	-> ALTER EVENT TRIGGER name enable_trigger	{}
+}
+
+nonterm() enable_trigger {
+	-> ENABLE_P	{}
+	-> ENABLE_P REPLICA	{}
+	-> ENABLE_P ALWAYS	{}
+	-> DISABLE_P	{}
+}
+
+nonterm() CreateAssertionStmt {
+	-> CREATE ASSERTION any_name CHECK "(" /*24L*/ a_expr ")" /*24L*/ ConstraintAttributeSpec	{}
+}
+
+nonterm() DefineStmt {
+	-> CREATE opt_or_replace AGGREGATE func_name aggr_args definition	{}
+	-> CREATE opt_or_replace AGGREGATE func_name old_aggr_definition	{}
+	-> CREATE OPERATOR /*16L*/ any_operator definition	{}
+	-> CREATE TYPE_P any_name definition	{}
+	-> CREATE TYPE_P any_name	{}
+	-> CREATE TYPE_P any_name AS "(" /*24L*/ OptTableFuncElementList ")" /*24L*/	{}
+	-> CREATE TYPE_P any_name AS ENUM_P "(" /*24L*/ opt_enum_val_list ")" /*24L*/	{}
+	-> CREATE TYPE_P any_name AS RANGE /*15N*/ definition	{}
+	-> CREATE TEXT_P SEARCH PARSER any_name definition	{}
+	-> CREATE TEXT_P SEARCH DICTIONARY any_name definition	{}
+	-> CREATE TEXT_P SEARCH TEMPLATE any_name definition	{}
+	-> CREATE TEXT_P SEARCH CONFIGURATION any_name definition	{}
+	-> CREATE COLLATION any_name definition	{}
+	-> CREATE COLLATION IF_P NOT /*6R*/ EXISTS any_name definition	{}
+	-> CREATE COLLATION any_name FROM any_name	{}
+	-> CREATE COLLATION IF_P NOT /*6R*/ EXISTS any_name FROM any_name	{}
+}
+
+nonterm() definition {
+	-> "(" /*24L*/ def_list ")" /*24L*/	{}
+}
+
+nonterm() def_list {
+	-> def_elem	{}
+	-> def_list "," def_elem	{}
+}
+
+nonterm() def_elem {
+	-> ColLabel "=" /*8N*/ def_arg	{}
+	-> ColLabel	{}
+}
+
+nonterm() def_arg {
+	-> func_type	{}
+	-> reserved_keyword	{}
+	-> qual_all_Op	{}
+	-> NumericOnly	{}
+	-> Sconst	{}
+	-> NONE	{}
+}
+
+nonterm() old_aggr_definition {
+	-> "(" /*24L*/ old_aggr_list ")" /*24L*/	{}
+}
+
+nonterm() old_aggr_list {
+	-> old_aggr_elem	{}
+	-> old_aggr_list "," old_aggr_elem	{}
+}
+
+nonterm() old_aggr_elem {
+	-> IDENT /*15N*/ "=" /*8N*/ def_arg	{}
+}
+
+nonterm() opt_enum_val_list {
+	-> enum_val_list	{}
+	-> empty	{}
+}
+
+nonterm() enum_val_list {
+	-> Sconst	{}
+	-> enum_val_list "," Sconst	{}
+}
+
+nonterm() AlterEnumStmt {
+	-> ALTER TYPE_P any_name ADD_P VALUE_P /*12N*/ opt_if_not_exists Sconst	{}
+	-> ALTER TYPE_P any_name ADD_P VALUE_P /*12N*/ opt_if_not_exists Sconst BEFORE Sconst	{}
+	-> ALTER TYPE_P any_name ADD_P VALUE_P /*12N*/ opt_if_not_exists Sconst AFTER Sconst	{}
+	-> ALTER TYPE_P any_name RENAME VALUE_P /*12N*/ Sconst TO Sconst	{}
+}
+
+nonterm() opt_if_not_exists {
+	-> IF_P NOT /*6R*/ EXISTS	{}
+	-> empty	{}
+}
+
+nonterm() CreateOpClassStmt {
+	-> CREATE OPERATOR /*16L*/ CLASS any_name opt_default FOR TYPE_P Typename USING name opt_opfamily AS opclass_item_list	{}
+}
+
+nonterm() opclass_item_list {
+	-> opclass_item	{}
+	-> opclass_item_list "," opclass_item	{}
+}
+
+nonterm() opclass_item {
+	-> OPERATOR /*16L*/ Iconst any_operator opclass_purpose opt_recheck	{}
+	-> OPERATOR /*16L*/ Iconst operator_with_argtypes opclass_purpose opt_recheck	{}
+	-> FUNCTION Iconst function_with_argtypes	{}
+	-> FUNCTION Iconst "(" /*24L*/ type_list ")" /*24L*/ function_with_argtypes	{}
+	-> STORAGE Typename	{}
+}
+
+nonterm() opt_default {
+	-> DEFAULT	{}
+	-> empty	{}
+}
+
+nonterm() opt_opfamily {
+	-> FAMILY any_name	{}
+	-> empty	{}
+}
+
+nonterm() opclass_purpose {
+	-> FOR SEARCH	{}
+	-> FOR ORDER BY any_name	{}
+	-> empty	{}
+}
+
+nonterm() opt_recheck {
+	-> RECHECK	{}
+	-> empty	{}
+}
+
+nonterm() CreateOpFamilyStmt {
+	-> CREATE OPERATOR /*16L*/ FAMILY any_name USING name	{}
+}
+
+nonterm() AlterOpFamilyStmt {
+	-> ALTER OPERATOR /*16L*/ FAMILY any_name USING name ADD_P opclass_item_list	{}
+	-> ALTER OPERATOR /*16L*/ FAMILY any_name USING name DROP opclass_drop_list	{}
+}
+
+nonterm() opclass_drop_list {
+	-> opclass_drop	{}
+	-> opclass_drop_list "," opclass_drop	{}
+}
+
+nonterm() opclass_drop {
+	-> OPERATOR /*16L*/ Iconst "(" /*24L*/ type_list ")" /*24L*/	{}
+	-> FUNCTION Iconst "(" /*24L*/ type_list ")" /*24L*/	{}
+}
+
+nonterm() DropOpClassStmt {
+	-> DROP OPERATOR /*16L*/ CLASS any_name USING name opt_drop_behavior	{}
+	-> DROP OPERATOR /*16L*/ CLASS IF_P EXISTS any_name USING name opt_drop_behavior	{}
+}
+
+nonterm() DropOpFamilyStmt {
+	-> DROP OPERATOR /*16L*/ FAMILY any_name USING name opt_drop_behavior	{}
+	-> DROP OPERATOR /*16L*/ FAMILY IF_P EXISTS any_name USING name opt_drop_behavior	{}
+}
+
+nonterm() DropOwnedStmt {
+	-> DROP OWNED BY role_list opt_drop_behavior	{}
+}
+
+nonterm() ReassignOwnedStmt {
+	-> REASSIGN OWNED BY role_list TO RoleSpec	{}
+}
+
+nonterm() DropStmt {
+	-> DROP object_type_any_name IF_P EXISTS any_name_list opt_drop_behavior	{}
+	-> DROP object_type_any_name any_name_list opt_drop_behavior	{}
+	-> DROP drop_type_name IF_P EXISTS name_list opt_drop_behavior	{}
+	-> DROP drop_type_name name_list opt_drop_behavior	{}
+	-> DROP object_type_name_on_any_name name ON any_name opt_drop_behavior	{}
+	-> DROP object_type_name_on_any_name IF_P EXISTS name ON any_name opt_drop_behavior	{}
+	-> DROP TYPE_P type_name_list opt_drop_behavior	{}
+	-> DROP TYPE_P IF_P EXISTS type_name_list opt_drop_behavior	{}
+	-> DROP DOMAIN_P type_name_list opt_drop_behavior	{}
+	-> DROP DOMAIN_P IF_P EXISTS type_name_list opt_drop_behavior	{}
+	-> DROP INDEX CONCURRENTLY any_name_list opt_drop_behavior	{}
+	-> DROP INDEX CONCURRENTLY IF_P EXISTS any_name_list opt_drop_behavior	{}
+}
+
+nonterm() object_type_any_name {
+	-> TABLE	{}
+	-> SEQUENCE	{}
+	-> VIEW	{}
+	-> MATERIALIZED VIEW	{}
+	-> INDEX	{}
+	-> FOREIGN TABLE	{}
+	-> COLLATION	{}
+	-> CONVERSION_P	{}
+	-> STATISTICS	{}
+	-> TEXT_P SEARCH PARSER	{}
+	-> TEXT_P SEARCH DICTIONARY	{}
+	-> TEXT_P SEARCH TEMPLATE	{}
+	-> TEXT_P SEARCH CONFIGURATION	{}
+}
+
+nonterm() object_type_name {
+	-> drop_type_name	{}
+	-> DATABASE	{}
+	-> ROLE	{}
+	-> SUBSCRIPTION	{}
+	-> TABLESPACE	{}
+}
+
+nonterm() drop_type_name {
+	-> ACCESS METHOD	{}
+	-> EVENT TRIGGER	{}
+	-> EXTENSION	{}
+	-> FOREIGN DATA_P WRAPPER	{}
+	-> opt_procedural LANGUAGE	{}
+	-> PUBLICATION	{}
+	-> SCHEMA	{}
+	-> SERVER	{}
+}
+
+nonterm() object_type_name_on_any_name {
+	-> POLICY	{}
+	-> RULE	{}
+	-> TRIGGER	{}
+}
+
+nonterm() any_name_list {
+	-> any_name	{}
+	-> any_name_list "," any_name	{}
+}
+
+nonterm() any_name {
+	-> ColId	{}
+	-> ColId attrs	{}
+}
+
+nonterm() attrs {
+	-> "." /*26L*/ attr_name	{}
+	-> attrs "." /*26L*/ attr_name	{}
+}
+
+nonterm() type_name_list {
+	-> Typename	{}
+	-> type_name_list "," Typename	{}
+}
+
+nonterm() TruncateStmt {
+	-> TRUNCATE opt_table relation_expr_list opt_restart_seqs opt_drop_behavior	{}
+}
+
+nonterm() opt_restart_seqs {
+	-> CONTINUE_P IDENTITY_P	{}
+	-> RESTART IDENTITY_P	{}
+	-> empty	{}
+}
+
+nonterm() CommentStmt {
+	-> COMMENT ON object_type_any_name any_name IS /*7N*/ comment_text	{}
+	-> COMMENT ON COLUMN any_name IS /*7N*/ comment_text	{}
+	-> COMMENT ON object_type_name name IS /*7N*/ comment_text	{}
+	-> COMMENT ON TYPE_P Typename IS /*7N*/ comment_text	{}
+	-> COMMENT ON DOMAIN_P Typename IS /*7N*/ comment_text	{}
+	-> COMMENT ON AGGREGATE aggregate_with_argtypes IS /*7N*/ comment_text	{}
+	-> COMMENT ON FUNCTION function_with_argtypes IS /*7N*/ comment_text	{}
+	-> COMMENT ON OPERATOR /*16L*/ operator_with_argtypes IS /*7N*/ comment_text	{}
+	-> COMMENT ON CONSTRAINT name ON any_name IS /*7N*/ comment_text	{}
+	-> COMMENT ON CONSTRAINT name ON DOMAIN_P any_name IS /*7N*/ comment_text	{}
+	-> COMMENT ON object_type_name_on_any_name name ON any_name IS /*7N*/ comment_text	{}
+	-> COMMENT ON PROCEDURE function_with_argtypes IS /*7N*/ comment_text	{}
+	-> COMMENT ON ROUTINE function_with_argtypes IS /*7N*/ comment_text	{}
+	-> COMMENT ON TRANSFORM FOR Typename LANGUAGE name IS /*7N*/ comment_text	{}
+	-> COMMENT ON OPERATOR /*16L*/ CLASS any_name USING name IS /*7N*/ comment_text	{}
+	-> COMMENT ON OPERATOR /*16L*/ FAMILY any_name USING name IS /*7N*/ comment_text	{}
+	-> COMMENT ON LARGE_P OBJECT_P /*12N*/ NumericOnly IS /*7N*/ comment_text	{}
+	-> COMMENT ON CAST "(" /*24L*/ Typename AS Typename ")" /*24L*/ IS /*7N*/ comment_text	{}
+}
+
+nonterm() comment_text {
+	-> Sconst	{}
+	-> NULL_P	{}
+}
+
+nonterm() SecLabelStmt {
+	-> SECURITY LABEL opt_provider ON object_type_any_name any_name IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON COLUMN any_name IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON object_type_name name IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON TYPE_P Typename IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON DOMAIN_P Typename IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON AGGREGATE aggregate_with_argtypes IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON FUNCTION function_with_argtypes IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON LARGE_P OBJECT_P /*12N*/ NumericOnly IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON PROCEDURE function_with_argtypes IS /*7N*/ security_label	{}
+	-> SECURITY LABEL opt_provider ON ROUTINE function_with_argtypes IS /*7N*/ security_label	{}
+}
+
+nonterm() opt_provider {
+	-> FOR NonReservedWord_or_Sconst	{}
+	-> empty	{}
+}
+
+nonterm() security_label {
+	-> Sconst	{}
+	-> NULL_P	{}
+}
+
+nonterm() FetchStmt {
+	-> FETCH fetch_args	{}
+	-> MOVE fetch_args	{}
+}
+
+nonterm() fetch_args {
+	-> cursor_name	{}
+	-> from_in cursor_name	{}
+	-> NEXT opt_from_in cursor_name	{}
+	-> PRIOR opt_from_in cursor_name	{}
+	-> FIRST_P opt_from_in cursor_name	{}
+	-> LAST_P opt_from_in cursor_name	{}
+	-> ABSOLUTE_P SignedIconst opt_from_in cursor_name	{}
+	-> RELATIVE_P SignedIconst opt_from_in cursor_name	{}
+	-> SignedIconst opt_from_in cursor_name	{}
+	-> ALL opt_from_in cursor_name	{}
+	-> FORWARD opt_from_in cursor_name	{}
+	-> FORWARD SignedIconst opt_from_in cursor_name	{}
+	-> FORWARD ALL opt_from_in cursor_name	{}
+	-> BACKWARD opt_from_in cursor_name	{}
+	-> BACKWARD SignedIconst opt_from_in cursor_name	{}
+	-> BACKWARD ALL opt_from_in cursor_name	{}
+}
+
+nonterm() from_in {
+	-> FROM	{}
+	-> IN_P /*9N*/	{}
+}
+
+nonterm() opt_from_in {
+	-> from_in	{}
+	-> empty	{}
+}
+
+nonterm() GrantStmt {
+	-> GRANT privileges ON privilege_target TO grantee_list opt_grant_grant_option opt_granted_by	{}
+}
+
+nonterm() RevokeStmt {
+	-> REVOKE privileges ON privilege_target FROM grantee_list opt_granted_by opt_drop_behavior	{}
+	-> REVOKE GRANT OPTION FOR privileges ON privilege_target FROM grantee_list opt_granted_by opt_drop_behavior	{}
+}
+
+nonterm() privileges {
+	-> privilege_list	{}
+	-> ALL	{}
+	-> ALL PRIVILEGES	{}
+	-> ALL "(" /*24L*/ columnList ")" /*24L*/	{}
+	-> ALL PRIVILEGES "(" /*24L*/ columnList ")" /*24L*/	{}
+}
+
+nonterm() privilege_list {
+	-> privilege	{}
+	-> privilege_list "," privilege	{}
+}
+
+nonterm() privilege {
+	-> SELECT opt_column_list	{}
+	-> REFERENCES opt_column_list	{}
+	-> CREATE opt_column_list	{}
+	-> ALTER SYSTEM_P	{}
+	-> ColId opt_column_list	{}
+}
+
+nonterm() parameter_name_list {
+	-> parameter_name	{}
+	-> parameter_name_list "," parameter_name	{}
+}
+
+nonterm() parameter_name {
+	-> ColId	{}
+	-> parameter_name "." /*26L*/ ColId	{}
+}
+
+nonterm() privilege_target {
+	-> qualified_name_list	{}
+	-> TABLE qualified_name_list	{}
+	-> SEQUENCE qualified_name_list	{}
+	-> FOREIGN DATA_P WRAPPER name_list	{}
+	-> FOREIGN SERVER name_list	{}
+	-> FUNCTION function_with_argtypes_list	{}
+	-> PROCEDURE function_with_argtypes_list	{}
+	-> ROUTINE function_with_argtypes_list	{}
+	-> DATABASE name_list	{}
+	-> DOMAIN_P any_name_list	{}
+	-> LANGUAGE name_list	{}
+	-> LARGE_P OBJECT_P /*12N*/ NumericOnly_list	{}
+	-> PARAMETER parameter_name_list	{}
+	-> SCHEMA name_list	{}
+	-> TABLESPACE name_list	{}
+	-> TYPE_P any_name_list	{}
+	-> ALL TABLES IN_P /*9N*/ SCHEMA name_list	{}
+	-> ALL SEQUENCES IN_P /*9N*/ SCHEMA name_list	{}
+	-> ALL FUNCTIONS IN_P /*9N*/ SCHEMA name_list	{}
+	-> ALL PROCEDURES IN_P /*9N*/ SCHEMA name_list	{}
+	-> ALL ROUTINES IN_P /*9N*/ SCHEMA name_list	{}
+}
+
+nonterm() grantee_list {
+	-> grantee	{}
+	-> grantee_list "," grantee	{}
+}
+
+nonterm() grantee {
+	-> RoleSpec	{}
+	-> GROUP_P RoleSpec	{}
+}
+
+nonterm() opt_grant_grant_option {
+	-> WITH /*13N*/ GRANT OPTION	{}
+	-> empty	{}
+}
+
+nonterm() GrantRoleStmt {
+	-> GRANT privilege_list TO role_list opt_granted_by	{}
+	-> GRANT privilege_list TO role_list WITH /*13N*/ grant_role_opt_list opt_granted_by	{}
+}
+
+nonterm() RevokeRoleStmt {
+	-> REVOKE privilege_list FROM role_list opt_granted_by opt_drop_behavior	{}
+	-> REVOKE ColId OPTION FOR privilege_list FROM role_list opt_granted_by opt_drop_behavior	{}
+}
+
+nonterm() grant_role_opt_list {
+	-> grant_role_opt_list "," grant_role_opt	{}
+	-> grant_role_opt	{}
+}
+
+nonterm() grant_role_opt {
+	-> ColLabel grant_role_opt_value	{}
+}
+
+nonterm() grant_role_opt_value {
+	-> OPTION	{}
+	-> TRUE_P	{}
+	-> FALSE_P	{}
+}
+
+nonterm() opt_granted_by {
+	-> GRANTED BY RoleSpec	{}
+	-> empty	{}
+}
+
+nonterm() AlterDefaultPrivilegesStmt {
+	-> ALTER DEFAULT PRIVILEGES DefACLOptionList DefACLAction	{}
+}
+
+nonterm() DefACLOptionList {
+	-> DefACLOptionList DefACLOption	{}
+	-> empty	{}
+}
+
+nonterm() DefACLOption {
+	-> IN_P /*9N*/ SCHEMA name_list	{}
+	-> FOR ROLE role_list	{}
+	-> FOR USER role_list	{}
+}
+
+nonterm() DefACLAction {
+	-> GRANT privileges ON defacl_privilege_target TO grantee_list opt_grant_grant_option	{}
+	-> REVOKE privileges ON defacl_privilege_target FROM grantee_list opt_drop_behavior	{}
+	-> REVOKE GRANT OPTION FOR privileges ON defacl_privilege_target FROM grantee_list opt_drop_behavior	{}
+}
+
+nonterm() defacl_privilege_target {
+	-> TABLES	{}
+	-> FUNCTIONS	{}
+	-> ROUTINES	{}
+	-> SEQUENCES	{}
+	-> TYPES_P	{}
+	-> SCHEMAS	{}
+}
+
+nonterm() IndexStmt {
+	-> CREATE opt_unique INDEX opt_concurrently opt_single_name ON relation_expr access_method_clause "(" /*24L*/ index_params ")" /*24L*/ opt_include opt_unique_null_treatment opt_reloptions OptTableSpace where_clause	{}
+	-> CREATE opt_unique INDEX opt_concurrently IF_P NOT /*6R*/ EXISTS name ON relation_expr access_method_clause "(" /*24L*/ index_params ")" /*24L*/ opt_include opt_unique_null_treatment opt_reloptions OptTableSpace where_clause	{}
+}
+
+nonterm() opt_unique {
+	-> UNIQUE /*11N*/	{}
+	-> empty	{}
+}
+
+nonterm() access_method_clause {
+	-> USING name	{}
+	-> empty	{}
+}
+
+nonterm() index_params {
+	-> index_elem	{}
+	-> index_params "," index_elem	{}
+}
+
+nonterm() index_elem_options {
+	-> opt_collate opt_qualified_name opt_asc_desc opt_nulls_order	{}
+	-> opt_collate any_name reloptions opt_asc_desc opt_nulls_order	{}
+}
+
+nonterm() index_elem {
+	-> ColId index_elem_options	{}
+	-> func_expr_windowless index_elem_options	{}
+	-> "(" /*24L*/ a_expr ")" /*24L*/ index_elem_options	{}
+}
+
+nonterm() opt_include {
+	-> INCLUDE "(" /*24L*/ index_including_params ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() index_including_params {
+	-> index_elem	{}
+	-> index_including_params "," index_elem	{}
+}
+
+nonterm() opt_collate {
+	-> COLLATE /*21L*/ any_name	{}
+	-> empty	{}
+}
+
+nonterm() opt_asc_desc {
+	-> ASC	{}
+	-> DESC	{}
+	-> empty	{}
+}
+
+nonterm() opt_nulls_order {
+	-> NULLS_LA FIRST_P	{}
+	-> NULLS_LA LAST_P	{}
+	-> empty	{}
+}
+
+nonterm() CreateFunctionStmt {
+	-> CREATE opt_or_replace FUNCTION func_name func_args_with_defaults RETURNS func_return opt_createfunc_opt_list opt_routine_body	{}
+	-> CREATE opt_or_replace FUNCTION func_name func_args_with_defaults RETURNS TABLE "(" /*24L*/ table_func_column_list ")" /*24L*/ opt_createfunc_opt_list opt_routine_body	{}
+	-> CREATE opt_or_replace FUNCTION func_name func_args_with_defaults opt_createfunc_opt_list opt_routine_body	{}
+	-> CREATE opt_or_replace PROCEDURE func_name func_args_with_defaults opt_createfunc_opt_list opt_routine_body	{}
+}
+
+nonterm() opt_or_replace {
+	-> OR /*4L*/ REPLACE	{}
+	-> empty	{}
+}
+
+nonterm() func_args {
+	-> "(" /*24L*/ func_args_list ")" /*24L*/	{}
+	-> "(" /*24L*/ ")" /*24L*/	{}
+}
+
+nonterm() func_args_list {
+	-> func_arg	{}
+	-> func_args_list "," func_arg	{}
+}
+
+nonterm() function_with_argtypes_list {
+	-> function_with_argtypes	{}
+	-> function_with_argtypes_list "," function_with_argtypes	{}
+}
+
+nonterm() function_with_argtypes {
+	-> func_name func_args	{}
+	-> type_func_name_keyword	{}
+	-> ColId	{}
+	-> ColId indirection	{}
+}
+
+nonterm() func_args_with_defaults {
+	-> "(" /*24L*/ func_args_with_defaults_list ")" /*24L*/	{}
+	-> "(" /*24L*/ ")" /*24L*/	{}
+}
+
+nonterm() func_args_with_defaults_list {
+	-> func_arg_with_default	{}
+	-> func_args_with_defaults_list "," func_arg_with_default	{}
+}
+
+nonterm() func_arg {
+	-> arg_class param_name func_type	{}
+	-> param_name arg_class func_type	{}
+	-> param_name func_type	{}
+	-> arg_class func_type	{}
+	-> func_type	{}
+}
+
+nonterm() arg_class {
+	-> IN_P /*9N*/	{}
+	-> OUT_P	{}
+	-> INOUT	{}
+	-> IN_P /*9N*/ OUT_P	{}
+	-> VARIADIC	{}
+}
+
+nonterm() param_name {
+	-> type_function_name	{}
+}
+
+nonterm() func_return {
+	-> func_type	{}
+}
+
+nonterm() func_type {
+	-> Typename	{}
+	-> type_function_name attrs "%" /*18L*/ TYPE_P	{}
+	-> SETOF type_function_name attrs "%" /*18L*/ TYPE_P	{}
+}
+
+nonterm() func_arg_with_default {
+	-> func_arg	{}
+	-> func_arg DEFAULT a_expr	{}
+	-> func_arg "=" /*8N*/ a_expr	{}
+}
+
+nonterm() aggr_arg {
+	-> func_arg	{}
+}
+
+nonterm() aggr_args {
+	-> "(" /*24L*/ "*" /*18L*/ ")" /*24L*/	{}
+	-> "(" /*24L*/ aggr_args_list ")" /*24L*/	{}
+	-> "(" /*24L*/ ORDER BY aggr_args_list ")" /*24L*/	{}
+	-> "(" /*24L*/ aggr_args_list ORDER BY aggr_args_list ")" /*24L*/	{}
+}
+
+nonterm() aggr_args_list {
+	-> aggr_arg	{}
+	-> aggr_args_list "," aggr_arg	{}
+}
+
+nonterm() aggregate_with_argtypes {
+	-> func_name aggr_args	{}
+}
+
+nonterm() aggregate_with_argtypes_list {
+	-> aggregate_with_argtypes	{}
+	-> aggregate_with_argtypes_list "," aggregate_with_argtypes	{}
+}
+
+nonterm() opt_createfunc_opt_list {
+	-> createfunc_opt_list	{}
+	-> empty	{}
+}
+
+nonterm() createfunc_opt_list {
+	-> createfunc_opt_item	{}
+	-> createfunc_opt_list createfunc_opt_item	{}
+}
+
+nonterm() common_func_opt_item {
+	-> CALLED ON NULL_P INPUT_P	{}
+	-> RETURNS NULL_P ON NULL_P INPUT_P	{}
+	-> STRICT_P	{}
+	-> IMMUTABLE	{}
+	-> STABLE	{}
+	-> VOLATILE	{}
+	-> EXTERNAL SECURITY DEFINER	{}
+	-> EXTERNAL SECURITY INVOKER	{}
+	-> SECURITY DEFINER	{}
+	-> SECURITY INVOKER	{}
+	-> LEAKPROOF	{}
+	-> NOT /*6R*/ LEAKPROOF	{}
+	-> COST NumericOnly	{}
+	-> ROWS /*15N*/ NumericOnly	{}
+	-> SUPPORT any_name	{}
+	-> FunctionSetResetClause	{}
+	-> PARALLEL ColId	{}
+}
+
+nonterm() createfunc_opt_item {
+	-> AS func_as	{}
+	-> LANGUAGE NonReservedWord_or_Sconst	{}
+	-> TRANSFORM transform_type_list	{}
+	-> WINDOW	{}
+	-> common_func_opt_item	{}
+}
+
+nonterm() func_as {
+	-> Sconst	{}
+	-> Sconst "," Sconst	{}
+}
+
+nonterm() ReturnStmt {
+	-> RETURN a_expr	{}
+}
+
+nonterm() opt_routine_body {
+	-> ReturnStmt	{}
+	-> BEGIN_P ATOMIC routine_body_stmt_list END_P	{}
+	-> empty	{}
+}
+
+nonterm() routine_body_stmt_list {
+	-> routine_body_stmt_list routine_body_stmt ";"	{}
+	-> empty	{}
+}
+
+nonterm() routine_body_stmt {
+	-> stmt	{}
+	-> ReturnStmt	{}
+}
+
+nonterm() transform_type_list {
+	-> FOR TYPE_P Typename	{}
+	-> transform_type_list "," FOR TYPE_P Typename	{}
+}
+
+nonterm() opt_definition {
+	-> WITH /*13N*/ definition	{}
+	-> empty	{}
+}
+
+nonterm() table_func_column {
+	-> param_name func_type	{}
+}
+
+nonterm() table_func_column_list {
+	-> table_func_column	{}
+	-> table_func_column_list "," table_func_column	{}
+}
+
+nonterm() AlterFunctionStmt {
+	-> ALTER FUNCTION function_with_argtypes alterfunc_opt_list opt_restrict	{}
+	-> ALTER PROCEDURE function_with_argtypes alterfunc_opt_list opt_restrict	{}
+	-> ALTER ROUTINE function_with_argtypes alterfunc_opt_list opt_restrict	{}
+}
+
+nonterm() alterfunc_opt_list {
+	-> common_func_opt_item	{}
+	-> alterfunc_opt_list common_func_opt_item	{}
+}
+
+nonterm() opt_restrict {
+	-> RESTRICT	{}
+	-> empty	{}
+}
+
+nonterm() RemoveFuncStmt {
+	-> DROP FUNCTION function_with_argtypes_list opt_drop_behavior	{}
+	-> DROP FUNCTION IF_P EXISTS function_with_argtypes_list opt_drop_behavior	{}
+	-> DROP PROCEDURE function_with_argtypes_list opt_drop_behavior	{}
+	-> DROP PROCEDURE IF_P EXISTS function_with_argtypes_list opt_drop_behavior	{}
+	-> DROP ROUTINE function_with_argtypes_list opt_drop_behavior	{}
+	-> DROP ROUTINE IF_P EXISTS function_with_argtypes_list opt_drop_behavior	{}
+}
+
+nonterm() RemoveAggrStmt {
+	-> DROP AGGREGATE aggregate_with_argtypes_list opt_drop_behavior	{}
+	-> DROP AGGREGATE IF_P EXISTS aggregate_with_argtypes_list opt_drop_behavior	{}
+}
+
+nonterm() RemoveOperStmt {
+	-> DROP OPERATOR /*16L*/ operator_with_argtypes_list opt_drop_behavior	{}
+	-> DROP OPERATOR /*16L*/ IF_P EXISTS operator_with_argtypes_list opt_drop_behavior	{}
+}
+
+nonterm() oper_argtypes {
+	-> "(" /*24L*/ Typename ")" /*24L*/	{}
+	-> "(" /*24L*/ Typename "," Typename ")" /*24L*/	{}
+	-> "(" /*24L*/ NONE "," Typename ")" /*24L*/	{}
+	-> "(" /*24L*/ Typename "," NONE ")" /*24L*/	{}
+}
+
+nonterm() any_operator {
+	-> all_Op	{}
+	-> ColId "." /*26L*/ any_operator	{}
+}
+
+nonterm() operator_with_argtypes_list {
+	-> operator_with_argtypes	{}
+	-> operator_with_argtypes_list "," operator_with_argtypes	{}
+}
+
+nonterm() operator_with_argtypes {
+	-> any_operator oper_argtypes	{}
+}
+
+nonterm() DoStmt {
+	-> DO dostmt_opt_list	{}
+}
+
+nonterm() dostmt_opt_list {
+	-> dostmt_opt_item	{}
+	-> dostmt_opt_list dostmt_opt_item	{}
+}
+
+nonterm() dostmt_opt_item {
+	-> Sconst	{}
+	-> LANGUAGE NonReservedWord_or_Sconst	{}
+}
+
+nonterm() CreateCastStmt {
+	-> CREATE CAST "(" /*24L*/ Typename AS Typename ")" /*24L*/ WITH /*13N*/ FUNCTION function_with_argtypes cast_context	{}
+	-> CREATE CAST "(" /*24L*/ Typename AS Typename ")" /*24L*/ WITHOUT /*13N*/ FUNCTION cast_context	{}
+	-> CREATE CAST "(" /*24L*/ Typename AS Typename ")" /*24L*/ WITH /*13N*/ INOUT cast_context	{}
+}
+
+nonterm() cast_context {
+	-> AS IMPLICIT_P	{}
+	-> AS ASSIGNMENT	{}
+	-> empty	{}
+}
+
+nonterm() DropCastStmt {
+	-> DROP CAST opt_if_exists "(" /*24L*/ Typename AS Typename ")" /*24L*/ opt_drop_behavior	{}
+}
+
+nonterm() opt_if_exists {
+	-> IF_P EXISTS	{}
+	-> empty	{}
+}
+
+nonterm() CreateTransformStmt {
+	-> CREATE opt_or_replace TRANSFORM FOR Typename LANGUAGE name "(" /*24L*/ transform_element_list ")" /*24L*/	{}
+}
+
+nonterm() transform_element_list {
+	-> FROM SQL_P WITH /*13N*/ FUNCTION function_with_argtypes "," TO SQL_P WITH /*13N*/ FUNCTION function_with_argtypes	{}
+	-> TO SQL_P WITH /*13N*/ FUNCTION function_with_argtypes "," FROM SQL_P WITH /*13N*/ FUNCTION function_with_argtypes	{}
+	-> FROM SQL_P WITH /*13N*/ FUNCTION function_with_argtypes	{}
+	-> TO SQL_P WITH /*13N*/ FUNCTION function_with_argtypes	{}
+}
+
+nonterm() DropTransformStmt {
+	-> DROP TRANSFORM opt_if_exists FOR Typename LANGUAGE name opt_drop_behavior	{}
+}
+
+nonterm() ReindexStmt {
+	-> REINDEX opt_reindex_option_list reindex_target_relation opt_concurrently qualified_name	{}
+	-> REINDEX opt_reindex_option_list SCHEMA opt_concurrently name	{}
+	-> REINDEX opt_reindex_option_list reindex_target_all opt_concurrently opt_single_name	{}
+}
+
+nonterm() reindex_target_relation {
+	-> INDEX	{}
+	-> TABLE	{}
+}
+
+nonterm() reindex_target_all {
+	-> SYSTEM_P	{}
+	-> DATABASE	{}
+}
+
+nonterm() opt_reindex_option_list {
+	-> "(" /*24L*/ utility_option_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() AlterTblSpcStmt {
+	-> ALTER TABLESPACE name SET /*1N*/ reloptions	{}
+	-> ALTER TABLESPACE name RESET reloptions	{}
+}
+
+nonterm() RenameStmt {
+	-> ALTER AGGREGATE aggregate_with_argtypes RENAME TO name	{}
+	-> ALTER COLLATION any_name RENAME TO name	{}
+	-> ALTER CONVERSION_P any_name RENAME TO name	{}
+	-> ALTER DATABASE name RENAME TO name	{}
+	-> ALTER DOMAIN_P any_name RENAME TO name	{}
+	-> ALTER DOMAIN_P any_name RENAME CONSTRAINT name TO name	{}
+	-> ALTER FOREIGN DATA_P WRAPPER name RENAME TO name	{}
+	-> ALTER FUNCTION function_with_argtypes RENAME TO name	{}
+	-> ALTER GROUP_P RoleId RENAME TO RoleId	{}
+	-> ALTER opt_procedural LANGUAGE name RENAME TO name	{}
+	-> ALTER OPERATOR /*16L*/ CLASS any_name USING name RENAME TO name	{}
+	-> ALTER OPERATOR /*16L*/ FAMILY any_name USING name RENAME TO name	{}
+	-> ALTER POLICY name ON qualified_name RENAME TO name	{}
+	-> ALTER POLICY IF_P EXISTS name ON qualified_name RENAME TO name	{}
+	-> ALTER PROCEDURE function_with_argtypes RENAME TO name	{}
+	-> ALTER PUBLICATION name RENAME TO name	{}
+	-> ALTER ROUTINE function_with_argtypes RENAME TO name	{}
+	-> ALTER SCHEMA name RENAME TO name	{}
+	-> ALTER SERVER name RENAME TO name	{}
+	-> ALTER SUBSCRIPTION name RENAME TO name	{}
+	-> ALTER TABLE relation_expr RENAME TO name	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr RENAME TO name	{}
+	-> ALTER SEQUENCE qualified_name RENAME TO name	{}
+	-> ALTER SEQUENCE IF_P EXISTS qualified_name RENAME TO name	{}
+	-> ALTER VIEW qualified_name RENAME TO name	{}
+	-> ALTER VIEW IF_P EXISTS qualified_name RENAME TO name	{}
+	-> ALTER MATERIALIZED VIEW qualified_name RENAME TO name	{}
+	-> ALTER MATERIALIZED VIEW IF_P EXISTS qualified_name RENAME TO name	{}
+	-> ALTER INDEX qualified_name RENAME TO name	{}
+	-> ALTER INDEX IF_P EXISTS qualified_name RENAME TO name	{}
+	-> ALTER FOREIGN TABLE relation_expr RENAME TO name	{}
+	-> ALTER FOREIGN TABLE IF_P EXISTS relation_expr RENAME TO name	{}
+	-> ALTER TABLE relation_expr RENAME opt_column name TO name	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr RENAME opt_column name TO name	{}
+	-> ALTER VIEW qualified_name RENAME opt_column name TO name	{}
+	-> ALTER VIEW IF_P EXISTS qualified_name RENAME opt_column name TO name	{}
+	-> ALTER MATERIALIZED VIEW qualified_name RENAME opt_column name TO name	{}
+	-> ALTER MATERIALIZED VIEW IF_P EXISTS qualified_name RENAME opt_column name TO name	{}
+	-> ALTER TABLE relation_expr RENAME CONSTRAINT name TO name	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr RENAME CONSTRAINT name TO name	{}
+	-> ALTER FOREIGN TABLE relation_expr RENAME opt_column name TO name	{}
+	-> ALTER FOREIGN TABLE IF_P EXISTS relation_expr RENAME opt_column name TO name	{}
+	-> ALTER RULE name ON qualified_name RENAME TO name	{}
+	-> ALTER TRIGGER name ON qualified_name RENAME TO name	{}
+	-> ALTER EVENT TRIGGER name RENAME TO name	{}
+	-> ALTER ROLE RoleId RENAME TO RoleId	{}
+	-> ALTER USER RoleId RENAME TO RoleId	{}
+	-> ALTER TABLESPACE name RENAME TO name	{}
+	-> ALTER STATISTICS any_name RENAME TO name	{}
+	-> ALTER TEXT_P SEARCH PARSER any_name RENAME TO name	{}
+	-> ALTER TEXT_P SEARCH DICTIONARY any_name RENAME TO name	{}
+	-> ALTER TEXT_P SEARCH TEMPLATE any_name RENAME TO name	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name RENAME TO name	{}
+	-> ALTER TYPE_P any_name RENAME TO name	{}
+	-> ALTER TYPE_P any_name RENAME ATTRIBUTE name TO name opt_drop_behavior	{}
+}
+
+nonterm() opt_column {
+	-> COLUMN	{}
+	-> empty	{}
+}
+
+nonterm() opt_set_data {
+	-> SET /*1N*/ DATA_P	{}
+	-> empty	{}
+}
+
+nonterm() AlterObjectDependsStmt {
+	-> ALTER FUNCTION function_with_argtypes opt_no DEPENDS ON EXTENSION name	{}
+	-> ALTER PROCEDURE function_with_argtypes opt_no DEPENDS ON EXTENSION name	{}
+	-> ALTER ROUTINE function_with_argtypes opt_no DEPENDS ON EXTENSION name	{}
+	-> ALTER TRIGGER name ON qualified_name opt_no DEPENDS ON EXTENSION name	{}
+	-> ALTER MATERIALIZED VIEW qualified_name opt_no DEPENDS ON EXTENSION name	{}
+	-> ALTER INDEX qualified_name opt_no DEPENDS ON EXTENSION name	{}
+}
+
+nonterm() opt_no {
+	-> NO	{}
+	-> empty	{}
+}
+
+nonterm() AlterObjectSchemaStmt {
+	-> ALTER AGGREGATE aggregate_with_argtypes SET /*1N*/ SCHEMA name	{}
+	-> ALTER COLLATION any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER CONVERSION_P any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER DOMAIN_P any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER EXTENSION name SET /*1N*/ SCHEMA name	{}
+	-> ALTER FUNCTION function_with_argtypes SET /*1N*/ SCHEMA name	{}
+	-> ALTER OPERATOR /*16L*/ operator_with_argtypes SET /*1N*/ SCHEMA name	{}
+	-> ALTER OPERATOR /*16L*/ CLASS any_name USING name SET /*1N*/ SCHEMA name	{}
+	-> ALTER OPERATOR /*16L*/ FAMILY any_name USING name SET /*1N*/ SCHEMA name	{}
+	-> ALTER PROCEDURE function_with_argtypes SET /*1N*/ SCHEMA name	{}
+	-> ALTER ROUTINE function_with_argtypes SET /*1N*/ SCHEMA name	{}
+	-> ALTER TABLE relation_expr SET /*1N*/ SCHEMA name	{}
+	-> ALTER TABLE IF_P EXISTS relation_expr SET /*1N*/ SCHEMA name	{}
+	-> ALTER STATISTICS any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER TEXT_P SEARCH PARSER any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER TEXT_P SEARCH DICTIONARY any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER TEXT_P SEARCH TEMPLATE any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER SEQUENCE qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER SEQUENCE IF_P EXISTS qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER VIEW qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER VIEW IF_P EXISTS qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER MATERIALIZED VIEW qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER MATERIALIZED VIEW IF_P EXISTS qualified_name SET /*1N*/ SCHEMA name	{}
+	-> ALTER FOREIGN TABLE relation_expr SET /*1N*/ SCHEMA name	{}
+	-> ALTER FOREIGN TABLE IF_P EXISTS relation_expr SET /*1N*/ SCHEMA name	{}
+	-> ALTER TYPE_P any_name SET /*1N*/ SCHEMA name	{}
+}
+
+nonterm() AlterOperatorStmt {
+	-> ALTER OPERATOR /*16L*/ operator_with_argtypes SET /*1N*/ "(" /*24L*/ operator_def_list ")" /*24L*/	{}
+}
+
+nonterm() operator_def_list {
+	-> operator_def_elem	{}
+	-> operator_def_list "," operator_def_elem	{}
+}
+
+nonterm() operator_def_elem {
+	-> ColLabel "=" /*8N*/ NONE	{}
+	-> ColLabel "=" /*8N*/ operator_def_arg	{}
+}
+
+nonterm() operator_def_arg {
+	-> func_type	{}
+	-> reserved_keyword	{}
+	-> qual_all_Op	{}
+	-> NumericOnly	{}
+	-> Sconst	{}
+}
+
+nonterm() AlterTypeStmt {
+	-> ALTER TYPE_P any_name SET /*1N*/ "(" /*24L*/ operator_def_list ")" /*24L*/	{}
+}
+
+nonterm() AlterOwnerStmt {
+	-> ALTER AGGREGATE aggregate_with_argtypes OWNER TO RoleSpec	{}
+	-> ALTER COLLATION any_name OWNER TO RoleSpec	{}
+	-> ALTER CONVERSION_P any_name OWNER TO RoleSpec	{}
+	-> ALTER DATABASE name OWNER TO RoleSpec	{}
+	-> ALTER DOMAIN_P any_name OWNER TO RoleSpec	{}
+	-> ALTER FUNCTION function_with_argtypes OWNER TO RoleSpec	{}
+	-> ALTER opt_procedural LANGUAGE name OWNER TO RoleSpec	{}
+	-> ALTER LARGE_P OBJECT_P /*12N*/ NumericOnly OWNER TO RoleSpec	{}
+	-> ALTER OPERATOR /*16L*/ operator_with_argtypes OWNER TO RoleSpec	{}
+	-> ALTER OPERATOR /*16L*/ CLASS any_name USING name OWNER TO RoleSpec	{}
+	-> ALTER OPERATOR /*16L*/ FAMILY any_name USING name OWNER TO RoleSpec	{}
+	-> ALTER PROCEDURE function_with_argtypes OWNER TO RoleSpec	{}
+	-> ALTER ROUTINE function_with_argtypes OWNER TO RoleSpec	{}
+	-> ALTER SCHEMA name OWNER TO RoleSpec	{}
+	-> ALTER TYPE_P any_name OWNER TO RoleSpec	{}
+	-> ALTER TABLESPACE name OWNER TO RoleSpec	{}
+	-> ALTER STATISTICS any_name OWNER TO RoleSpec	{}
+	-> ALTER TEXT_P SEARCH DICTIONARY any_name OWNER TO RoleSpec	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name OWNER TO RoleSpec	{}
+	-> ALTER FOREIGN DATA_P WRAPPER name OWNER TO RoleSpec	{}
+	-> ALTER SERVER name OWNER TO RoleSpec	{}
+	-> ALTER EVENT TRIGGER name OWNER TO RoleSpec	{}
+	-> ALTER PUBLICATION name OWNER TO RoleSpec	{}
+	-> ALTER SUBSCRIPTION name OWNER TO RoleSpec	{}
+}
+
+nonterm() CreatePublicationStmt {
+	-> CREATE PUBLICATION name opt_definition	{}
+	-> CREATE PUBLICATION name FOR ALL TABLES opt_definition	{}
+	-> CREATE PUBLICATION name FOR pub_obj_list opt_definition	{}
+}
+
+nonterm() PublicationObjSpec {
+	-> TABLE relation_expr opt_column_list OptWhereClause	{}
+	-> TABLES IN_P /*9N*/ SCHEMA ColId	{}
+	-> TABLES IN_P /*9N*/ SCHEMA CURRENT_SCHEMA	{}
+	-> ColId opt_column_list OptWhereClause	{}
+	-> ColId indirection opt_column_list OptWhereClause	{}
+	-> extended_relation_expr opt_column_list OptWhereClause	{}
+	-> CURRENT_SCHEMA	{}
+}
+
+nonterm() pub_obj_list {
+	-> PublicationObjSpec	{}
+	-> pub_obj_list "," PublicationObjSpec	{}
+}
+
+nonterm() AlterPublicationStmt {
+	-> ALTER PUBLICATION name SET /*1N*/ definition	{}
+	-> ALTER PUBLICATION name ADD_P pub_obj_list	{}
+	-> ALTER PUBLICATION name SET /*1N*/ pub_obj_list	{}
+	-> ALTER PUBLICATION name DROP pub_obj_list	{}
+}
+
+nonterm() CreateSubscriptionStmt {
+	-> CREATE SUBSCRIPTION name CONNECTION Sconst PUBLICATION name_list opt_definition	{}
+}
+
+nonterm() AlterSubscriptionStmt {
+	-> ALTER SUBSCRIPTION name SET /*1N*/ definition	{}
+	-> ALTER SUBSCRIPTION name CONNECTION Sconst	{}
+	-> ALTER SUBSCRIPTION name REFRESH PUBLICATION opt_definition	{}
+	-> ALTER SUBSCRIPTION name ADD_P PUBLICATION name_list opt_definition	{}
+	-> ALTER SUBSCRIPTION name DROP PUBLICATION name_list opt_definition	{}
+	-> ALTER SUBSCRIPTION name SET /*1N*/ PUBLICATION name_list opt_definition	{}
+	-> ALTER SUBSCRIPTION name ENABLE_P	{}
+	-> ALTER SUBSCRIPTION name DISABLE_P	{}
+	-> ALTER SUBSCRIPTION name SKIP definition	{}
+}
+
+nonterm() DropSubscriptionStmt {
+	-> DROP SUBSCRIPTION name opt_drop_behavior	{}
+	-> DROP SUBSCRIPTION IF_P EXISTS name opt_drop_behavior	{}
+}
+
+nonterm() RuleStmt {
+	-> CREATE opt_or_replace RULE name AS ON event TO qualified_name where_clause DO opt_instead RuleActionList	{}
+}
+
+nonterm() RuleActionList {
+	-> NOTHING	{}
+	-> RuleActionStmt	{}
+	-> "(" /*24L*/ RuleActionMulti ")" /*24L*/	{}
+}
+
+nonterm() RuleActionMulti {
+	-> RuleActionMulti ";" RuleActionStmtOrEmpty	{}
+	-> RuleActionStmtOrEmpty	{}
+}
+
+nonterm() RuleActionStmt {
+	-> SelectStmt	{}
+	-> InsertStmt	{}
+	-> UpdateStmt	{}
+	-> DeleteStmt	{}
+	-> NotifyStmt	{}
+}
+
+nonterm() RuleActionStmtOrEmpty {
+	-> RuleActionStmt	{}
+	-> empty	{}
+}
+
+nonterm() event {
+	-> SELECT	{}
+	-> UPDATE	{}
+	-> DELETE_P	{}
+	-> INSERT	{}
+}
+
+nonterm() opt_instead {
+	-> INSTEAD	{}
+	-> ALSO	{}
+	-> empty	{}
+}
+
+nonterm() NotifyStmt {
+	-> NOTIFY ColId notify_payload	{}
+}
+
+nonterm() notify_payload {
+	-> "," Sconst	{}
+	-> empty	{}
+}
+
+nonterm() ListenStmt {
+	-> LISTEN ColId	{}
+}
+
+nonterm() UnlistenStmt {
+	-> UNLISTEN ColId	{}
+	-> UNLISTEN "*" /*18L*/	{}
+}
+
+nonterm() TransactionStmt {
+	-> ABORT_P opt_transaction opt_transaction_chain	{}
+	-> START TRANSACTION transaction_mode_list_or_empty	{}
+	-> COMMIT opt_transaction opt_transaction_chain	{}
+	-> ROLLBACK opt_transaction opt_transaction_chain	{}
+	-> SAVEPOINT ColId	{}
+	-> RELEASE SAVEPOINT ColId	{}
+	-> RELEASE ColId	{}
+	-> ROLLBACK opt_transaction TO SAVEPOINT ColId	{}
+	-> ROLLBACK opt_transaction TO ColId	{}
+	-> PREPARE TRANSACTION Sconst	{}
+	-> COMMIT PREPARED Sconst	{}
+	-> ROLLBACK PREPARED Sconst	{}
+}
+
+nonterm() TransactionStmtLegacy {
+	-> BEGIN_P opt_transaction transaction_mode_list_or_empty	{}
+	-> END_P opt_transaction opt_transaction_chain	{}
+}
+
+nonterm() opt_transaction {
+	-> WORK	{}
+	-> TRANSACTION	{}
+	-> empty	{}
+}
+
+nonterm() transaction_mode_item {
+	-> ISOLATION LEVEL iso_level	{}
+	-> READ ONLY	{}
+	-> READ WRITE	{}
+	-> DEFERRABLE	{}
+	-> NOT /*6R*/ DEFERRABLE	{}
+}
+
+nonterm() transaction_mode_list {
+	-> transaction_mode_item	{}
+	-> transaction_mode_list "," transaction_mode_item	{}
+	-> transaction_mode_list transaction_mode_item	{}
+}
+
+nonterm() transaction_mode_list_or_empty {
+	-> transaction_mode_list	{}
+	-> empty	{}
+}
+
+nonterm() opt_transaction_chain {
+	-> AND /*5L*/ CHAIN	{}
+	-> AND /*5L*/ NO CHAIN	{}
+	-> empty	{}
+}
+
+nonterm() ViewStmt {
+	-> CREATE OptTemp VIEW qualified_name opt_column_list opt_reloptions AS SelectStmt opt_check_option	{}
+	-> CREATE OR /*4L*/ REPLACE OptTemp VIEW qualified_name opt_column_list opt_reloptions AS SelectStmt opt_check_option	{}
+	-> CREATE OptTemp RECURSIVE VIEW qualified_name "(" /*24L*/ columnList ")" /*24L*/ opt_reloptions AS SelectStmt opt_check_option	{}
+	-> CREATE OR /*4L*/ REPLACE OptTemp RECURSIVE VIEW qualified_name "(" /*24L*/ columnList ")" /*24L*/ opt_reloptions AS SelectStmt opt_check_option	{}
+}
+
+nonterm() opt_check_option {
+	-> WITH /*13N*/ CHECK OPTION	{}
+	-> WITH /*13N*/ CASCADED CHECK OPTION	{}
+	-> WITH /*13N*/ LOCAL CHECK OPTION	{}
+	-> empty	{}
+}
+
+nonterm() LoadStmt {
+	-> LOAD file_name	{}
+}
+
+nonterm() CreatedbStmt {
+	-> CREATE DATABASE name opt_with createdb_opt_list	{}
+}
+
+nonterm() createdb_opt_list {
+	-> createdb_opt_items	{}
+	-> empty	{}
+}
+
+nonterm() createdb_opt_items {
+	-> createdb_opt_item	{}
+	-> createdb_opt_items createdb_opt_item	{}
+}
+
+nonterm() createdb_opt_item {
+	-> createdb_opt_name opt_equal NumericOnly	{}
+	-> createdb_opt_name opt_equal opt_boolean_or_string	{}
+	-> createdb_opt_name opt_equal DEFAULT	{}
+}
+
+nonterm() createdb_opt_name {
+	-> IDENT /*15N*/	{}
+	-> CONNECTION LIMIT	{}
+	-> ENCODING	{}
+	-> LOCATION	{}
+	-> OWNER	{}
+	-> TABLESPACE	{}
+	-> TEMPLATE	{}
+}
+
+nonterm() opt_equal {
+	-> "=" /*8N*/	{}
+	-> empty	{}
+}
+
+nonterm() AlterDatabaseStmt {
+	-> ALTER DATABASE name WITH /*13N*/ createdb_opt_list	{}
+	-> ALTER DATABASE name createdb_opt_list	{}
+	-> ALTER DATABASE name SET /*1N*/ TABLESPACE name	{}
+	-> ALTER DATABASE name REFRESH COLLATION VERSION_P	{}
+}
+
+nonterm() AlterDatabaseSetStmt {
+	-> ALTER DATABASE name SetResetClause	{}
+}
+
+nonterm() DropdbStmt {
+	-> DROP DATABASE name	{}
+	-> DROP DATABASE IF_P EXISTS name	{}
+	-> DROP DATABASE name opt_with "(" /*24L*/ drop_option_list ")" /*24L*/	{}
+	-> DROP DATABASE IF_P EXISTS name opt_with "(" /*24L*/ drop_option_list ")" /*24L*/	{}
+}
+
+nonterm() drop_option_list {
+	-> drop_option	{}
+	-> drop_option_list "," drop_option	{}
+}
+
+nonterm() drop_option {
+	-> FORCE	{}
+}
+
+nonterm() AlterCollationStmt {
+	-> ALTER COLLATION any_name REFRESH VERSION_P	{}
+}
+
+nonterm() AlterSystemStmt {
+	-> ALTER SYSTEM_P SET /*1N*/ generic_set	{}
+	-> ALTER SYSTEM_P RESET generic_reset	{}
+}
+
+nonterm() CreateDomainStmt {
+	-> CREATE DOMAIN_P any_name opt_as Typename ColQualList	{}
+}
+
+nonterm() AlterDomainStmt {
+	-> ALTER DOMAIN_P any_name alter_column_default	{}
+	-> ALTER DOMAIN_P any_name DROP NOT /*6R*/ NULL_P	{}
+	-> ALTER DOMAIN_P any_name SET /*1N*/ NOT /*6R*/ NULL_P	{}
+	-> ALTER DOMAIN_P any_name ADD_P TableConstraint	{}
+	-> ALTER DOMAIN_P any_name DROP CONSTRAINT name opt_drop_behavior	{}
+	-> ALTER DOMAIN_P any_name DROP CONSTRAINT IF_P EXISTS name opt_drop_behavior	{}
+	-> ALTER DOMAIN_P any_name VALIDATE CONSTRAINT name	{}
+}
+
+nonterm() opt_as {
+	-> AS	{}
+	-> empty	{}
+}
+
+nonterm() AlterTSDictionaryStmt {
+	-> ALTER TEXT_P SEARCH DICTIONARY any_name definition	{}
+}
+
+nonterm() AlterTSConfigurationStmt {
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name ADD_P MAPPING FOR name_list any_with any_name_list	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name ALTER MAPPING FOR name_list any_with any_name_list	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name ALTER MAPPING REPLACE any_name any_with any_name	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name ALTER MAPPING FOR name_list REPLACE any_name any_with any_name	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name DROP MAPPING FOR name_list	{}
+	-> ALTER TEXT_P SEARCH CONFIGURATION any_name DROP MAPPING IF_P EXISTS FOR name_list	{}
+}
+
+nonterm() any_with {
+	-> WITH /*13N*/	{}
+	-> WITH_LA	{}
+}
+
+nonterm() CreateConversionStmt {
+	-> CREATE opt_default CONVERSION_P any_name FOR Sconst TO Sconst FROM any_name	{}
+}
+
+nonterm() ClusterStmt {
+	-> CLUSTER opt_verbose qualified_name cluster_index_specification	{}
+	-> CLUSTER "(" /*24L*/ utility_option_list ")" /*24L*/ qualified_name cluster_index_specification	{}
+	-> CLUSTER opt_verbose	{}
+	-> CLUSTER opt_verbose name ON qualified_name	{}
+}
+
+nonterm() cluster_index_specification {
+	-> USING name	{}
+	-> empty	{}
+}
+
+nonterm() VacuumStmt {
+	-> VACUUM opt_full opt_freeze opt_verbose opt_analyze opt_vacuum_relation_list	{}
+	-> VACUUM "(" /*24L*/ utility_option_list ")" /*24L*/ opt_vacuum_relation_list	{}
+}
+
+nonterm() AnalyzeStmt {
+	-> analyze_keyword opt_verbose opt_vacuum_relation_list	{}
+	-> analyze_keyword "(" /*24L*/ utility_option_list ")" /*24L*/ opt_vacuum_relation_list	{}
+}
+
+nonterm() utility_option_list {
+	-> utility_option_elem	{}
+	-> utility_option_list "," utility_option_elem	{}
+}
+
+nonterm() analyze_keyword {
+	-> ANALYZE	{}
+	-> ANALYSE	{}
+}
+
+nonterm() utility_option_elem {
+	-> utility_option_name utility_option_arg	{}
+}
+
+nonterm() utility_option_name {
+	-> NonReservedWord	{}
+	-> analyze_keyword	{}
+	-> FORMAT_LA	{}
+}
+
+nonterm() utility_option_arg {
+	-> opt_boolean_or_string	{}
+	-> NumericOnly	{}
+	-> empty	{}
+}
+
+nonterm() opt_analyze {
+	-> analyze_keyword	{}
+	-> empty	{}
+}
+
+nonterm() opt_verbose {
+	-> VERBOSE	{}
+	-> empty	{}
+}
+
+nonterm() opt_full {
+	-> FULL /*27L*/	{}
+	-> empty	{}
+}
+
+nonterm() opt_freeze {
+	-> FREEZE	{}
+	-> empty	{}
+}
+
+nonterm() opt_name_list {
+	-> "(" /*24L*/ name_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() vacuum_relation {
+	-> qualified_name opt_name_list	{}
+}
+
+nonterm() vacuum_relation_list {
+	-> vacuum_relation	{}
+	-> vacuum_relation_list "," vacuum_relation	{}
+}
+
+nonterm() opt_vacuum_relation_list {
+	-> vacuum_relation_list	{}
+	-> empty	{}
+}
+
+nonterm() ExplainStmt {
+	-> EXPLAIN ExplainableStmt	{}
+	-> EXPLAIN analyze_keyword opt_verbose ExplainableStmt	{}
+	-> EXPLAIN VERBOSE ExplainableStmt	{}
+	-> EXPLAIN "(" /*24L*/ utility_option_list ")" /*24L*/ ExplainableStmt	{}
+}
+
+nonterm() ExplainableStmt {
+	-> SelectStmt	{}
+	-> InsertStmt	{}
+	-> UpdateStmt	{}
+	-> DeleteStmt	{}
+	-> MergeStmt	{}
+	-> DeclareCursorStmt	{}
+	-> CreateAsStmt	{}
+	-> CreateMatViewStmt	{}
+	-> RefreshMatViewStmt	{}
+	-> ExecuteStmt	{}
+}
+
+nonterm() PrepareStmt {
+	-> PREPARE name prep_type_clause AS PreparableStmt	{}
+}
+
+nonterm() prep_type_clause {
+	-> "(" /*24L*/ type_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() PreparableStmt {
+	-> SelectStmt	{}
+	-> InsertStmt	{}
+	-> UpdateStmt	{}
+	-> DeleteStmt	{}
+	-> MergeStmt	{}
+}
+
+nonterm() ExecuteStmt {
+	-> EXECUTE name execute_param_clause	{}
+	-> CREATE OptTemp TABLE create_as_target AS EXECUTE name execute_param_clause opt_with_data	{}
+	-> CREATE OptTemp TABLE IF_P NOT /*6R*/ EXISTS create_as_target AS EXECUTE name execute_param_clause opt_with_data	{}
+}
+
+nonterm() execute_param_clause {
+	-> "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() DeallocateStmt {
+	-> DEALLOCATE name	{}
+	-> DEALLOCATE PREPARE name	{}
+	-> DEALLOCATE ALL	{}
+	-> DEALLOCATE PREPARE ALL	{}
+}
+
+nonterm() InsertStmt {
+	-> opt_with_clause INSERT INTO insert_target insert_rest opt_on_conflict returning_clause	{}
+}
+
+nonterm() insert_target {
+	-> qualified_name	{}
+	-> qualified_name AS ColId	{}
+}
+
+nonterm() insert_rest {
+	-> SelectStmt	{}
+	-> OVERRIDING override_kind VALUE_P /*12N*/ SelectStmt	{}
+	-> "(" /*24L*/ insert_column_list ")" /*24L*/ SelectStmt	{}
+	-> "(" /*24L*/ insert_column_list ")" /*24L*/ OVERRIDING override_kind VALUE_P /*12N*/ SelectStmt	{}
+	-> DEFAULT VALUES	{}
+}
+
+nonterm() override_kind {
+	-> USER	{}
+	-> SYSTEM_P	{}
+}
+
+nonterm() insert_column_list {
+	-> insert_column_item	{}
+	-> insert_column_list "," insert_column_item	{}
+}
+
+nonterm() insert_column_item {
+	-> ColId opt_indirection	{}
+}
+
+nonterm() opt_on_conflict {
+	-> ON CONFLICT opt_conf_expr DO UPDATE SET /*1N*/ set_clause_list where_clause	{}
+	-> ON CONFLICT opt_conf_expr DO NOTHING	{}
+	-> empty	{}
+}
+
+nonterm() opt_conf_expr {
+	-> "(" /*24L*/ index_params ")" /*24L*/ where_clause	{}
+	-> ON CONSTRAINT name	{}
+	-> empty	{}
+}
+
+nonterm() returning_clause {
+	-> RETURNING target_list	{}
+	-> empty	{}
+}
+
+nonterm() DeleteStmt {
+	-> opt_with_clause DELETE_P FROM relation_expr_opt_alias using_clause where_or_current_clause returning_clause	{}
+}
+
+nonterm() using_clause {
+	-> USING from_list	{}
+	-> empty	{}
+}
+
+nonterm() LockStmt {
+	-> LOCK_P opt_table relation_expr_list opt_lock opt_nowait	{}
+}
+
+nonterm() opt_lock {
+	-> IN_P /*9N*/ lock_type MODE	{}
+	-> empty	{}
+}
+
+nonterm() lock_type {
+	-> ACCESS SHARE	{}
+	-> ROW SHARE	{}
+	-> ROW EXCLUSIVE	{}
+	-> SHARE UPDATE EXCLUSIVE	{}
+	-> SHARE	{}
+	-> SHARE ROW EXCLUSIVE	{}
+	-> EXCLUSIVE	{}
+	-> ACCESS EXCLUSIVE	{}
+}
+
+nonterm() opt_nowait {
+	-> NOWAIT	{}
+	-> empty	{}
+}
+
+nonterm() opt_nowait_or_skip {
+	-> NOWAIT	{}
+	-> SKIP LOCKED	{}
+	-> empty	{}
+}
+
+nonterm() UpdateStmt {
+	-> opt_with_clause UPDATE relation_expr_opt_alias SET /*1N*/ set_clause_list from_clause where_or_current_clause returning_clause	{}
+}
+
+nonterm() set_clause_list {
+	-> set_clause	{}
+	-> set_clause_list "," set_clause	{}
+}
+
+nonterm() set_clause {
+	-> set_target "=" /*8N*/ a_expr	{}
+	-> "(" /*24L*/ set_target_list ")" /*24L*/ "=" /*8N*/ a_expr	{}
+}
+
+nonterm() set_target {
+	-> ColId opt_indirection	{}
+}
+
+nonterm() set_target_list {
+	-> set_target	{}
+	-> set_target_list "," set_target	{}
+}
+
+nonterm() MergeStmt {
+	-> opt_with_clause MERGE INTO relation_expr_opt_alias USING table_ref ON a_expr merge_when_list	{}
+}
+
+nonterm() merge_when_list {
+	-> merge_when_clause	{}
+	-> merge_when_list merge_when_clause	{}
+}
+
+nonterm() merge_when_clause {
+	-> WHEN MATCHED opt_merge_when_condition THEN merge_update	{}
+	-> WHEN MATCHED opt_merge_when_condition THEN merge_delete	{}
+	-> WHEN NOT /*6R*/ MATCHED opt_merge_when_condition THEN merge_insert	{}
+	-> WHEN MATCHED opt_merge_when_condition THEN DO NOTHING	{}
+	-> WHEN NOT /*6R*/ MATCHED opt_merge_when_condition THEN DO NOTHING	{}
+}
+
+nonterm() opt_merge_when_condition {
+	-> AND /*5L*/ a_expr	{}
+	-> empty	{}
+}
+
+nonterm() merge_update {
+	-> UPDATE SET /*1N*/ set_clause_list	{}
+}
+
+nonterm() merge_delete {
+	-> DELETE_P	{}
+}
+
+nonterm() merge_insert {
+	-> INSERT merge_values_clause	{}
+	-> INSERT OVERRIDING override_kind VALUE_P /*12N*/ merge_values_clause	{}
+	-> INSERT "(" /*24L*/ insert_column_list ")" /*24L*/ merge_values_clause	{}
+	-> INSERT "(" /*24L*/ insert_column_list ")" /*24L*/ OVERRIDING override_kind VALUE_P /*12N*/ merge_values_clause	{}
+	-> INSERT DEFAULT VALUES	{}
+}
+
+nonterm() merge_values_clause {
+	-> VALUES "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() DeclareCursorStmt {
+	-> DECLARE cursor_name cursor_options CURSOR opt_hold FOR SelectStmt	{}
+}
+
+nonterm() cursor_name {
+	-> name	{}
+}
+
+nonterm() cursor_options {
+	-> empty	{}
+	-> cursor_options NO SCROLL	{}
+	-> cursor_options SCROLL	{}
+	-> cursor_options BINARY	{}
+	-> cursor_options ASENSITIVE	{}
+	-> cursor_options INSENSITIVE	{}
+}
+
+nonterm() opt_hold {
+	-> empty	{}
+	-> WITH /*13N*/ HOLD	{}
+	-> WITHOUT /*13N*/ HOLD	{}
+}
+
+nonterm() SelectStmt {
+	-> select_no_parens precedence(UMINUS) /*22R*/	{}
+	-> select_with_parens precedence(UMINUS) /*22R*/	{}
+}
+
+nonterm() select_with_parens {
+	-> "(" /*24L*/ select_no_parens ")" /*24L*/	{}
+	-> "(" /*24L*/ select_with_parens ")" /*24L*/	{}
+}
+
+nonterm() select_no_parens {
+	-> simple_select	{}
+	-> select_clause sort_clause	{}
+	-> select_clause opt_sort_clause for_locking_clause opt_select_limit	{}
+	-> select_clause opt_sort_clause select_limit opt_for_locking_clause	{}
+	-> with_clause select_clause	{}
+	-> with_clause select_clause sort_clause	{}
+	-> with_clause select_clause opt_sort_clause for_locking_clause opt_select_limit	{}
+	-> with_clause select_clause opt_sort_clause select_limit opt_for_locking_clause	{}
+}
+
+nonterm() select_clause {
+	-> simple_select	{}
+	-> select_with_parens	{}
+}
+
+nonterm() simple_select {
+	-> SELECT opt_all_clause opt_target_list into_clause from_clause where_clause group_clause having_clause window_clause	{}
+	-> SELECT distinct_clause target_list into_clause from_clause where_clause group_clause having_clause window_clause	{}
+	-> values_clause	{}
+	-> TABLE relation_expr	{}
+	-> select_clause UNION /*2L*/ set_quantifier select_clause	{}
+	-> select_clause INTERSECT /*3L*/ set_quantifier select_clause	{}
+	-> select_clause EXCEPT /*2L*/ set_quantifier select_clause	{}
+}
+
+nonterm() with_clause {
+	-> WITH /*13N*/ cte_list	{}
+	-> WITH_LA cte_list	{}
+	-> WITH /*13N*/ RECURSIVE cte_list	{}
+}
+
+nonterm() cte_list {
+	-> common_table_expr	{}
+	-> cte_list "," common_table_expr	{}
+}
+
+nonterm() common_table_expr {
+	-> name opt_name_list AS opt_materialized "(" /*24L*/ PreparableStmt ")" /*24L*/ opt_search_clause opt_cycle_clause	{}
+}
+
+nonterm() opt_materialized {
+	-> MATERIALIZED	{}
+	-> NOT /*6R*/ MATERIALIZED	{}
+	-> empty	{}
+}
+
+nonterm() opt_search_clause {
+	-> SEARCH DEPTH FIRST_P BY columnList SET /*1N*/ ColId	{}
+	-> SEARCH BREADTH FIRST_P BY columnList SET /*1N*/ ColId	{}
+	-> empty	{}
+}
+
+nonterm() opt_cycle_clause {
+	-> CYCLE columnList SET /*1N*/ ColId TO AexprConst DEFAULT AexprConst USING ColId	{}
+	-> CYCLE columnList SET /*1N*/ ColId USING ColId	{}
+	-> empty	{}
+}
+
+nonterm() opt_with_clause {
+	-> with_clause	{}
+	-> empty	{}
+}
+
+nonterm() into_clause {
+	-> INTO OptTempTableName	{}
+	-> empty	{}
+}
+
+nonterm() OptTempTableName {
+	-> TEMPORARY opt_table qualified_name	{}
+	-> TEMP opt_table qualified_name	{}
+	-> LOCAL TEMPORARY opt_table qualified_name	{}
+	-> LOCAL TEMP opt_table qualified_name	{}
+	-> GLOBAL TEMPORARY opt_table qualified_name	{}
+	-> GLOBAL TEMP opt_table qualified_name	{}
+	-> UNLOGGED opt_table qualified_name	{}
+	-> TABLE qualified_name	{}
+	-> qualified_name	{}
+}
+
+nonterm() opt_table {
+	-> TABLE	{}
+	-> empty	{}
+}
+
+nonterm() set_quantifier {
+	-> ALL	{}
+	-> DISTINCT	{}
+	-> empty	{}
+}
+
+nonterm() distinct_clause {
+	-> DISTINCT	{}
+	-> DISTINCT ON "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() opt_all_clause {
+	-> ALL	{}
+	-> empty	{}
+}
+
+nonterm() opt_distinct_clause {
+	-> distinct_clause	{}
+	-> opt_all_clause	{}
+}
+
+nonterm() opt_sort_clause {
+	-> sort_clause	{}
+	-> empty	{}
+}
+
+nonterm() sort_clause {
+	-> ORDER BY sortby_list	{}
+}
+
+nonterm() sortby_list {
+	-> sortby	{}
+	-> sortby_list "," sortby	{}
+}
+
+nonterm() sortby {
+	-> a_expr USING qual_all_Op opt_nulls_order	{}
+	-> a_expr opt_asc_desc opt_nulls_order	{}
+}
+
+nonterm() select_limit {
+	-> limit_clause offset_clause	{}
+	-> offset_clause limit_clause	{}
+	-> limit_clause	{}
+	-> offset_clause	{}
+}
+
+nonterm() opt_select_limit {
+	-> select_limit	{}
+	-> empty	{}
+}
+
+nonterm() limit_clause {
+	-> LIMIT select_limit_value	{}
+	-> LIMIT select_limit_value "," select_offset_value	{}
+	-> FETCH first_or_next select_fetch_first_value row_or_rows ONLY	{}
+	-> FETCH first_or_next select_fetch_first_value row_or_rows WITH /*13N*/ TIES	{}
+	-> FETCH first_or_next row_or_rows ONLY	{}
+	-> FETCH first_or_next row_or_rows WITH /*13N*/ TIES	{}
+}
+
+nonterm() offset_clause {
+	-> OFFSET select_offset_value	{}
+	-> OFFSET select_fetch_first_value row_or_rows	{}
+}
+
+nonterm() select_limit_value {
+	-> a_expr	{}
+	-> ALL	{}
+}
+
+nonterm() select_offset_value {
+	-> a_expr	{}
+}
+
+nonterm() select_fetch_first_value {
+	-> c_expr	{}
+	-> "+" /*17L*/ I_or_F_const	{}
+	-> "-" /*17L*/ I_or_F_const	{}
+}
+
+nonterm() I_or_F_const {
+	-> Iconst	{}
+	-> FCONST	{}
+}
+
+nonterm() row_or_rows {
+	-> ROW	{}
+	-> ROWS /*15N*/	{}
+}
+
+nonterm() first_or_next {
+	-> FIRST_P	{}
+	-> NEXT	{}
+}
+
+nonterm() group_clause {
+	-> GROUP_P BY set_quantifier group_by_list	{}
+	-> empty	{}
+}
+
+nonterm() group_by_list {
+	-> group_by_item	{}
+	-> group_by_list "," group_by_item	{}
+}
+
+nonterm() group_by_item {
+	-> a_expr	{}
+	-> empty_grouping_set	{}
+	-> cube_clause	{}
+	-> rollup_clause	{}
+	-> grouping_sets_clause	{}
+}
+
+nonterm() empty_grouping_set {
+	-> "(" /*24L*/ ")" /*24L*/	{}
+}
+
+nonterm() rollup_clause {
+	-> ROLLUP /*15N*/ "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() cube_clause {
+	-> CUBE /*15N*/ "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() grouping_sets_clause {
+	-> GROUPING SETS "(" /*24L*/ group_by_list ")" /*24L*/	{}
+}
+
+nonterm() having_clause {
+	-> HAVING a_expr	{}
+	-> empty	{}
+}
+
+nonterm() for_locking_clause {
+	-> for_locking_items	{}
+	-> FOR READ ONLY	{}
+}
+
+nonterm() opt_for_locking_clause {
+	-> for_locking_clause	{}
+	-> empty	{}
+}
+
+nonterm() for_locking_items {
+	-> for_locking_item	{}
+	-> for_locking_items for_locking_item	{}
+}
+
+nonterm() for_locking_item {
+	-> for_locking_strength locked_rels_list opt_nowait_or_skip	{}
+}
+
+nonterm() for_locking_strength {
+	-> FOR UPDATE	{}
+	-> FOR NO KEY UPDATE	{}
+	-> FOR SHARE	{}
+	-> FOR KEY SHARE	{}
+}
+
+nonterm() locked_rels_list {
+	-> OF qualified_name_list	{}
+	-> empty	{}
+}
+
+nonterm() values_clause {
+	-> VALUES "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> values_clause "," "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() from_clause {
+	-> FROM from_list	{}
+	-> empty	{}
+}
+
+nonterm() from_list {
+	-> table_ref	{}
+	-> from_list "," table_ref	{}
+}
+
+nonterm() table_ref {
+	-> relation_expr opt_alias_clause	{}
+	-> relation_expr opt_alias_clause tablesample_clause	{}
+	-> func_table func_alias_clause	{}
+	-> LATERAL_P func_table func_alias_clause	{}
+	-> xmltable opt_alias_clause	{}
+	-> LATERAL_P xmltable opt_alias_clause	{}
+	-> select_with_parens opt_alias_clause	{}
+	-> LATERAL_P select_with_parens opt_alias_clause	{}
+	-> joined_table	{}
+	-> "(" /*24L*/ joined_table ")" /*24L*/ alias_clause	{}
+}
+
+nonterm() joined_table {
+	-> "(" /*24L*/ joined_table ")" /*24L*/	{}
+	-> table_ref CROSS /*27L*/ JOIN /*27L*/ table_ref	{}
+	-> table_ref join_type JOIN /*27L*/ table_ref join_qual	{}
+	-> table_ref JOIN /*27L*/ table_ref join_qual	{}
+	-> table_ref NATURAL /*27L*/ join_type JOIN /*27L*/ table_ref	{}
+	-> table_ref NATURAL /*27L*/ JOIN /*27L*/ table_ref	{}
+}
+
+nonterm() alias_clause {
+	-> AS ColId "(" /*24L*/ name_list ")" /*24L*/	{}
+	-> AS ColId	{}
+	-> ColId "(" /*24L*/ name_list ")" /*24L*/	{}
+	-> ColId	{}
+}
+
+nonterm() opt_alias_clause {
+	-> alias_clause	{}
+	-> empty	{}
+}
+
+nonterm() opt_alias_clause_for_join_using {
+	-> AS ColId	{}
+	-> empty	{}
+}
+
+nonterm() func_alias_clause {
+	-> alias_clause	{}
+	-> AS "(" /*24L*/ TableFuncElementList ")" /*24L*/	{}
+	-> AS ColId "(" /*24L*/ TableFuncElementList ")" /*24L*/	{}
+	-> ColId "(" /*24L*/ TableFuncElementList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() join_type {
+	-> FULL /*27L*/ opt_outer	{}
+	-> LEFT /*27L*/ opt_outer	{}
+	-> RIGHT /*27L*/ opt_outer	{}
+	-> INNER_P /*27L*/	{}
+}
+
+nonterm() opt_outer {
+	-> OUTER_P	{}
+	-> empty	{}
+}
+
+nonterm() join_qual {
+	-> USING "(" /*24L*/ name_list ")" /*24L*/ opt_alias_clause_for_join_using	{}
+	-> ON a_expr	{}
+}
+
+nonterm() relation_expr {
+	-> qualified_name	{}
+	-> extended_relation_expr	{}
+}
+
+nonterm() extended_relation_expr {
+	-> qualified_name "*" /*18L*/	{}
+	-> ONLY qualified_name	{}
+	-> ONLY "(" /*24L*/ qualified_name ")" /*24L*/	{}
+}
+
+nonterm() relation_expr_list {
+	-> relation_expr	{}
+	-> relation_expr_list "," relation_expr	{}
+}
+
+nonterm() relation_expr_opt_alias {
+	-> relation_expr precedence(UMINUS) /*22R*/	{}
+	-> relation_expr ColId	{}
+	-> relation_expr AS ColId	{}
+}
+
+nonterm() tablesample_clause {
+	-> TABLESAMPLE func_name "(" /*24L*/ expr_list ")" /*24L*/ opt_repeatable_clause	{}
+}
+
+nonterm() opt_repeatable_clause {
+	-> REPEATABLE "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() func_table {
+	-> func_expr_windowless opt_ordinality	{}
+	-> ROWS /*15N*/ FROM "(" /*24L*/ rowsfrom_list ")" /*24L*/ opt_ordinality	{}
+}
+
+nonterm() rowsfrom_item {
+	-> func_expr_windowless opt_col_def_list	{}
+}
+
+nonterm() rowsfrom_list {
+	-> rowsfrom_item	{}
+	-> rowsfrom_list "," rowsfrom_item	{}
+}
+
+nonterm() opt_col_def_list {
+	-> AS "(" /*24L*/ TableFuncElementList ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() opt_ordinality {
+	-> WITH_LA ORDINALITY	{}
+	-> empty	{}
+}
+
+nonterm() where_clause {
+	-> WHERE a_expr	{}
+	-> empty	{}
+}
+
+nonterm() where_or_current_clause {
+	-> WHERE a_expr	{}
+	-> WHERE CURRENT_P OF cursor_name	{}
+	-> empty	{}
+}
+
+nonterm() OptTableFuncElementList {
+	-> TableFuncElementList	{}
+	-> empty	{}
+}
+
+nonterm() TableFuncElementList {
+	-> TableFuncElement	{}
+	-> TableFuncElementList "," TableFuncElement	{}
+}
+
+nonterm() TableFuncElement {
+	-> ColId Typename opt_collate_clause	{}
+}
+
+nonterm() xmltable {
+	-> XMLTABLE "(" /*24L*/ c_expr xmlexists_argument COLUMNS xmltable_column_list ")" /*24L*/	{}
+	-> XMLTABLE "(" /*24L*/ XMLNAMESPACES "(" /*24L*/ xml_namespace_list ")" /*24L*/ "," c_expr xmlexists_argument COLUMNS xmltable_column_list ")" /*24L*/	{}
+}
+
+nonterm() xmltable_column_list {
+	-> xmltable_column_el	{}
+	-> xmltable_column_list "," xmltable_column_el	{}
+}
+
+nonterm() xmltable_column_el {
+	-> ColId Typename	{}
+	-> ColId Typename xmltable_column_option_list	{}
+	-> ColId FOR ORDINALITY	{}
+}
+
+nonterm() xmltable_column_option_list {
+	-> xmltable_column_option_el	{}
+	-> xmltable_column_option_list xmltable_column_option_el	{}
+}
+
+nonterm() xmltable_column_option_el {
+	-> IDENT /*15N*/ b_expr	{}
+	-> DEFAULT b_expr	{}
+	-> NOT /*6R*/ NULL_P	{}
+	-> NULL_P	{}
+}
+
+nonterm() xml_namespace_list {
+	-> xml_namespace_el	{}
+	-> xml_namespace_list "," xml_namespace_el	{}
+}
+
+nonterm() xml_namespace_el {
+	-> b_expr AS ColLabel	{}
+	-> DEFAULT b_expr	{}
+}
+
+nonterm() Typename {
+	-> SimpleTypename opt_array_bounds	{}
+	-> SETOF SimpleTypename opt_array_bounds	{}
+	-> SimpleTypename ARRAY "[" /*23L*/ Iconst "]" /*23L*/	{}
+	-> SETOF SimpleTypename ARRAY "[" /*23L*/ Iconst "]" /*23L*/	{}
+	-> SimpleTypename ARRAY	{}
+	-> SETOF SimpleTypename ARRAY	{}
+}
+
+nonterm() opt_array_bounds {
+	-> opt_array_bounds "[" /*23L*/ "]" /*23L*/	{}
+	-> opt_array_bounds "[" /*23L*/ Iconst "]" /*23L*/	{}
+	-> empty	{}
+}
+
+nonterm() SimpleTypename {
+	-> GenericType	{}
+	-> Numeric	{}
+	-> Bit	{}
+	-> Character	{}
+	-> ConstDatetime	{}
+	-> ConstInterval opt_interval	{}
+	-> ConstInterval "(" /*24L*/ Iconst ")" /*24L*/	{}
+}
+
+nonterm() ConstTypename {
+	-> Numeric	{}
+	-> ConstBit	{}
+	-> ConstCharacter	{}
+	-> ConstDatetime	{}
+}
+
+nonterm() GenericType {
+	-> type_function_name opt_type_modifiers	{}
+	-> type_function_name attrs opt_type_modifiers	{}
+}
+
+nonterm() opt_type_modifiers {
+	-> "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() Numeric {
+	-> INT_P	{}
+	-> INTEGER	{}
+	-> SMALLINT	{}
+	-> BIGINT	{}
+	-> REAL	{}
+	-> FLOAT_P opt_float	{}
+	-> DOUBLE_P PRECISION	{}
+	-> DECIMAL_P opt_type_modifiers	{}
+	-> DEC opt_type_modifiers	{}
+	-> NUMERIC opt_type_modifiers	{}
+	-> BOOLEAN_P	{}
+}
+
+nonterm() opt_float {
+	-> "(" /*24L*/ Iconst ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() Bit {
+	-> BitWithLength	{}
+	-> BitWithoutLength	{}
+}
+
+nonterm() ConstBit {
+	-> BitWithLength	{}
+	-> BitWithoutLength	{}
+}
+
+nonterm() BitWithLength {
+	-> BIT opt_varying "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() BitWithoutLength {
+	-> BIT opt_varying	{}
+}
+
+nonterm() Character {
+	-> CharacterWithLength	{}
+	-> CharacterWithoutLength	{}
+}
+
+nonterm() ConstCharacter {
+	-> CharacterWithLength	{}
+	-> CharacterWithoutLength	{}
+}
+
+nonterm() CharacterWithLength {
+	-> character "(" /*24L*/ Iconst ")" /*24L*/	{}
+}
+
+nonterm() CharacterWithoutLength {
+	-> character	{}
+}
+
+nonterm() character {
+	-> CHARACTER opt_varying	{}
+	-> CHAR_P opt_varying	{}
+	-> VARCHAR	{}
+	-> NATIONAL CHARACTER opt_varying	{}
+	-> NATIONAL CHAR_P opt_varying	{}
+	-> NCHAR opt_varying	{}
+}
+
+nonterm() opt_varying {
+	-> VARYING	{}
+	-> empty	{}
+}
+
+nonterm() ConstDatetime {
+	-> TIMESTAMP "(" /*24L*/ Iconst ")" /*24L*/ opt_timezone	{}
+	-> TIMESTAMP opt_timezone	{}
+	-> TIME "(" /*24L*/ Iconst ")" /*24L*/ opt_timezone	{}
+	-> TIME opt_timezone	{}
+}
+
+nonterm() ConstInterval {
+	-> INTERVAL	{}
+}
+
+nonterm() opt_timezone {
+	-> WITH_LA TIME ZONE	{}
+	-> WITHOUT_LA TIME ZONE	{}
+	-> empty	{}
+}
+
+nonterm() opt_interval {
+	-> YEAR_P	{}
+	-> MONTH_P	{}
+	-> DAY_P	{}
+	-> HOUR_P	{}
+	-> MINUTE_P	{}
+	-> interval_second	{}
+	-> YEAR_P TO MONTH_P	{}
+	-> DAY_P TO HOUR_P	{}
+	-> DAY_P TO MINUTE_P	{}
+	-> DAY_P TO interval_second	{}
+	-> HOUR_P TO MINUTE_P	{}
+	-> HOUR_P TO interval_second	{}
+	-> MINUTE_P TO interval_second	{}
+	-> empty	{}
+}
+
+nonterm() interval_second {
+	-> SECOND_P	{}
+	-> SECOND_P "(" /*24L*/ Iconst ")" /*24L*/	{}
+}
+
+nonterm() a_expr {
+	-> c_expr	{}
+	-> a_expr TYPECAST /*25L*/ Typename	{}
+	-> a_expr COLLATE /*21L*/ any_name	{}
+	-> a_expr AT /*20L*/ TIME ZONE a_expr precedence(AT) /*20L*/	{}
+	-> "+" /*17L*/ a_expr precedence(UMINUS) /*22R*/	{}
+	-> "-" /*17L*/ a_expr precedence(UMINUS) /*22R*/	{}
+	-> a_expr "+" /*17L*/ a_expr	{}
+	-> a_expr "-" /*17L*/ a_expr	{}
+	-> a_expr "*" /*18L*/ a_expr	{}
+	-> a_expr "/" /*18L*/ a_expr	{}
+	-> a_expr "%" /*18L*/ a_expr	{}
+	-> a_expr "^" /*19L*/ a_expr	{}
+	-> a_expr "<" /*8N*/ a_expr	{}
+	-> a_expr ">" /*8N*/ a_expr	{}
+	-> a_expr "=" /*8N*/ a_expr	{}
+	-> a_expr LESS_EQUALS /*8N*/ a_expr	{}
+	-> a_expr GREATER_EQUALS /*8N*/ a_expr	{}
+	-> a_expr NOT_EQUALS /*8N*/ a_expr	{}
+	-> a_expr qual_Op a_expr precedence(Op) /*16L*/	{}
+	-> qual_Op a_expr precedence(Op) /*16L*/	{}
+	-> a_expr AND /*5L*/ a_expr	{}
+	-> a_expr OR /*4L*/ a_expr	{}
+	-> NOT /*6R*/ a_expr	{}
+	-> NOT_LA /*9N*/ a_expr precedence(NOT) /*6R*/	{}
+	-> a_expr LIKE /*9N*/ a_expr	{}
+	-> a_expr LIKE /*9N*/ a_expr ESCAPE /*10N*/ a_expr precedence(LIKE) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ LIKE /*9N*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ LIKE /*9N*/ a_expr ESCAPE /*10N*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr ILIKE /*9N*/ a_expr	{}
+	-> a_expr ILIKE /*9N*/ a_expr ESCAPE /*10N*/ a_expr precedence(ILIKE) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ ILIKE /*9N*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ ILIKE /*9N*/ a_expr ESCAPE /*10N*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr SIMILAR /*9N*/ TO a_expr precedence(SIMILAR) /*9N*/	{}
+	-> a_expr SIMILAR /*9N*/ TO a_expr ESCAPE /*10N*/ a_expr precedence(SIMILAR) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ SIMILAR /*9N*/ TO a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ SIMILAR /*9N*/ TO a_expr ESCAPE /*10N*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr IS /*7N*/ NULL_P precedence(IS) /*7N*/	{}
+	-> a_expr ISNULL /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ NULL_P precedence(IS) /*7N*/	{}
+	-> a_expr NOTNULL /*7N*/	{}
+	-> row OVERLAPS row	{}
+	-> a_expr IS /*7N*/ TRUE_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ TRUE_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ FALSE_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ FALSE_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ UNKNOWN precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ UNKNOWN precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ DISTINCT FROM a_expr precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ DISTINCT FROM a_expr precedence(IS) /*7N*/	{}
+	-> a_expr BETWEEN /*9N*/ opt_asymmetric b_expr AND /*5L*/ a_expr precedence(BETWEEN) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ BETWEEN /*9N*/ opt_asymmetric b_expr AND /*5L*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr BETWEEN /*9N*/ SYMMETRIC b_expr AND /*5L*/ a_expr precedence(BETWEEN) /*9N*/	{}
+	-> a_expr NOT_LA /*9N*/ BETWEEN /*9N*/ SYMMETRIC b_expr AND /*5L*/ a_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr IN_P /*9N*/ in_expr	{}
+	-> a_expr NOT_LA /*9N*/ IN_P /*9N*/ in_expr precedence(NOT_LA) /*9N*/	{}
+	-> a_expr subquery_Op sub_type select_with_parens precedence(Op) /*16L*/	{}
+	-> a_expr subquery_Op sub_type "(" /*24L*/ a_expr ")" /*24L*/ precedence(Op) /*16L*/	{}
+	-> UNIQUE /*11N*/ opt_unique_null_treatment select_with_parens	{}
+	-> a_expr IS /*7N*/ DOCUMENT_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ DOCUMENT_P precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NORMALIZED precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ unicode_normal_form NORMALIZED precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ NORMALIZED precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ unicode_normal_form NORMALIZED precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ json_predicate_type_constraint json_key_uniqueness_constraint_opt precedence(IS) /*7N*/	{}
+	-> a_expr IS /*7N*/ NOT /*6R*/ json_predicate_type_constraint json_key_uniqueness_constraint_opt precedence(IS) /*7N*/	{}
+	-> DEFAULT	{}
+}
+
+nonterm() b_expr {
+	-> c_expr	{}
+	-> b_expr TYPECAST /*25L*/ Typename	{}
+	-> "+" /*17L*/ b_expr precedence(UMINUS) /*22R*/	{}
+	-> "-" /*17L*/ b_expr precedence(UMINUS) /*22R*/	{}
+	-> b_expr "+" /*17L*/ b_expr	{}
+	-> b_expr "-" /*17L*/ b_expr	{}
+	-> b_expr "*" /*18L*/ b_expr	{}
+	-> b_expr "/" /*18L*/ b_expr	{}
+	-> b_expr "%" /*18L*/ b_expr	{}
+	-> b_expr "^" /*19L*/ b_expr	{}
+	-> b_expr "<" /*8N*/ b_expr	{}
+	-> b_expr ">" /*8N*/ b_expr	{}
+	-> b_expr "=" /*8N*/ b_expr	{}
+	-> b_expr LESS_EQUALS /*8N*/ b_expr	{}
+	-> b_expr GREATER_EQUALS /*8N*/ b_expr	{}
+	-> b_expr NOT_EQUALS /*8N*/ b_expr	{}
+	-> b_expr qual_Op b_expr precedence(Op) /*16L*/	{}
+	-> qual_Op b_expr precedence(Op) /*16L*/	{}
+	-> b_expr IS /*7N*/ DISTINCT FROM b_expr precedence(IS) /*7N*/	{}
+	-> b_expr IS /*7N*/ NOT /*6R*/ DISTINCT FROM b_expr precedence(IS) /*7N*/	{}
+	-> b_expr IS /*7N*/ DOCUMENT_P precedence(IS) /*7N*/	{}
+	-> b_expr IS /*7N*/ NOT /*6R*/ DOCUMENT_P precedence(IS) /*7N*/	{}
+}
+
+nonterm() c_expr {
+	-> columnref	{}
+	-> AexprConst	{}
+	-> PARAM opt_indirection	{}
+	-> "(" /*24L*/ a_expr ")" /*24L*/ opt_indirection	{}
+	-> case_expr	{}
+	-> func_expr	{}
+	-> select_with_parens precedence(UMINUS) /*22R*/	{}
+	-> select_with_parens indirection	{}
+	-> EXISTS select_with_parens	{}
+	-> ARRAY select_with_parens	{}
+	-> ARRAY array_expr	{}
+	-> explicit_row	{}
+	-> implicit_row	{}
+	-> GROUPING "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() func_application {
+	-> func_name "(" /*24L*/ ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ func_arg_list opt_sort_clause ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ VARIADIC func_arg_expr opt_sort_clause ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ func_arg_list "," VARIADIC func_arg_expr opt_sort_clause ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ ALL func_arg_list opt_sort_clause ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ DISTINCT func_arg_list opt_sort_clause ")" /*24L*/	{}
+	-> func_name "(" /*24L*/ "*" /*18L*/ ")" /*24L*/	{}
+}
+
+nonterm() func_expr {
+	-> func_application within_group_clause filter_clause over_clause	{}
+	-> json_aggregate_func filter_clause over_clause	{}
+	-> func_expr_common_subexpr	{}
+}
+
+nonterm() func_expr_windowless {
+	-> func_application	{}
+	-> func_expr_common_subexpr	{}
+	-> json_aggregate_func	{}
+}
+
+nonterm() func_expr_common_subexpr {
+	-> COLLATION FOR "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> CURRENT_DATE	{}
+	-> CURRENT_TIME	{}
+	-> CURRENT_TIME "(" /*24L*/ Iconst ")" /*24L*/	{}
+	-> CURRENT_TIMESTAMP	{}
+	-> CURRENT_TIMESTAMP "(" /*24L*/ Iconst ")" /*24L*/	{}
+	-> LOCALTIME	{}
+	-> LOCALTIME "(" /*24L*/ Iconst ")" /*24L*/	{}
+	-> LOCALTIMESTAMP	{}
+	-> LOCALTIMESTAMP "(" /*24L*/ Iconst ")" /*24L*/	{}
+	-> CURRENT_ROLE	{}
+	-> CURRENT_USER	{}
+	-> SESSION_USER	{}
+	-> SYSTEM_USER	{}
+	-> USER	{}
+	-> CURRENT_CATALOG	{}
+	-> CURRENT_SCHEMA	{}
+	-> CAST "(" /*24L*/ a_expr AS Typename ")" /*24L*/	{}
+	-> EXTRACT "(" /*24L*/ extract_list ")" /*24L*/	{}
+	-> NORMALIZE "(" /*24L*/ a_expr ")" /*24L*/	{}
+	-> NORMALIZE "(" /*24L*/ a_expr "," unicode_normal_form ")" /*24L*/	{}
+	-> OVERLAY "(" /*24L*/ overlay_list ")" /*24L*/	{}
+	-> OVERLAY "(" /*24L*/ func_arg_list_opt ")" /*24L*/	{}
+	-> POSITION "(" /*24L*/ position_list ")" /*24L*/	{}
+	-> SUBSTRING "(" /*24L*/ substr_list ")" /*24L*/	{}
+	-> SUBSTRING "(" /*24L*/ func_arg_list_opt ")" /*24L*/	{}
+	-> TREAT "(" /*24L*/ a_expr AS Typename ")" /*24L*/	{}
+	-> TRIM "(" /*24L*/ BOTH trim_list ")" /*24L*/	{}
+	-> TRIM "(" /*24L*/ LEADING trim_list ")" /*24L*/	{}
+	-> TRIM "(" /*24L*/ TRAILING trim_list ")" /*24L*/	{}
+	-> TRIM "(" /*24L*/ trim_list ")" /*24L*/	{}
+	-> NULLIF "(" /*24L*/ a_expr "," a_expr ")" /*24L*/	{}
+	-> COALESCE "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> GREATEST "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> LEAST "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> XMLCONCAT "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> XMLELEMENT "(" /*24L*/ NAME_P ColLabel ")" /*24L*/	{}
+	-> XMLELEMENT "(" /*24L*/ NAME_P ColLabel "," xml_attributes ")" /*24L*/	{}
+	-> XMLELEMENT "(" /*24L*/ NAME_P ColLabel "," expr_list ")" /*24L*/	{}
+	-> XMLELEMENT "(" /*24L*/ NAME_P ColLabel "," xml_attributes "," expr_list ")" /*24L*/	{}
+	-> XMLEXISTS "(" /*24L*/ c_expr xmlexists_argument ")" /*24L*/	{}
+	-> XMLFOREST "(" /*24L*/ xml_attribute_list ")" /*24L*/	{}
+	-> XMLPARSE "(" /*24L*/ document_or_content a_expr xml_whitespace_option ")" /*24L*/	{}
+	-> XMLPI "(" /*24L*/ NAME_P ColLabel ")" /*24L*/	{}
+	-> XMLPI "(" /*24L*/ NAME_P ColLabel "," a_expr ")" /*24L*/	{}
+	-> XMLROOT "(" /*24L*/ a_expr "," xml_root_version opt_xml_root_standalone ")" /*24L*/	{}
+	-> XMLSERIALIZE "(" /*24L*/ document_or_content a_expr AS SimpleTypename xml_indent_option ")" /*24L*/	{}
+	-> JSON_OBJECT "(" /*24L*/ func_arg_list ")" /*24L*/	{}
+	-> JSON_OBJECT "(" /*24L*/ json_name_and_value_list json_object_constructor_null_clause_opt json_key_uniqueness_constraint_opt json_output_clause_opt ")" /*24L*/	{}
+	-> JSON_OBJECT "(" /*24L*/ json_output_clause_opt ")" /*24L*/	{}
+	-> JSON_ARRAY "(" /*24L*/ json_value_expr_list json_array_constructor_null_clause_opt json_output_clause_opt ")" /*24L*/	{}
+	-> JSON_ARRAY "(" /*24L*/ select_no_parens json_format_clause_opt json_output_clause_opt ")" /*24L*/	{}
+	-> JSON_ARRAY "(" /*24L*/ json_output_clause_opt ")" /*24L*/	{}
+}
+
+nonterm() xml_root_version {
+	-> VERSION_P a_expr	{}
+	-> VERSION_P NO VALUE_P /*12N*/	{}
+}
+
+nonterm() opt_xml_root_standalone {
+	-> "," STANDALONE_P YES_P	{}
+	-> "," STANDALONE_P NO	{}
+	-> "," STANDALONE_P NO VALUE_P /*12N*/	{}
+	-> empty	{}
+}
+
+nonterm() xml_attributes {
+	-> XMLATTRIBUTES "(" /*24L*/ xml_attribute_list ")" /*24L*/	{}
+}
+
+nonterm() xml_attribute_list {
+	-> xml_attribute_el	{}
+	-> xml_attribute_list "," xml_attribute_el	{}
+}
+
+nonterm() xml_attribute_el {
+	-> a_expr AS ColLabel	{}
+	-> a_expr	{}
+}
+
+nonterm() document_or_content {
+	-> DOCUMENT_P	{}
+	-> CONTENT_P	{}
+}
+
+nonterm() xml_indent_option {
+	-> INDENT	{}
+	-> NO INDENT	{}
+	-> empty	{}
+}
+
+nonterm() xml_whitespace_option {
+	-> PRESERVE WHITESPACE_P	{}
+	-> STRIP_P WHITESPACE_P	{}
+	-> empty	{}
+}
+
+nonterm() xmlexists_argument {
+	-> PASSING c_expr	{}
+	-> PASSING c_expr xml_passing_mech	{}
+	-> PASSING xml_passing_mech c_expr	{}
+	-> PASSING xml_passing_mech c_expr xml_passing_mech	{}
+}
+
+nonterm() xml_passing_mech {
+	-> BY REF_P	{}
+	-> BY VALUE_P /*12N*/	{}
+}
+
+nonterm() within_group_clause {
+	-> WITHIN GROUP_P "(" /*24L*/ sort_clause ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() filter_clause {
+	-> FILTER "(" /*24L*/ WHERE a_expr ")" /*24L*/	{}
+	-> empty	{}
+}
+
+nonterm() window_clause {
+	-> WINDOW window_definition_list	{}
+	-> empty	{}
+}
+
+nonterm() window_definition_list {
+	-> window_definition	{}
+	-> window_definition_list "," window_definition	{}
+}
+
+nonterm() window_definition {
+	-> ColId AS window_specification	{}
+}
+
+nonterm() over_clause {
+	-> OVER window_specification	{}
+	-> OVER ColId	{}
+	-> empty	{}
+}
+
+nonterm() window_specification {
+	-> "(" /*24L*/ opt_existing_window_name opt_partition_clause opt_sort_clause opt_frame_clause ")" /*24L*/	{}
+}
+
+nonterm() opt_existing_window_name {
+	-> ColId	{}
+	-> empty precedence(Op) /*16L*/	{}
+}
+
+nonterm() opt_partition_clause {
+	-> PARTITION /*15N*/ BY expr_list	{}
+	-> empty	{}
+}
+
+nonterm() opt_frame_clause {
+	-> RANGE /*15N*/ frame_extent opt_window_exclusion_clause	{}
+	-> ROWS /*15N*/ frame_extent opt_window_exclusion_clause	{}
+	-> GROUPS /*15N*/ frame_extent opt_window_exclusion_clause	{}
+	-> empty	{}
+}
+
+nonterm() frame_extent {
+	-> frame_bound	{}
+	-> BETWEEN /*9N*/ frame_bound AND /*5L*/ frame_bound	{}
+}
+
+nonterm() frame_bound {
+	-> UNBOUNDED /*14N*/ PRECEDING /*15N*/	{}
+	-> UNBOUNDED /*14N*/ FOLLOWING /*15N*/	{}
+	-> CURRENT_P ROW	{}
+	-> a_expr PRECEDING /*15N*/	{}
+	-> a_expr FOLLOWING /*15N*/	{}
+}
+
+nonterm() opt_window_exclusion_clause {
+	-> EXCLUDE CURRENT_P ROW	{}
+	-> EXCLUDE GROUP_P	{}
+	-> EXCLUDE TIES	{}
+	-> EXCLUDE NO OTHERS	{}
+	-> empty	{}
+}
+
+nonterm() row {
+	-> ROW "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> ROW "(" /*24L*/ ")" /*24L*/	{}
+	-> "(" /*24L*/ expr_list "," a_expr ")" /*24L*/	{}
+}
+
+nonterm() explicit_row {
+	-> ROW "(" /*24L*/ expr_list ")" /*24L*/	{}
+	-> ROW "(" /*24L*/ ")" /*24L*/	{}
+}
+
+nonterm() implicit_row {
+	-> "(" /*24L*/ expr_list "," a_expr ")" /*24L*/	{}
+}
+
+nonterm() sub_type {
+	-> ANY	{}
+	-> SOME	{}
+	-> ALL	{}
+}
+
+nonterm() all_Op {
+	-> Op /*16L*/	{}
+	-> MathOp	{}
+}
+
+nonterm() MathOp {
+	-> "+" /*17L*/	{}
+	-> "-" /*17L*/	{}
+	-> "*" /*18L*/	{}
+	-> "/" /*18L*/	{}
+	-> "%" /*18L*/	{}
+	-> "^" /*19L*/	{}
+	-> "<" /*8N*/	{}
+	-> ">" /*8N*/	{}
+	-> "=" /*8N*/	{}
+	-> LESS_EQUALS /*8N*/	{}
+	-> GREATER_EQUALS /*8N*/	{}
+	-> NOT_EQUALS /*8N*/	{}
+}
+
+nonterm() qual_Op {
+	-> Op /*16L*/	{}
+	-> OPERATOR /*16L*/ "(" /*24L*/ any_operator ")" /*24L*/	{}
+}
+
+nonterm() qual_all_Op {
+	-> all_Op	{}
+	-> OPERATOR /*16L*/ "(" /*24L*/ any_operator ")" /*24L*/	{}
+}
+
+nonterm() subquery_Op {
+	-> all_Op	{}
+	-> OPERATOR /*16L*/ "(" /*24L*/ any_operator ")" /*24L*/	{}
+	-> LIKE /*9N*/	{}
+	-> NOT_LA /*9N*/ LIKE /*9N*/	{}
+	-> ILIKE /*9N*/	{}
+	-> NOT_LA /*9N*/ ILIKE /*9N*/	{}
+}
+
+nonterm() expr_list {
+	-> a_expr	{}
+	-> expr_list "," a_expr	{}
+}
+
+nonterm() func_arg_list {
+	-> func_arg_expr	{}
+	-> func_arg_list "," func_arg_expr	{}
+}
+
+nonterm() func_arg_expr {
+	-> a_expr	{}
+	-> param_name COLON_EQUALS a_expr	{}
+	-> param_name EQUALS_GREATER a_expr	{}
+}
+
+nonterm() func_arg_list_opt {
+	-> func_arg_list	{}
+	-> empty	{}
+}
+
+nonterm() type_list {
+	-> Typename	{}
+	-> type_list "," Typename	{}
+}
+
+nonterm() array_expr {
+	-> "[" /*23L*/ expr_list "]" /*23L*/	{}
+	-> "[" /*23L*/ array_expr_list "]" /*23L*/	{}
+	-> "[" /*23L*/ "]" /*23L*/	{}
+}
+
+nonterm() array_expr_list {
+	-> array_expr	{}
+	-> array_expr_list "," array_expr	{}
+}
+
+nonterm() extract_list {
+	-> extract_arg FROM a_expr	{}
+}
+
+nonterm() extract_arg {
+	-> IDENT /*15N*/	{}
+	-> YEAR_P	{}
+	-> MONTH_P	{}
+	-> DAY_P	{}
+	-> HOUR_P	{}
+	-> MINUTE_P	{}
+	-> SECOND_P	{}
+	-> Sconst	{}
+}
+
+nonterm() unicode_normal_form {
+	-> NFC	{}
+	-> NFD	{}
+	-> NFKC	{}
+	-> NFKD	{}
+}
+
+nonterm() overlay_list {
+	-> a_expr PLACING a_expr FROM a_expr FOR a_expr	{}
+	-> a_expr PLACING a_expr FROM a_expr	{}
+}
+
+nonterm() position_list {
+	-> b_expr IN_P /*9N*/ b_expr	{}
+}
+
+nonterm() substr_list {
+	-> a_expr FROM a_expr FOR a_expr	{}
+	-> a_expr FOR a_expr FROM a_expr	{}
+	-> a_expr FROM a_expr	{}
+	-> a_expr FOR a_expr	{}
+	-> a_expr SIMILAR /*9N*/ a_expr ESCAPE /*10N*/ a_expr	{}
+}
+
+nonterm() trim_list {
+	-> a_expr FROM expr_list	{}
+	-> FROM expr_list	{}
+	-> expr_list	{}
+}
+
+nonterm() in_expr {
+	-> select_with_parens	{}
+	-> "(" /*24L*/ expr_list ")" /*24L*/	{}
+}
+
+nonterm() case_expr {
+	-> CASE case_arg when_clause_list case_default END_P	{}
+}
+
+nonterm() when_clause_list {
+	-> when_clause	{}
+	-> when_clause_list when_clause	{}
+}
+
+nonterm() when_clause {
+	-> WHEN a_expr THEN a_expr	{}
+}
+
+nonterm() case_default {
+	-> ELSE a_expr	{}
+	-> empty	{}
+}
+
+nonterm() case_arg {
+	-> a_expr	{}
+	-> empty	{}
+}
+
+nonterm() columnref {
+	-> ColId	{}
+	-> ColId indirection	{}
+}
+
+nonterm() indirection_el {
+	-> "." /*26L*/ attr_name	{}
+	-> "." /*26L*/ "*" /*18L*/	{}
+	-> "[" /*23L*/ a_expr "]" /*23L*/	{}
+	-> "[" /*23L*/ opt_slice_bound ":" opt_slice_bound "]" /*23L*/	{}
+}
+
+nonterm() opt_slice_bound {
+	-> a_expr	{}
+	-> empty	{}
+}
+
+nonterm() indirection {
+	-> indirection_el	{}
+	-> indirection indirection_el	{}
+}
+
+nonterm() opt_indirection {
+	-> empty	{}
+	-> opt_indirection indirection_el	{}
+}
+
+nonterm() opt_asymmetric {
+	-> ASYMMETRIC	{}
+	-> empty	{}
+}
+
+nonterm() json_value_expr {
+	-> a_expr json_format_clause_opt	{}
+}
+
+nonterm() json_format_clause_opt {
+	-> FORMAT_LA JSON /*11N*/ json_encoding_clause_opt	{}
+	-> empty	{}
+}
+
+nonterm() json_encoding_clause_opt {
+	-> ENCODING name	{}
+	-> empty	{}
+}
+
+nonterm() json_output_clause_opt {
+	-> RETURNING Typename json_format_clause_opt	{}
+	-> empty	{}
+}
+
+nonterm() json_predicate_type_constraint {
+	-> JSON /*11N*/	{}
+	-> JSON /*11N*/ VALUE_P /*12N*/	{}
+	-> JSON /*11N*/ ARRAY	{}
+	-> JSON /*11N*/ OBJECT_P /*12N*/	{}
+	-> JSON /*11N*/ SCALAR /*12N*/	{}
+}
+
+nonterm() json_key_uniqueness_constraint_opt {
+	-> WITH /*13N*/ UNIQUE /*11N*/ KEYS /*12N*/	{}
+	-> WITH /*13N*/ UNIQUE /*11N*/	{}
+	-> WITHOUT /*13N*/ UNIQUE /*11N*/ KEYS /*12N*/	{}
+	-> WITHOUT /*13N*/ UNIQUE /*11N*/	{}
+	-> empty precedence(KEYS) /*12N*/	{}
+}
+
+nonterm() json_name_and_value_list {
+	-> json_name_and_value	{}
+	-> json_name_and_value_list "," json_name_and_value	{}
+}
+
+nonterm() json_name_and_value {
+	-> c_expr VALUE_P /*12N*/ json_value_expr	{}
+	-> a_expr ":" json_value_expr	{}
+}
+
+nonterm() json_object_constructor_null_clause_opt {
+	-> NULL_P ON NULL_P	{}
+	-> ABSENT ON NULL_P	{}
+	-> empty	{}
+}
+
+nonterm() json_array_constructor_null_clause_opt {
+	-> NULL_P ON NULL_P	{}
+	-> ABSENT ON NULL_P	{}
+	-> empty	{}
+}
+
+nonterm() json_value_expr_list {
+	-> json_value_expr	{}
+	-> json_value_expr_list "," json_value_expr	{}
+}
+
+nonterm() json_aggregate_func {
+	-> JSON_OBJECTAGG "(" /*24L*/ json_name_and_value json_object_constructor_null_clause_opt json_key_uniqueness_constraint_opt json_output_clause_opt ")" /*24L*/	{}
+	-> JSON_ARRAYAGG "(" /*24L*/ json_value_expr json_array_aggregate_order_by_clause_opt json_array_constructor_null_clause_opt json_output_clause_opt ")" /*24L*/	{}
+}
+
+nonterm() json_array_aggregate_order_by_clause_opt {
+	-> ORDER BY sortby_list	{}
+	-> empty	{}
+}
+
+nonterm() opt_target_list {
+	-> target_list	{}
+	-> empty	{}
+}
+
+nonterm() target_list {
+	-> target_el	{}
+	-> target_list "," target_el	{}
+}
+
+nonterm() target_el {
+	-> a_expr AS ColLabel	{}
+	-> a_expr BareColLabel	{}
+	-> a_expr	{}
+	-> "*" /*18L*/	{}
+}
+
+nonterm() qualified_name_list {
+	-> qualified_name	{}
+	-> qualified_name_list "," qualified_name	{}
+}
+
+nonterm() qualified_name {
+	-> ColId	{}
+	-> ColId indirection	{}
+}
+
+nonterm() name_list {
+	-> name	{}
+	-> name_list "," name	{}
+}
+
+nonterm() name {
+	-> ColId	{}
+}
+
+nonterm() attr_name {
+	-> ColLabel	{}
+}
+
+nonterm() file_name {
+	-> Sconst	{}
+}
+
+nonterm() func_name {
+	-> type_function_name	{}
+	-> ColId indirection	{}
+}
+
+nonterm() AexprConst {
+	-> Iconst	{}
+	-> FCONST	{}
+	-> Sconst	{}
+	-> BCONST	{}
+	-> XCONST	{}
+	-> func_name Sconst	{}
+	-> func_name "(" /*24L*/ func_arg_list opt_sort_clause ")" /*24L*/ Sconst	{}
+	-> ConstTypename Sconst	{}
+	-> ConstInterval Sconst opt_interval	{}
+	-> ConstInterval "(" /*24L*/ Iconst ")" /*24L*/ Sconst	{}
+	-> TRUE_P	{}
+	-> FALSE_P	{}
+	-> NULL_P	{}
+}
+
+nonterm() Iconst {
+	-> ICONST	{}
+}
+
+nonterm() Sconst {
+	-> SCONST	{}
+}
+
+nonterm() SignedIconst {
+	-> Iconst	{}
+	-> "+" /*17L*/ Iconst	{}
+	-> "-" /*17L*/ Iconst	{}
+}
+
+nonterm() RoleId {
+	-> RoleSpec	{}
+}
+
+nonterm() RoleSpec {
+	-> NonReservedWord	{}
+	-> CURRENT_ROLE	{}
+	-> CURRENT_USER	{}
+	-> SESSION_USER	{}
+}
+
+nonterm() role_list {
+	-> RoleSpec	{}
+	-> role_list "," RoleSpec	{}
+}
+
+nonterm() PLpgSQL_Expr {
+	-> opt_distinct_clause opt_target_list from_clause where_clause group_clause having_clause window_clause opt_sort_clause opt_select_limit opt_for_locking_clause	{}
+}
+
+nonterm() PLAssignStmt {
+	-> plassign_target opt_indirection plassign_equals PLpgSQL_Expr	{}
+}
+
+nonterm() plassign_target {
+	-> ColId	{}
+	-> PARAM	{}
+}
+
+nonterm() plassign_equals {
+	-> COLON_EQUALS	{}
+	-> "=" /*8N*/	{}
+}
+
+nonterm() ColId {
+	-> IDENT /*15N*/	{}
+	-> unreserved_keyword	{}
+	-> col_name_keyword	{}
+}
+
+nonterm() type_function_name {
+	-> IDENT /*15N*/	{}
+	-> unreserved_keyword	{}
+	-> type_func_name_keyword	{}
+}
+
+nonterm() NonReservedWord {
+	-> IDENT /*15N*/	{}
+	-> unreserved_keyword	{}
+	-> col_name_keyword	{}
+	-> type_func_name_keyword	{}
+}
+
+nonterm() ColLabel {
+	-> IDENT /*15N*/	{}
+	-> unreserved_keyword	{}
+	-> col_name_keyword	{}
+	-> type_func_name_keyword	{}
+	-> reserved_keyword	{}
+}
+
+nonterm() BareColLabel {
+	-> IDENT /*15N*/	{}
+	-> bare_label_keyword	{}
+}
+
+nonterm() unreserved_keyword {
+	-> ABORT_P	{}
+	-> ABSENT	{}
+	-> ABSOLUTE_P	{}
+	-> ACCESS	{}
+	-> ACTION	{}
+	-> ADD_P	{}
+	-> ADMIN	{}
+	-> AFTER	{}
+	-> AGGREGATE	{}
+	-> ALSO	{}
+	-> ALTER	{}
+	-> ALWAYS	{}
+	-> ASENSITIVE	{}
+	-> ASSERTION	{}
+	-> ASSIGNMENT	{}
+	-> AT /*20L*/	{}
+	-> ATOMIC	{}
+	-> ATTACH	{}
+	-> ATTRIBUTE	{}
+	-> BACKWARD	{}
+	-> BEFORE	{}
+	-> BEGIN_P	{}
+	-> BREADTH	{}
+	-> BY	{}
+	-> CACHE	{}
+	-> CALL	{}
+	-> CALLED	{}
+	-> CASCADE	{}
+	-> CASCADED	{}
+	-> CATALOG_P	{}
+	-> CHAIN	{}
+	-> CHARACTERISTICS	{}
+	-> CHECKPOINT	{}
+	-> CLASS	{}
+	-> CLOSE	{}
+	-> CLUSTER	{}
+	-> COLUMNS	{}
+	-> COMMENT	{}
+	-> COMMENTS	{}
+	-> COMMIT	{}
+	-> COMMITTED	{}
+	-> COMPRESSION	{}
+	-> CONFIGURATION	{}
+	-> CONFLICT	{}
+	-> CONNECTION	{}
+	-> CONSTRAINTS	{}
+	-> CONTENT_P	{}
+	-> CONTINUE_P	{}
+	-> CONVERSION_P	{}
+	-> COPY	{}
+	-> COST	{}
+	-> CSV	{}
+	-> CUBE /*15N*/	{}
+	-> CURRENT_P	{}
+	-> CURSOR	{}
+	-> CYCLE	{}
+	-> DATA_P	{}
+	-> DATABASE	{}
+	-> DAY_P	{}
+	-> DEALLOCATE	{}
+	-> DECLARE	{}
+	-> DEFAULTS	{}
+	-> DEFERRED	{}
+	-> DEFINER	{}
+	-> DELETE_P	{}
+	-> DELIMITER	{}
+	-> DELIMITERS	{}
+	-> DEPENDS	{}
+	-> DEPTH	{}
+	-> DETACH	{}
+	-> DICTIONARY	{}
+	-> DISABLE_P	{}
+	-> DISCARD	{}
+	-> DOCUMENT_P	{}
+	-> DOMAIN_P	{}
+	-> DOUBLE_P	{}
+	-> DROP	{}
+	-> EACH	{}
+	-> ENABLE_P	{}
+	-> ENCODING	{}
+	-> ENCRYPTED	{}
+	-> ENUM_P	{}
+	-> ESCAPE /*10N*/	{}
+	-> EVENT	{}
+	-> EXCLUDE	{}
+	-> EXCLUDING	{}
+	-> EXCLUSIVE	{}
+	-> EXECUTE	{}
+	-> EXPLAIN	{}
+	-> EXPRESSION	{}
+	-> EXTENSION	{}
+	-> EXTERNAL	{}
+	-> FAMILY	{}
+	-> FILTER	{}
+	-> FINALIZE	{}
+	-> FIRST_P	{}
+	-> FOLLOWING /*15N*/	{}
+	-> FORCE	{}
+	-> FORMAT	{}
+	-> FORWARD	{}
+	-> FUNCTION	{}
+	-> FUNCTIONS	{}
+	-> GENERATED	{}
+	-> GLOBAL	{}
+	-> GRANTED	{}
+	-> GROUPS /*15N*/	{}
+	-> HANDLER	{}
+	-> HEADER_P	{}
+	-> HOLD	{}
+	-> HOUR_P	{}
+	-> IDENTITY_P	{}
+	-> IF_P	{}
+	-> IMMEDIATE	{}
+	-> IMMUTABLE	{}
+	-> IMPLICIT_P	{}
+	-> IMPORT_P	{}
+	-> INCLUDE	{}
+	-> INCLUDING	{}
+	-> INCREMENT	{}
+	-> INDENT	{}
+	-> INDEX	{}
+	-> INDEXES	{}
+	-> INHERIT	{}
+	-> INHERITS	{}
+	-> INLINE_P	{}
+	-> INPUT_P	{}
+	-> INSENSITIVE	{}
+	-> INSERT	{}
+	-> INSTEAD	{}
+	-> INVOKER	{}
+	-> ISOLATION	{}
+	-> JSON /*11N*/	{}
+	-> KEY	{}
+	-> KEYS /*12N*/	{}
+	-> LABEL	{}
+	-> LANGUAGE	{}
+	-> LARGE_P	{}
+	-> LAST_P	{}
+	-> LEAKPROOF	{}
+	-> LEVEL	{}
+	-> LISTEN	{}
+	-> LOAD	{}
+	-> LOCAL	{}
+	-> LOCATION	{}
+	-> LOCK_P	{}
+	-> LOCKED	{}
+	-> LOGGED	{}
+	-> MAPPING	{}
+	-> MATCH	{}
+	-> MATCHED	{}
+	-> MATERIALIZED	{}
+	-> MAXVALUE	{}
+	-> MERGE	{}
+	-> METHOD	{}
+	-> MINUTE_P	{}
+	-> MINVALUE	{}
+	-> MODE	{}
+	-> MONTH_P	{}
+	-> MOVE	{}
+	-> NAME_P	{}
+	-> NAMES	{}
+	-> NEW	{}
+	-> NEXT	{}
+	-> NFC	{}
+	-> NFD	{}
+	-> NFKC	{}
+	-> NFKD	{}
+	-> NO	{}
+	-> NORMALIZED	{}
+	-> NOTHING	{}
+	-> NOTIFY	{}
+	-> NOWAIT	{}
+	-> NULLS_P	{}
+	-> OBJECT_P /*12N*/	{}
+	-> OF	{}
+	-> OFF	{}
+	-> OIDS	{}
+	-> OLD	{}
+	-> OPERATOR /*16L*/	{}
+	-> OPTION	{}
+	-> OPTIONS	{}
+	-> ORDINALITY	{}
+	-> OTHERS	{}
+	-> OVER	{}
+	-> OVERRIDING	{}
+	-> OWNED	{}
+	-> OWNER	{}
+	-> PARALLEL	{}
+	-> PARAMETER	{}
+	-> PARSER	{}
+	-> PARTIAL	{}
+	-> PARTITION /*15N*/	{}
+	-> PASSING	{}
+	-> PASSWORD	{}
+	-> PLANS	{}
+	-> POLICY	{}
+	-> PRECEDING /*15N*/	{}
+	-> PREPARE	{}
+	-> PREPARED	{}
+	-> PRESERVE	{}
+	-> PRIOR	{}
+	-> PRIVILEGES	{}
+	-> PROCEDURAL	{}
+	-> PROCEDURE	{}
+	-> PROCEDURES	{}
+	-> PROGRAM	{}
+	-> PUBLICATION	{}
+	-> QUOTE	{}
+	-> RANGE /*15N*/	{}
+	-> READ	{}
+	-> REASSIGN	{}
+	-> RECHECK	{}
+	-> RECURSIVE	{}
+	-> REF_P	{}
+	-> REFERENCING	{}
+	-> REFRESH	{}
+	-> REINDEX	{}
+	-> RELATIVE_P	{}
+	-> RELEASE	{}
+	-> RENAME	{}
+	-> REPEATABLE	{}
+	-> REPLACE	{}
+	-> REPLICA	{}
+	-> RESET	{}
+	-> RESTART	{}
+	-> RESTRICT	{}
+	-> RETURN	{}
+	-> RETURNS	{}
+	-> REVOKE	{}
+	-> ROLE	{}
+	-> ROLLBACK	{}
+	-> ROLLUP /*15N*/	{}
+	-> ROUTINE	{}
+	-> ROUTINES	{}
+	-> ROWS /*15N*/	{}
+	-> RULE	{}
+	-> SAVEPOINT	{}
+	-> SCALAR /*12N*/	{}
+	-> SCHEMA	{}
+	-> SCHEMAS	{}
+	-> SCROLL	{}
+	-> SEARCH	{}
+	-> SECOND_P	{}
+	-> SECURITY	{}
+	-> SEQUENCE	{}
+	-> SEQUENCES	{}
+	-> SERIALIZABLE	{}
+	-> SERVER	{}
+	-> SESSION	{}
+	-> SET /*1N*/	{}
+	-> SETS	{}
+	-> SHARE	{}
+	-> SHOW	{}
+	-> SIMPLE	{}
+	-> SKIP	{}
+	-> SNAPSHOT	{}
+	-> SQL_P	{}
+	-> STABLE	{}
+	-> STANDALONE_P	{}
+	-> START	{}
+	-> STATEMENT	{}
+	-> STATISTICS	{}
+	-> STDIN	{}
+	-> STDOUT	{}
+	-> STORAGE	{}
+	-> STORED	{}
+	-> STRICT_P	{}
+	-> STRIP_P	{}
+	-> SUBSCRIPTION	{}
+	-> SUPPORT	{}
+	-> SYSID	{}
+	-> SYSTEM_P	{}
+	-> TABLES	{}
+	-> TABLESPACE	{}
+	-> TEMP	{}
+	-> TEMPLATE	{}
+	-> TEMPORARY	{}
+	-> TEXT_P	{}
+	-> TIES	{}
+	-> TRANSACTION	{}
+	-> TRANSFORM	{}
+	-> TRIGGER	{}
+	-> TRUNCATE	{}
+	-> TRUSTED	{}
+	-> TYPE_P	{}
+	-> TYPES_P	{}
+	-> UESCAPE	{}
+	-> UNBOUNDED /*14N*/	{}
+	-> UNCOMMITTED	{}
+	-> UNENCRYPTED	{}
+	-> UNKNOWN	{}
+	-> UNLISTEN	{}
+	-> UNLOGGED	{}
+	-> UNTIL	{}
+	-> UPDATE	{}
+	-> VACUUM	{}
+	-> VALID	{}
+	-> VALIDATE	{}
+	-> VALIDATOR	{}
+	-> VALUE_P /*12N*/	{}
+	-> VARYING	{}
+	-> VERSION_P	{}
+	-> VIEW	{}
+	-> VIEWS	{}
+	-> VOLATILE	{}
+	-> WHITESPACE_P	{}
+	-> WITHIN	{}
+	-> WITHOUT /*13N*/	{}
+	-> WORK	{}
+	-> WRAPPER	{}
+	-> WRITE	{}
+	-> XML_P	{}
+	-> YEAR_P	{}
+	-> YES_P	{}
+	-> ZONE	{}
+}
+
+nonterm() col_name_keyword {
+	-> BETWEEN /*9N*/	{}
+	-> BIGINT	{}
+	-> BIT	{}
+	-> BOOLEAN_P	{}
+	-> CHAR_P	{}
+	-> CHARACTER	{}
+	-> COALESCE	{}
+	-> DEC	{}
+	-> DECIMAL_P	{}
+	-> EXISTS	{}
+	-> EXTRACT	{}
+	-> FLOAT_P	{}
+	-> GREATEST	{}
+	-> GROUPING	{}
+	-> INOUT	{}
+	-> INT_P	{}
+	-> INTEGER	{}
+	-> INTERVAL	{}
+	-> JSON_ARRAY	{}
+	-> JSON_ARRAYAGG	{}
+	-> JSON_OBJECT	{}
+	-> JSON_OBJECTAGG	{}
+	-> LEAST	{}
+	-> NATIONAL	{}
+	-> NCHAR	{}
+	-> NONE	{}
+	-> NORMALIZE	{}
+	-> NULLIF	{}
+	-> NUMERIC	{}
+	-> OUT_P	{}
+	-> OVERLAY	{}
+	-> POSITION	{}
+	-> PRECISION	{}
+	-> REAL	{}
+	-> ROW	{}
+	-> SETOF	{}
+	-> SMALLINT	{}
+	-> SUBSTRING	{}
+	-> TIME	{}
+	-> TIMESTAMP	{}
+	-> TREAT	{}
+	-> TRIM	{}
+	-> VALUES	{}
+	-> VARCHAR	{}
+	-> XMLATTRIBUTES	{}
+	-> XMLCONCAT	{}
+	-> XMLELEMENT	{}
+	-> XMLEXISTS	{}
+	-> XMLFOREST	{}
+	-> XMLNAMESPACES	{}
+	-> XMLPARSE	{}
+	-> XMLPI	{}
+	-> XMLROOT	{}
+	-> XMLSERIALIZE	{}
+	-> XMLTABLE	{}
+}
+
+nonterm() type_func_name_keyword {
+	-> AUTHORIZATION	{}
+	-> BINARY	{}
+	-> COLLATION	{}
+	-> CONCURRENTLY	{}
+	-> CROSS /*27L*/	{}
+	-> CURRENT_SCHEMA	{}
+	-> FREEZE	{}
+	-> FULL /*27L*/	{}
+	-> ILIKE /*9N*/	{}
+	-> INNER_P /*27L*/	{}
+	-> IS /*7N*/	{}
+	-> ISNULL /*7N*/	{}
+	-> JOIN /*27L*/	{}
+	-> LEFT /*27L*/	{}
+	-> LIKE /*9N*/	{}
+	-> NATURAL /*27L*/	{}
+	-> NOTNULL /*7N*/	{}
+	-> OUTER_P	{}
+	-> OVERLAPS	{}
+	-> RIGHT /*27L*/	{}
+	-> SIMILAR /*9N*/	{}
+	-> TABLESAMPLE	{}
+	-> VERBOSE	{}
+}
+
+nonterm() reserved_keyword {
+	-> ALL	{}
+	-> ANALYSE	{}
+	-> ANALYZE	{}
+	-> AND /*5L*/	{}
+	-> ANY	{}
+	-> ARRAY	{}
+	-> AS	{}
+	-> ASC	{}
+	-> ASYMMETRIC	{}
+	-> BOTH	{}
+	-> CASE	{}
+	-> CAST	{}
+	-> CHECK	{}
+	-> COLLATE /*21L*/	{}
+	-> COLUMN	{}
+	-> CONSTRAINT	{}
+	-> CREATE	{}
+	-> CURRENT_CATALOG	{}
+	-> CURRENT_DATE	{}
+	-> CURRENT_ROLE	{}
+	-> CURRENT_TIME	{}
+	-> CURRENT_TIMESTAMP	{}
+	-> CURRENT_USER	{}
+	-> DEFAULT	{}
+	-> DEFERRABLE	{}
+	-> DESC	{}
+	-> DISTINCT	{}
+	-> DO	{}
+	-> ELSE	{}
+	-> END_P	{}
+	-> EXCEPT /*2L*/	{}
+	-> FALSE_P	{}
+	-> FETCH	{}
+	-> FOR	{}
+	-> FOREIGN	{}
+	-> FROM	{}
+	-> GRANT	{}
+	-> GROUP_P	{}
+	-> HAVING	{}
+	-> IN_P /*9N*/	{}
+	-> INITIALLY	{}
+	-> INTERSECT /*3L*/	{}
+	-> INTO	{}
+	-> LATERAL_P	{}
+	-> LEADING	{}
+	-> LIMIT	{}
+	-> LOCALTIME	{}
+	-> LOCALTIMESTAMP	{}
+	-> NOT /*6R*/	{}
+	-> NULL_P	{}
+	-> OFFSET	{}
+	-> ON	{}
+	-> ONLY	{}
+	-> OR /*4L*/	{}
+	-> ORDER	{}
+	-> PLACING	{}
+	-> PRIMARY	{}
+	-> REFERENCES	{}
+	-> RETURNING	{}
+	-> SELECT	{}
+	-> SESSION_USER	{}
+	-> SOME	{}
+	-> SYMMETRIC	{}
+	-> SYSTEM_USER	{}
+	-> TABLE	{}
+	-> THEN	{}
+	-> TO	{}
+	-> TRAILING	{}
+	-> TRUE_P	{}
+	-> UNION /*2L*/	{}
+	-> UNIQUE /*11N*/	{}
+	-> USER	{}
+	-> USING	{}
+	-> VARIADIC	{}
+	-> WHEN	{}
+	-> WHERE	{}
+	-> WINDOW	{}
+	-> WITH /*13N*/	{}
+}
+
+nonterm() bare_label_keyword {
+	-> ABORT_P	{}
+	-> ABSENT	{}
+	-> ABSOLUTE_P	{}
+	-> ACCESS	{}
+	-> ACTION	{}
+	-> ADD_P	{}
+	-> ADMIN	{}
+	-> AFTER	{}
+	-> AGGREGATE	{}
+	-> ALL	{}
+	-> ALSO	{}
+	-> ALTER	{}
+	-> ALWAYS	{}
+	-> ANALYSE	{}
+	-> ANALYZE	{}
+	-> AND /*5L*/	{}
+	-> ANY	{}
+	-> ASC	{}
+	-> ASENSITIVE	{}
+	-> ASSERTION	{}
+	-> ASSIGNMENT	{}
+	-> ASYMMETRIC	{}
+	-> AT /*20L*/	{}
+	-> ATOMIC	{}
+	-> ATTACH	{}
+	-> ATTRIBUTE	{}
+	-> AUTHORIZATION	{}
+	-> BACKWARD	{}
+	-> BEFORE	{}
+	-> BEGIN_P	{}
+	-> BETWEEN /*9N*/	{}
+	-> BIGINT	{}
+	-> BINARY	{}
+	-> BIT	{}
+	-> BOOLEAN_P	{}
+	-> BOTH	{}
+	-> BREADTH	{}
+	-> BY	{}
+	-> CACHE	{}
+	-> CALL	{}
+	-> CALLED	{}
+	-> CASCADE	{}
+	-> CASCADED	{}
+	-> CASE	{}
+	-> CAST	{}
+	-> CATALOG_P	{}
+	-> CHAIN	{}
+	-> CHARACTERISTICS	{}
+	-> CHECK	{}
+	-> CHECKPOINT	{}
+	-> CLASS	{}
+	-> CLOSE	{}
+	-> CLUSTER	{}
+	-> COALESCE	{}
+	-> COLLATE /*21L*/	{}
+	-> COLLATION	{}
+	-> COLUMN	{}
+	-> COLUMNS	{}
+	-> COMMENT	{}
+	-> COMMENTS	{}
+	-> COMMIT	{}
+	-> COMMITTED	{}
+	-> COMPRESSION	{}
+	-> CONCURRENTLY	{}
+	-> CONFIGURATION	{}
+	-> CONFLICT	{}
+	-> CONNECTION	{}
+	-> CONSTRAINT	{}
+	-> CONSTRAINTS	{}
+	-> CONTENT_P	{}
+	-> CONTINUE_P	{}
+	-> CONVERSION_P	{}
+	-> COPY	{}
+	-> COST	{}
+	-> CROSS /*27L*/	{}
+	-> CSV	{}
+	-> CUBE /*15N*/	{}
+	-> CURRENT_P	{}
+	-> CURRENT_CATALOG	{}
+	-> CURRENT_DATE	{}
+	-> CURRENT_ROLE	{}
+	-> CURRENT_SCHEMA	{}
+	-> CURRENT_TIME	{}
+	-> CURRENT_TIMESTAMP	{}
+	-> CURRENT_USER	{}
+	-> CURSOR	{}
+	-> CYCLE	{}
+	-> DATA_P	{}
+	-> DATABASE	{}
+	-> DEALLOCATE	{}
+	-> DEC	{}
+	-> DECIMAL_P	{}
+	-> DECLARE	{}
+	-> DEFAULT	{}
+	-> DEFAULTS	{}
+	-> DEFERRABLE	{}
+	-> DEFERRED	{}
+	-> DEFINER	{}
+	-> DELETE_P	{}
+	-> DELIMITER	{}
+	-> DELIMITERS	{}
+	-> DEPENDS	{}
+	-> DEPTH	{}
+	-> DESC	{}
+	-> DETACH	{}
+	-> DICTIONARY	{}
+	-> DISABLE_P	{}
+	-> DISCARD	{}
+	-> DISTINCT	{}
+	-> DO	{}
+	-> DOCUMENT_P	{}
+	-> DOMAIN_P	{}
+	-> DOUBLE_P	{}
+	-> DROP	{}
+	-> EACH	{}
+	-> ELSE	{}
+	-> ENABLE_P	{}
+	-> ENCODING	{}
+	-> ENCRYPTED	{}
+	-> END_P	{}
+	-> ENUM_P	{}
+	-> ESCAPE /*10N*/	{}
+	-> EVENT	{}
+	-> EXCLUDE	{}
+	-> EXCLUDING	{}
+	-> EXCLUSIVE	{}
+	-> EXECUTE	{}
+	-> EXISTS	{}
+	-> EXPLAIN	{}
+	-> EXPRESSION	{}
+	-> EXTENSION	{}
+	-> EXTERNAL	{}
+	-> EXTRACT	{}
+	-> FALSE_P	{}
+	-> FAMILY	{}
+	-> FINALIZE	{}
+	-> FIRST_P	{}
+	-> FLOAT_P	{}
+	-> FOLLOWING /*15N*/	{}
+	-> FORCE	{}
+	-> FOREIGN	{}
+	-> FORMAT	{}
+	-> FORWARD	{}
+	-> FREEZE	{}
+	-> FULL /*27L*/	{}
+	-> FUNCTION	{}
+	-> FUNCTIONS	{}
+	-> GENERATED	{}
+	-> GLOBAL	{}
+	-> GRANTED	{}
+	-> GREATEST	{}
+	-> GROUPING	{}
+	-> GROUPS /*15N*/	{}
+	-> HANDLER	{}
+	-> HEADER_P	{}
+	-> HOLD	{}
+	-> IDENTITY_P	{}
+	-> IF_P	{}
+	-> ILIKE /*9N*/	{}
+	-> IMMEDIATE	{}
+	-> IMMUTABLE	{}
+	-> IMPLICIT_P	{}
+	-> IMPORT_P	{}
+	-> IN_P /*9N*/	{}
+	-> INCLUDE	{}
+	-> INCLUDING	{}
+	-> INCREMENT	{}
+	-> INDENT	{}
+	-> INDEX	{}
+	-> INDEXES	{}
+	-> INHERIT	{}
+	-> INHERITS	{}
+	-> INITIALLY	{}
+	-> INLINE_P	{}
+	-> INNER_P /*27L*/	{}
+	-> INOUT	{}
+	-> INPUT_P	{}
+	-> INSENSITIVE	{}
+	-> INSERT	{}
+	-> INSTEAD	{}
+	-> INT_P	{}
+	-> INTEGER	{}
+	-> INTERVAL	{}
+	-> INVOKER	{}
+	-> IS /*7N*/	{}
+	-> ISOLATION	{}
+	-> JOIN /*27L*/	{}
+	-> JSON /*11N*/	{}
+	-> JSON_ARRAY	{}
+	-> JSON_ARRAYAGG	{}
+	-> JSON_OBJECT	{}
+	-> JSON_OBJECTAGG	{}
+	-> KEY	{}
+	-> KEYS /*12N*/	{}
+	-> LABEL	{}
+	-> LANGUAGE	{}
+	-> LARGE_P	{}
+	-> LAST_P	{}
+	-> LATERAL_P	{}
+	-> LEADING	{}
+	-> LEAKPROOF	{}
+	-> LEAST	{}
+	-> LEFT /*27L*/	{}
+	-> LEVEL	{}
+	-> LIKE /*9N*/	{}
+	-> LISTEN	{}
+	-> LOAD	{}
+	-> LOCAL	{}
+	-> LOCALTIME	{}
+	-> LOCALTIMESTAMP	{}
+	-> LOCATION	{}
+	-> LOCK_P	{}
+	-> LOCKED	{}
+	-> LOGGED	{}
+	-> MAPPING	{}
+	-> MATCH	{}
+	-> MATCHED	{}
+	-> MATERIALIZED	{}
+	-> MAXVALUE	{}
+	-> MERGE	{}
+	-> METHOD	{}
+	-> MINVALUE	{}
+	-> MODE	{}
+	-> MOVE	{}
+	-> NAME_P	{}
+	-> NAMES	{}
+	-> NATIONAL	{}
+	-> NATURAL /*27L*/	{}
+	-> NCHAR	{}
+	-> NEW	{}
+	-> NEXT	{}
+	-> NFC	{}
+	-> NFD	{}
+	-> NFKC	{}
+	-> NFKD	{}
+	-> NO	{}
+	-> NONE	{}
+	-> NORMALIZE	{}
+	-> NORMALIZED	{}
+	-> NOT /*6R*/	{}
+	-> NOTHING	{}
+	-> NOTIFY	{}
+	-> NOWAIT	{}
+	-> NULL_P	{}
+	-> NULLIF	{}
+	-> NULLS_P	{}
+	-> NUMERIC	{}
+	-> OBJECT_P /*12N*/	{}
+	-> OF	{}
+	-> OFF	{}
+	-> OIDS	{}
+	-> OLD	{}
+	-> ONLY	{}
+	-> OPERATOR /*16L*/	{}
+	-> OPTION	{}
+	-> OPTIONS	{}
+	-> OR /*4L*/	{}
+	-> ORDINALITY	{}
+	-> OTHERS	{}
+	-> OUT_P	{}
+	-> OUTER_P	{}
+	-> OVERLAY	{}
+	-> OVERRIDING	{}
+	-> OWNED	{}
+	-> OWNER	{}
+	-> PARALLEL	{}
+	-> PARAMETER	{}
+	-> PARSER	{}
+	-> PARTIAL	{}
+	-> PARTITION /*15N*/	{}
+	-> PASSING	{}
+	-> PASSWORD	{}
+	-> PLACING	{}
+	-> PLANS	{}
+	-> POLICY	{}
+	-> POSITION	{}
+	-> PRECEDING /*15N*/	{}
+	-> PREPARE	{}
+	-> PREPARED	{}
+	-> PRESERVE	{}
+	-> PRIMARY	{}
+	-> PRIOR	{}
+	-> PRIVILEGES	{}
+	-> PROCEDURAL	{}
+	-> PROCEDURE	{}
+	-> PROCEDURES	{}
+	-> PROGRAM	{}
+	-> PUBLICATION	{}
+	-> QUOTE	{}
+	-> RANGE /*15N*/	{}
+	-> READ	{}
+	-> REAL	{}
+	-> REASSIGN	{}
+	-> RECHECK	{}
+	-> RECURSIVE	{}
+	-> REF_P	{}
+	-> REFERENCES	{}
+	-> REFERENCING	{}
+	-> REFRESH	{}
+	-> REINDEX	{}
+	-> RELATIVE_P	{}
+	-> RELEASE	{}
+	-> RENAME	{}
+	-> REPEATABLE	{}
+	-> REPLACE	{}
+	-> REPLICA	{}
+	-> RESET	{}
+	-> RESTART	{}
+	-> RESTRICT	{}
+	-> RETURN	{}
+	-> RETURNS	{}
+	-> REVOKE	{}
+	-> RIGHT /*27L*/	{}
+	-> ROLE	{}
+	-> ROLLBACK	{}
+	-> ROLLUP /*15N*/	{}
+	-> ROUTINE	{}
+	-> ROUTINES	{}
+	-> ROW	{}
+	-> ROWS /*15N*/	{}
+	-> RULE	{}
+	-> SAVEPOINT	{}
+	-> SCALAR /*12N*/	{}
+	-> SCHEMA	{}
+	-> SCHEMAS	{}
+	-> SCROLL	{}
+	-> SEARCH	{}
+	-> SECURITY	{}
+	-> SELECT	{}
+	-> SEQUENCE	{}
+	-> SEQUENCES	{}
+	-> SERIALIZABLE	{}
+	-> SERVER	{}
+	-> SESSION	{}
+	-> SESSION_USER	{}
+	-> SET /*1N*/	{}
+	-> SETOF	{}
+	-> SETS	{}
+	-> SHARE	{}
+	-> SHOW	{}
+	-> SIMILAR /*9N*/	{}
+	-> SIMPLE	{}
+	-> SKIP	{}
+	-> SMALLINT	{}
+	-> SNAPSHOT	{}
+	-> SOME	{}
+	-> SQL_P	{}
+	-> STABLE	{}
+	-> STANDALONE_P	{}
+	-> START	{}
+	-> STATEMENT	{}
+	-> STATISTICS	{}
+	-> STDIN	{}
+	-> STDOUT	{}
+	-> STORAGE	{}
+	-> STORED	{}
+	-> STRICT_P	{}
+	-> STRIP_P	{}
+	-> SUBSCRIPTION	{}
+	-> SUBSTRING	{}
+	-> SUPPORT	{}
+	-> SYMMETRIC	{}
+	-> SYSID	{}
+	-> SYSTEM_P	{}
+	-> SYSTEM_USER	{}
+	-> TABLE	{}
+	-> TABLES	{}
+	-> TABLESAMPLE	{}
+	-> TABLESPACE	{}
+	-> TEMP	{}
+	-> TEMPLATE	{}
+	-> TEMPORARY	{}
+	-> TEXT_P	{}
+	-> THEN	{}
+	-> TIES	{}
+	-> TIME	{}
+	-> TIMESTAMP	{}
+	-> TRAILING	{}
+	-> TRANSACTION	{}
+	-> TRANSFORM	{}
+	-> TREAT	{}
+	-> TRIGGER	{}
+	-> TRIM	{}
+	-> TRUE_P	{}
+	-> TRUNCATE	{}
+	-> TRUSTED	{}
+	-> TYPE_P	{}
+	-> TYPES_P	{}
+	-> UESCAPE	{}
+	-> UNBOUNDED /*14N*/	{}
+	-> UNCOMMITTED	{}
+	-> UNENCRYPTED	{}
+	-> UNIQUE /*11N*/	{}
+	-> UNKNOWN	{}
+	-> UNLISTEN	{}
+	-> UNLOGGED	{}
+	-> UNTIL	{}
+	-> UPDATE	{}
+	-> USER	{}
+	-> USING	{}
+	-> VACUUM	{}
+	-> VALID	{}
+	-> VALIDATE	{}
+	-> VALIDATOR	{}
+	-> VALUE_P /*12N*/	{}
+	-> VALUES	{}
+	-> VARCHAR	{}
+	-> VARIADIC	{}
+	-> VERBOSE	{}
+	-> VERSION_P	{}
+	-> VIEW	{}
+	-> VIEWS	{}
+	-> VOLATILE	{}
+	-> WHEN	{}
+	-> WHITESPACE_P	{}
+	-> WORK	{}
+	-> WRAPPER	{}
+	-> WRITE	{}
+	-> XML_P	{}
+	-> XMLATTRIBUTES	{}
+	-> XMLCONCAT	{}
+	-> XMLELEMENT	{}
+	-> XMLEXISTS	{}
+	-> XMLFOREST	{}
+	-> XMLNAMESPACES	{}
+	-> XMLPARSE	{}
+	-> XMLPI	{}
+	-> XMLROOT	{}
+	-> XMLSERIALIZE	{}
+	-> XMLTABLE	{}
+	-> YES_P	{}
+	-> ZONE	{}
+}
+
