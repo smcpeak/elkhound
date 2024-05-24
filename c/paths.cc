@@ -10,6 +10,8 @@
 #include "trace.h"       // tracingSys
 #include "treeout.h"     // treeOut
 
+#include <algorithm>     // std::max
+
 
 // one thing to note about constness: when an AST node contains a field
 // to store the path count, the counting function is declared non-const;
@@ -499,7 +501,7 @@ int countPaths(Env &env, Expression *ths)
     return 0;
   }
 
-  #define SIDE_EFFECT() numPaths = max(numPaths,1) /* user ; */
+  #define SIDE_EFFECT() numPaths = std::max(numPaths,1) /* user ; */
 
   ASTSWITCH(Expression, ths) {
     ASTCASE(E_funCall, ths) {
@@ -608,7 +610,7 @@ int countPaths(Env &env, Expression *ths)
     ASTNEXT(E_comma, ths) {
       numPaths = ths->e1->numPaths;
       if (ths->e2->numPaths > 0) {
-        numPaths = mult(max(numPaths,1), ths->e2->numPaths);
+        numPaths = mult(std::max(numPaths,1), ths->e2->numPaths);
       }
     }
     ASTNEXT(E_assign, ths) {

@@ -68,7 +68,7 @@ string astTypeToString(int type)
 
   STATIC_ASSERT(TABLESIZE(arr) == NUM_AST_CODES-1);
 
-  loopi(TABLESIZE(arr)) {
+  smbase_loopi(TABLESIZE(arr)) {
     if (arr[i].code == type) {
       return arr[i].name;
     }

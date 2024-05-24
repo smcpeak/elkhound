@@ -140,7 +140,7 @@ void GrammarAnalysis::initDerivableRelation()
 
   // initialize it
   derivable->setall(0);
-  loopi(numNonterms) {
+  smbase_loopi(numNonterms) {
     derivable->set(point(i,i));
       // every nonterminal can derive itself in 0 or more steps
       // (specifically, in 0 steps, at least)
@@ -241,7 +241,7 @@ void GrammarAnalysis::initializeAuxData()
   // to insist on a contiguous space starting at 0
   numTerms = numTerminals();
   indexedTerms = new Terminal* [numTerms];
-  loopi(numTerminals()) {
+  smbase_loopi(numTerminals()) {
     indexedTerms[i] = NULL;      // used to track id duplication
   }
   for (ObjListMutator<Terminal> sym(terminals);
@@ -1429,7 +1429,7 @@ void GrammarAnalysis::exampleGrammar()
     // terminals: "a", "b", .. "e"
     char const termLetters[] = "abcde";
     Terminal *terms[5];
-    loopi(5) {
+    smbase_loopi(5) {
       char s[2];          // will be e.g. "b\0"
       s[0] = termLetters[i];
       s[1] = 0;
@@ -1449,7 +1449,7 @@ void GrammarAnalysis::exampleGrammar()
       "Start", "A", "B", "C", "D"
     };
     Nonterminal *nonterms[5];
-    loopi(5) {
+    smbase_loopi(5) {
       nonterms[i] = new Nonterminal(nontermNames[i]);
       nonterminals.append(nonterms[i]);
     }

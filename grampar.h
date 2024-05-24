@@ -4,11 +4,12 @@
 #ifndef __GRAMPAR_H
 #define __GRAMPAR_H
 
-#include "typ.h"          // NULL
 #include "sobjlist.h"     // SObjList
 #include "exc.h"          // xBase
 #include "strsobjdict.h"  // StringSObjDict
 #include "locstr.h"       // LocString
+
+#include <stddef.h>       // NULL
 
 // linkdepend: grampar.tab.cc
 

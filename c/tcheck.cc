@@ -9,7 +9,9 @@
 #include "paths.h"          // printPaths
 #include "cc_lang.h"        // CCLang
 
-#define IN_PREDICATE(env) Restorer<bool> restorer(env.inPredicate, true)
+#include "save-restore.h"   // SET_RESTORE
+
+#define IN_PREDICATE(env) SET_RESTORE(env.inPredicate, true)
 
 
 void checkBoolean(Env &env, Type const *t, Expression const *e)

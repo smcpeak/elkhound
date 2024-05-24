@@ -1049,7 +1049,24 @@ int ParseTables::colorTheGraph(int *color, Bit2d &graph)
 }
 
 
-// --------------------- table emission -------------------
+// -------------------------- table emission ---------------------------
+// Normally, tables entries contain integers that we can simply get
+// as-is.
+template <class EltType>
+int getEltAsInt(EltType const &elt)
+{
+  return elt;
+}
+
+// But for `ProdInfo`, we (evidently?) use just its `rhsLen` field.
+// (I'm fixing a bug in some very old code, and am not sure if this is
+// exactly right.)
+template <>
+int getEltAsInt(ParseTables::ProdInfo const &prodInfo)
+{
+  return prodInfo.rhsLen;
+}
+
 // create literal tables
 template <class EltType>
 void emitTable(EmitCode &out, EltType const *table, int size, int rowLength,
@@ -1096,7 +1113,7 @@ void emitTable(EmitCode &out, EltType const *table, int size, int rowLength,
     }
 
     if (printHex) {
-      out << stringf("0x%02X,", table[i]);
+      out << stringf("0x%02X,", getEltAsInt(table[i]));
     }
     else if (sizeof(table[i]) == 1) {
       // little bit of a hack to make sure 'unsigned char' gets

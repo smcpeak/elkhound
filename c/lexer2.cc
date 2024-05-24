@@ -264,21 +264,21 @@ Lexer2TokenType lookupKeyword(CCLang &lang, rostring keyword)
 
   xassert(TABLESIZE(l2TokTypes) == L2_NUM_TYPES);
 
-  {loopi(TABLESIZE(gnuKeywordMap)) {
+  {smbase_loopi(TABLESIZE(gnuKeywordMap)) {
     if (0==strcmp(gnuKeywordMap[i].spelling, keyword)) {
       return gnuKeywordMap[i].tokType;
     }
   }}
 
   if (!lang.recognizeCppKeywords) {
-    {loopi(TABLESIZE(c_KeywordMap)) {
+    {smbase_loopi(TABLESIZE(c_KeywordMap)) {
       if (0==strcmp(c_KeywordMap[i].spelling, keyword)) {
         return c_KeywordMap[i].tokType;
       }
     }}
   }
 
-  {loopi(L2_NUM_TYPES) {
+  {smbase_loopi(L2_NUM_TYPES) {
     if (l2TokTypes[i].bisonSpelling &&
         0==strcmp(l2TokTypes[i].spelling, keyword)) {
       return l2TokTypes[i].tokType;
@@ -312,7 +312,7 @@ char const *l2Tok2SexpString(Lexer2TokenType type)
 // list of "%token" declarations for Bison
 void printBisonTokenDecls(bool spellings)
 {
-  loopi(L2_NUM_TYPES) {
+  smbase_loopi(L2_NUM_TYPES) {
     //if (i == L2_EOF) {
     //  continue;    // bison doesn't like me to define a token with code 0
     //}
@@ -341,7 +341,7 @@ void printMyTokenDecls()
          "//   <code> : <name> [<alias>] ;\n"
          "\n");
 
-  loopi(L2_NUM_TYPES) {
+  smbase_loopi(L2_NUM_TYPES) {
     Lexer2TokenTypeDesc const &desc = l2TokTypes[i];
     xassert(desc.tokType == i);    // check correspondence between index and tokType
 

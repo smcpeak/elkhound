@@ -2,7 +2,11 @@
 // code for c_type.h
 
 #include "c_type.h"     // this module
+
 #include "trace.h"      // tracingSys
+
+#include <algorithm>    // std::max
+
 #include <assert.h>     // assert
 
 
@@ -392,7 +396,7 @@ int CompoundType::reprSize() const
     int membSize = iter.data()->type->reprSize();
     if (keyword == K_UNION) {
       // representation size is max over field sizes
-      total = max(total, membSize);
+      total = std::max(total, membSize);
     }
     else {
       // representation size is sum over field sizes

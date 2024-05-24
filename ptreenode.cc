@@ -2,7 +2,8 @@
 // code for ptreenode.h
 
 #include "ptreenode.h"      // this module
-#include "typ.h"            // STATICDEF
+
+#include "sm-macros.h"      // STATICDEF
 #include "str.h"            // string
 #include "trace.h"          // tracingSys
 

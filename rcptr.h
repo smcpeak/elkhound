@@ -8,10 +8,10 @@
 //   // decrement refcount, and if it becomes 0, delete yourself
 //   void decRefCt();
 
-#ifndef __RCPTR_H
-#define __RCPTR_H
+#ifndef ELKHOUND_RCPTR_H
+#define ELKHOUND_RCPTR_H
 
-#include "typ.h"      // NULL
+#include <stddef.h>   // NULL
 
 #if 0
   #include <stdio.h>    // printf, temporary
@@ -67,4 +67,4 @@ public:     // funcs
 };
 
 
-#endif // __RCPTR_H
+#endif // ELKHOUND_RCPTR_H

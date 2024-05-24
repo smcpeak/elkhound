@@ -17,8 +17,10 @@
 #include "grampar.tab.h"     // token constant codes, union YYSTYPE
 #include "array.h"           // GrowArray
 #include "mlsstr.h"          // MLSubstrate
-
 #include "sm-fstream.h"      // ifstream
+
+#include <algorithm>         // std::max
+
 #include <ctype.h>           // isspace, isalnum
 
 #define LIT_STR(s) LocString(SL_INIT, grammarStringTable.add(s))
@@ -413,7 +415,7 @@ void astParseTerminals(Environment &env, TF_terminals const &terms)
       }
 
       // track what terminals have codes
-      maxCode = max(code, maxCode);
+      maxCode = std::max(code, maxCode);
       codeHasTerm.ensureIndexDoubler(code);
       codeHasTerm[code].b = true;
     }

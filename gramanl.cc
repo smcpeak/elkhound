@@ -620,7 +620,7 @@ void ItemSet::getPossibleReductions(ProductionList &reductions,
                                     bool parsing) const
 {
   // for each item with dot at end
-  loopi(numDotsAtEnd) {
+  smbase_loopi(numDotsAtEnd) {
     LRItem const *item = dotsAtEnd[i];
 
     if (LR0) {
@@ -1102,7 +1102,7 @@ void GrammarAnalysis::initDerivableRelation()
 
   // initialize it
   derivable->setall(0);
-  loopi(numNonterms) {
+  smbase_loopi(numNonterms) {
     derivable->set(point(i,i));
       // every nonterminal can derive itself in 0 or more steps
       // (specifically, in 0 steps, at least)
@@ -1208,7 +1208,7 @@ void GrammarAnalysis::computeIndexedTerms()
   // to insist on a contiguous space starting at 0
   numTerms = Grammar::numTerminals();
   indexedTerms = new Terminal* [numTerms];
-  loopi(numTerminals()) {
+  smbase_loopi(numTerminals()) {
     indexedTerms[i] = NULL;      // used to track id duplication
   }
   for (ObjListMutator<Terminal> sym(terminals);
