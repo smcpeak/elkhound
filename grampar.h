@@ -5,7 +5,7 @@
 #define __GRAMPAR_H
 
 #include "sobjlist.h"     // SObjList
-#include "exc.h"          // xBase
+#include "exc.h"          // XBase
 #include "strsobjdict.h"  // StringSObjDict
 #include "locstr.h"       // LocString
 
@@ -113,7 +113,7 @@ void parseGrammarAST(Grammar &g, GrammarAST *treeTop);
 
 
 // thrown when there is an error parsing the AST
-class XASTParse : public xBase {
+class XASTParse : public XBase {
 public:    // data
   // token at or near failure
   LocString failToken;

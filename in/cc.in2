@@ -5,7 +5,7 @@
 #include "trace.h"     // trace
 #include "glrtree.h"   // AttrContext
 #include "util.h"      // TVAL
-#include "exc.h"       // xBase
+#include "exc.h"       // XBase
 
 
 // ----------------------- Condition --------------------
@@ -56,7 +56,7 @@ bool Conditions::test(AttrContext const &actx) const
 	return false;
       }
     }
-    catch (xBase &x) {
+    catch (XBase &x) {
       cout << "condition " << iter.data()->toString(actx.reductionC().production)
            << " failed with exception: " << x << endl;
       return false;

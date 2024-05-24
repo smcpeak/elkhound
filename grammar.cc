@@ -5,7 +5,7 @@
 #include "syserr.h"    // xsyserror
 #include "strtokp.h"   // StrtokParse
 #include "trace.h"     // trace
-#include "exc.h"       // xBase
+#include "exc.h"       // XBase
 #include "strutil.h"   // quoted, parseQuotedString
 #include "flatten.h"   // Flatten
 #include "eh-flatutil.h"  // various xfer helpers

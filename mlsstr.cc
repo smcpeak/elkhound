@@ -486,12 +486,12 @@ int Test::main(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-  //xBase::logExceptions = false;
+  //XBase::logExceptions = false;
   try {
     Test t;
     return t.main(argc, argv);
   }
-  catch (xBase &x) {
+  catch (XBase &x) {
     cout << endl << x << endl;
     return 10;
   }

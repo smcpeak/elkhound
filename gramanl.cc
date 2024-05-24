@@ -4904,7 +4904,7 @@ int inner_entry(int argc, char **argv)
   SHIFT;
 
   // disable 'Exception thrown' reports
-  xBase::logExceptions = false;
+  XBase::logExceptions = false;
 
   // as long as this remains 0-length, it means to use
   // the default naming scheme

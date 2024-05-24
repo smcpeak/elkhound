@@ -66,14 +66,14 @@ STATICDEF string XASTParse::
 }
 
 XASTParse::XASTParse(LocString const &tok, rostring m)
-  : xBase(constructMsg(tok, m)),
+  : XBase(constructMsg(tok, m)),
     failToken(tok),
     message(m)
 {}
 
 
 XASTParse::XASTParse(XASTParse const &obj)
-  : xBase(obj),
+  : XBase(obj),
     DMEMB(failToken),
     DMEMB(message)
 {}
@@ -128,7 +128,7 @@ void astParseErrorCont(Environment &env, LocString const &failToken,
     /* leave unchanged */               \
     throw x;                            \
   }                                     \
-  catch (xBase &x) {                    \
+  catch (XBase &x) {                    \
     /* add context */                   \
     astParseError(tok, x.why());        \
     throw 0;     /* silence warning */  \
@@ -922,7 +922,7 @@ int grampar_yylex(YYSTYPE *lvalp, void *parseParam)
         lvalp->str = NULL;        // any attempt to use will segfault
     }
   }
-  catch (xBase &x) {
+  catch (XBase &x) {
     // e.g. malformed fundecl
     cout << lexer.curLocStr() << ": " << x << endl;
 
