@@ -26,8 +26,13 @@ tokens.tok: lexer.h $(ELKHOUND)/make-tok
 lexer.exe: lexer.cc
 	g++ -o $@ $(CCFLAGS) -DTEST_LEXER lexer.cc $(LDFLAGS)
 
-gcom.h gcom.cc: gcom.gr tokens.tok
+gcom.h: gcom.gr tokens.tok
 	$(ELKHOUND)/elkhound.exe gcom.gr
+
+# I cannot make both gcom.cc and gcom.h in one rule because that causes
+# `elkhound` to be run twice, which in a parallel build causes a race.
+gcom.cc: gcom.h
+	@echo "Fake rule to create gcom.cc from gcom.h"
 
 parser.o: gcom.h
 
