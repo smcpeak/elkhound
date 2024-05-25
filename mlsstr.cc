@@ -486,7 +486,6 @@ int Test::main(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-  //XBase::logExceptions = false;
   try {
     Test t;
     return t.main(argc, argv);

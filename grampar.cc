@@ -66,17 +66,18 @@ STATICDEF string XASTParse::
 }
 
 XASTParse::XASTParse(LocString const &tok, rostring m)
-  : XBase(constructMsg(tok, m)),
+  : XMessage(constructMsg(failToken, message)),
     failToken(tok),
     message(m)
 {}
 
 
 XASTParse::XASTParse(XASTParse const &obj)
-  : XBase(obj),
+  : XMessage(obj),
     DMEMB(failToken),
     DMEMB(message)
 {}
+
 
 XASTParse::~XASTParse()
 {}

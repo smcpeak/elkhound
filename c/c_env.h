@@ -21,10 +21,10 @@ class CCLang;             // cc_lang.h
 
 
 // thrown by some error functions
-class XError : public XBase {
+class XError : public XMessage {
 public:
-  XError(char const *msg) : XBase(msg) {}
-  XError(XError const &obj) : XBase(obj) {}
+  XError(char const *msg) : XMessage(msg) {}
+  XError(XError const &obj) : XMessage(obj) {}
 };
 
 

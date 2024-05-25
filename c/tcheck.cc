@@ -332,13 +332,13 @@ Type const *TS_classSpec::tcheck(Env &env)
 }
 
 
-class XNonConst : public XBase {
+class XNonConst : public XMessage {
 public:
   Expression const *subexpr;     // on which it fails to be const
 
 public:
-  XNonConst() : XBase("non-const") {}
-  XNonConst(XNonConst const &obj) : XBase(obj), subexpr(obj.subexpr) {}
+  XNonConst() : XMessage("non-const") {}
+  XNonConst(XNonConst const &obj) : XMessage(obj), subexpr(obj.subexpr) {}
   ~XNonConst();
 };
 

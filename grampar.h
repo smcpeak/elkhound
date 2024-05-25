@@ -113,9 +113,18 @@ void parseGrammarAST(Grammar &g, GrammarAST *treeTop);
 
 
 // thrown when there is an error parsing the AST
-class XASTParse : public XBase {
+class XASTParse : public XMessage {
 public:    // data
-  // token at or near failure
+  // Token at or near failure.
+  //
+  // Note: This carries a `SourceLoc`, which can only be interpreted
+  // with the help of a `SourceLocManager`.  But it is quite possible
+  // for this exception to propagate out of the scope that creates and
+  // destroys the manager.  If one then attempts to turn this location
+  // into a string, the program will crash due to not having a manager.
+  //
+  // That is why this class inherits from `XMessage` instead of `XBase`,
+  // since with the former, we create the complete message eagerly.
   LocString failToken;
 
   // what is wrong

@@ -4903,9 +4903,6 @@ int inner_entry(int argc, char **argv)
   char const *progName = argv[0];
   SHIFT;
 
-  // disable 'Exception thrown' reports
-  XBase::logExceptions = false;
-
   // as long as this remains 0-length, it means to use
   // the default naming scheme
   string prefix;
