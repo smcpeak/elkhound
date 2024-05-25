@@ -584,7 +584,7 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
           xfailure("unknown L1 type");
       }
     }
-    catch (xFormat &x) {
+    catch (XFormat &x) {
       cout << toString(L1->loc) << ": " << x.cond() << endl;
       continue;
     }
