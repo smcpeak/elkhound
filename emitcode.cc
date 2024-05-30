@@ -2,10 +2,13 @@
 // code for emitcode.h
 
 #include "emitcode.h"      // this module
-#include "syserr.h"        // xsyserror
+#include "syserr.h"        // smbase::xsyserror
 #include "srcloc.h"        // SourceLoc
 #include "trace.h"         // tracingSys
 #include <string.h>        // memcpy
+
+using namespace smbase;
+
 
 EmitCode::EmitCode(rostring f)
   : stringBuilder(),

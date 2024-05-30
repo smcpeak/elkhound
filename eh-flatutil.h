@@ -1,9 +1,11 @@
 // eh-flatutil.h            see license.txt for copyright and terms of use
-// flatten helpers
+// Flatten helpers for Elkhound.
 
 #ifndef EH_FLATUTIL_H
 #define EH_FLATUTIL_H
 
+// smbase
+#include "exc.h"         // formatAssert
 #include "flatten.h"     // Flatten
 #include "objlist.h"     // ObjList
 #include "sobjlist.h"    // SObjList

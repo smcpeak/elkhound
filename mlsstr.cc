@@ -4,11 +4,13 @@
 
 #include "mlsstr.h"      // this module
 #include "xassert.h"     // xassert
-#include "exc.h"         // xformat
+#include "exc.h"         // smbase::xformat
 #include "strutil.h"     // string, replace
 
 #include "sm-iostream.h" // cout
 #include <ctype.h>       // isspace
+
+using namespace smbase;
 
 
 MLSubstrate::MLSubstrate(ReportError *err)

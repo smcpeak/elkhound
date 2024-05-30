@@ -4,13 +4,16 @@
 #include "lexer2.h"      // this module
 #include "trace.h"       // tracingSys
 #include "strutil.h"     // encodeWithEscapes
-#include "exc.h"         // xformat
+#include "exc.h"         // smbase::xformat
 #include "cc_lang.h"     // CCLang
 #include "glrconfig.h"   // SOURCELOC
 #include "syserr.h"      // xsyserror
 
 #include <stdlib.h>      // strtoul
 #include <string.h>      // strlen, strcmp
+
+using namespace smbase;
+
 
 // ------------------ token type descriptions ----------------------
 struct Lexer2TokenTypeDesc

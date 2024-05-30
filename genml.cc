@@ -9,7 +9,9 @@
 #include "parsetables.h" // ParseTables
 #include "exc.h"         // XOpen
 #include "strutil.h"     // replace
-#include "syserr.h"      // xsyserror
+#include "syserr.h"      // smbase::xsyserror
+
+using namespace smbase;
 
 
 // NOTE: The as following code is largely copied from elsewhere,

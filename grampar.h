@@ -1,8 +1,8 @@
 // grampar.h            see license.txt for copyright and terms of use
 // declarations for bison-generated grammar parser
 
-#ifndef __GRAMPAR_H
-#define __GRAMPAR_H
+#ifndef ELKHOUND_GRAMPAR_H
+#define ELKHOUND_GRAMPAR_H
 
 #include "sobjlist.h"     // SObjList
 #include "exc.h"          // XBase
@@ -113,7 +113,7 @@ void parseGrammarAST(Grammar &g, GrammarAST *treeTop);
 
 
 // thrown when there is an error parsing the AST
-class XASTParse : public XMessage {
+class XASTParse : public smbase::XMessage {
 public:    // data
   // Token at or near failure.
   //
@@ -140,4 +140,4 @@ public:    // funcs
 };
 
 
-#endif // __GRAMPAR_H
+#endif // ELKHOUND_GRAMPAR_H

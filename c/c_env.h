@@ -8,7 +8,7 @@
 #include "strobjdict.h"   // StrObjDict
 #include "strsobjdict.h"  // StrSObjDict
 #include "owner.h"        // Owner
-#include "exc.h"          // XBase
+#include "exc.h"          // smbase::XMessage
 #include "sobjlist.h"     // SObjList
 #include "objstack.h"     // ObjStack
 #include "sobjstack.h"    // SObjStack
@@ -21,10 +21,10 @@ class CCLang;             // cc_lang.h
 
 
 // thrown by some error functions
-class XError : public XMessage {
+class XError : public smbase::XMessage {
 public:
-  XError(char const *msg) : XMessage(msg) {}
-  XError(XError const &obj) : XMessage(obj) {}
+  XError(char const *msg) : smbase::XMessage(msg) {}
+  XError(XError const &obj) : smbase::XMessage(obj) {}
 };
 
 

@@ -4,12 +4,16 @@
 #include "c.ast.gen.h"      // C ast
 #include "c_type.h"         // Type, AtomicType, etc.
 #include "c_env.h"          // Env
-#include "strutil.h"        // quoted
-#include "trace.h"          // trace
 #include "paths.h"          // printPaths
 #include "cc_lang.h"        // CCLang
 
+// smbase
 #include "save-restore.h"   // SET_RESTORE
+#include "strutil.h"        // quoted
+#include "trace.h"          // trace
+
+using namespace smbase;
+
 
 #define IN_PREDICATE(env) SET_RESTORE(env.inPredicate, true)
 

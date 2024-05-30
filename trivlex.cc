@@ -2,9 +2,12 @@
 // trivial lexer (returns each character as a token)
 
 #include "lexer2.h"     // Lexer2
-#include "syserr.h"     // xsyserror
+#include "syserr.h"     // smbase::xsyserror
 
 #include <stdio.h>      // FILE stuff
+
+using namespace smbase;
+
 
 void trivialLexer(char const *fname, Lexer2 &dest)
 {

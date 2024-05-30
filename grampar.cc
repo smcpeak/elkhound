@@ -23,6 +23,9 @@
 
 #include <ctype.h>           // isspace, isalnum
 
+using namespace smbase;
+
+
 #define LIT_STR(s) LocString(SL_INIT, grammarStringTable.add(s))
 
 

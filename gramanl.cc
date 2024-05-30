@@ -6,7 +6,7 @@
 #include "bit2d.h"       // Bit2d
 #include "bitarray.h"    // BitArray
 #include "strtokp.h"     // StrtokParse
-#include "syserr.h"      // xsyserror
+#include "syserr.h"      // smbase::xsyserror
 #include "trace.h"       // tracing system
 #include "nonport.h"     // getMilliseconds
 #include "crc.h"         // crc32
@@ -24,6 +24,9 @@
 
 // for ParseTables::emitConstructionCode:
 //   linkdepend: parsetables.cc
+
+
+using namespace smbase;
 
 
 // for now, we'll just have these be global variables; if I later

@@ -4,9 +4,11 @@
 #include "parssppt.h"     // this module
 #include "glr.h"          // toplevelParse
 #include "trace.h"        // traceProcessArg
-#include "syserr.h"       // xsyserror
+#include "syserr.h"       // smbase::xsyserror
 
 #include <stdlib.h>       // exit
+
+using namespace smbase;
 
 
 // ---------------------- ParseTree --------------------

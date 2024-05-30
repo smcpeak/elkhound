@@ -15,10 +15,13 @@
 #include "useract.h"   // UserActions
 #include "ptreenode.h" // PTreeNode
 #include "cc_lang.h"   // CCLang
-#include "syserr.h"    // xsyserror
+#include "syserr.h"    // smbase::xsyserror
 
 #include <string.h>    // strcmp
 #include <stdlib.h>    // exit
+
+using namespace smbase;
+
 
 // no bison-parser present, so need to define this
 Lexer2Token const *yylval = NULL;
