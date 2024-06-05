@@ -8,7 +8,7 @@
 #include "emitcode.h"    // EmitCode
 #include "parsetables.h" // ParseTables
 #include "exc.h"         // XOpen
-#include "strutil.h"     // replace
+#include "string-util.h" // replaceAll
 #include "syserr.h"      // smbase::xsyserror
 
 using namespace smbase;
@@ -589,7 +589,7 @@ void emitMLSwitchCode(Grammar const &g, EmitCode &out,
                       ObjList<SYMBOL> const &syms, int whichFunc,
                       char const *templateCode, char const *actUpon)
 {
-  out << replace(signature, "$acn", string(g.actionClassName)) << " =\n"
+  out << replaceAll(signature, "$acn", string(g.actionClassName)) << " =\n"
          "begin\n"
          "  match " << switchVar << " with\n"
          ;
@@ -603,7 +603,7 @@ void emitMLSwitchCode(Grammar const &g, EmitCode &out,
         (whichFunc==3 && sym.asNonterminalC().keepCode) ||
         (whichFunc==4 && sym.asTerminalC().classifyCode)) {
       out << "  | " << sym.getTermOrNontermIndex() << " -> (\n";
-      out << replace(replace(templateCode,
+      out << replaceAll(replaceAll(templateCode,
                "$symName", string(sym.name)),
                "$symType", notVoid(sym.type));
       out << "    )\n";

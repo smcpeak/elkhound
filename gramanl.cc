@@ -13,7 +13,7 @@
 #include "eh-flatutil.h" // Flatten, xfer helpers
 #include "grampar.h"     // readGrammarFile
 #include "emitcode.h"    // EmitCode
-#include "strutil.h"     // replace
+#include "string-util.h" // replaceAll
 #include "genml.h"       // emitMLActionCode
 
 #include "sm-fstream.h"  // ofstream
@@ -4194,7 +4194,7 @@ void emitActionCode(GrammarAnalysis const &g, rostring hFname,
     xsyserror("open", hFname);
   }
 
-  string latchName = replace(replace(replace(
+  string latchName = replaceAll(replaceAll(replaceAll(
                        stringToupper(hFname),
                          ".", "_"),
                          "/", "_"),
@@ -4789,7 +4789,7 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
                     ObjList<SYMBOL> const &syms, int whichFunc,
                     char const *templateCode, char const *actUpon)
 {
-  out << replace(signature, "$acn", string(g.actionClassName)) << "\n"
+  out << replaceAll(signature, "$acn", string(g.actionClassName)) << "\n"
          "{\n"
          "  switch (" << switchVar << ") {\n";
 
@@ -4802,7 +4802,7 @@ void emitSwitchCode(Grammar const &g, EmitCode &out,
         (whichFunc==3 && sym.asNonterminalC().keepCode) ||
         (whichFunc==4 && sym.asTerminalC().classifyCode)) {
       out << "    case " << sym.getTermOrNontermIndex() << ":\n";
-      out << replace(replace(templateCode,
+      out << replaceAll(replaceAll(templateCode,
                "$symName", string(sym.name)),
                "$symType", notVoid(sym.type));
     }
@@ -4983,7 +4983,7 @@ int inner_entry(int argc, char **argv)
 
   if (!prefix.length()) {
     // default naming scheme
-    prefix = replace(argv[0], ".gr", "");
+    prefix = replaceAll(argv[0], ".gr", "");
   }
 
   SourceLocManager mgr;

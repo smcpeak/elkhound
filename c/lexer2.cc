@@ -1,16 +1,23 @@
 // lexer2.cc            see license.txt for copyright and terms of use
 // code for lexer2.h
 
-#include "lexer2.h"      // this module
-#include "trace.h"       // tracingSys
-#include "strutil.h"     // encodeWithEscapes
-#include "exc.h"         // smbase::xformat
-#include "cc_lang.h"     // CCLang
-#include "glrconfig.h"   // SOURCELOC
-#include "syserr.h"      // xsyserror
+#include "lexer2.h"                    // this module
 
-#include <stdlib.h>      // strtoul
-#include <string.h>      // strlen, strcmp
+// this dir
+#include "cc_lang.h"                   // CCLang
+#include "glrconfig.h"                 // SOURCELOC
+
+// smbase
+#include "c-string-reader.h"           // smbase::decodeCStringEscapesToString
+#include "exc.h"                       // smbase::xformat
+#include "string-util.h"               // doubleQuote
+#include "strutil.h"                   // encodeWithEscapes
+#include "syserr.h"                    // xsyserror
+#include "trace.h"                     // tracingSys
+
+// libc
+#include <stdlib.h>                    // strtoul
+#include <string.h>                    // strlen, strcmp
 
 using namespace smbase;
 
@@ -425,7 +432,7 @@ string Lexer2Token::unparseString() const
       return string(strValue);
 
     case L2_STRING_LITERAL:
-      return stringc << quoted(strValue);
+      return stringc << doubleQuote(strValue);
 
     case L2_INT_LITERAL:
       return stringc << intValue;
@@ -443,15 +450,17 @@ void Lexer2Token::print() const
 }
 
 
-// Populate 'dest' with the decoded character values from the C string
-// literal syntax in 'src'.  This does *not* add a NUL terminator to the
-// end of the 'dest' array (use its 'length' method instead).
-void quotedUnescape(ArrayStack<char> &dest, rostring src,
-                    char delim, bool allowNewlines)
+// Return the decoded character values from the C string literal syntax
+// in 'src'.
+std::string quotedUnescape(
+  std::string const &src, char delim, bool allowNewlines)
 {
-  // strip quotes or ticks
-  decodeEscapes(dest, substring(toCStr(src)+1, strlen(src)-2),
-                delim, allowNewlines);
+  // Strip quotes or ticks.
+  xassert(src.size() >= 2);
+  std::string inside = src.substr(1, src.size()-2);
+
+  // Decode the escapes.
+  return decodeCStringEscapesToString(inside, delim, allowNewlines);
 }
 
 
@@ -490,16 +499,13 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
     if (L1->type == L1_STRING_LITERAL         &&
         prevToken != NULL                     &&
         prevToken->type == L2_STRING_LITERAL) {
-      // coalesce adjacent strings (this is not efficient code..)
-      stringBuilder sb;
-      sb << prevToken->strValue;
+      // Decode the literal.
+      std::string tempString =
+        quotedUnescape(L1->text, '"', src.allowMultilineStrings);
 
-      ArrayStack<char> tempString;
-      quotedUnescape(tempString, L1->text, '"',
-                     src.allowMultilineStrings);
-      sb.append(tempString.getArray(), tempString.length());
-
-      prevToken->strValue = dest.idTable.add(sb);
+      // Coalesce adjacent strings (this is not efficient code...).
+      prevToken->strValue =
+        dest.idTable.add(prevToken->strValue + tempString);
       continue;
     }
 
@@ -535,22 +541,17 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
           char const *srcText = L1->text.c_str();
           if (*srcText == 'L') srcText++;
 
-          ArrayStack<char> tmp;
-          quotedUnescape(tmp, srcText, '"',
-                         src.allowMultilineStrings);
+          std::string decoded =
+            quotedUnescape(srcText, '"', src.allowMultilineStrings);
 
-          for (int i=0; i<tmp.length(); i++) {
-            if (tmp[i]==0) {
+          for (int i=0; i<decoded.length(); i++) {
+            if (decoded[i]==0) {
               cout << "warning: literal string with embedded nulls not handled properly\n";
               break;
             }
           }
 
-          // Add a NUL terminator since 'StringTable::add' needs one, as
-          // it does not accept a length parameter.
-          tmp.push('\0');
-
-          L2->strValue = dest.idTable.add(tmp.getArray());
+          L2->strValue = dest.idTable.add(decoded);
           break;
         }
 
@@ -566,15 +567,14 @@ void lexer2_lex(Lexer2 &dest, Lexer1 const &src, char const *fname)
           char const *srcText = L1->text.c_str();
           if (*srcText == 'L') srcText++;
 
-          ArrayStack<char> tmp;
-          quotedUnescape(tmp, srcText, '\'',
-                         false /*allowNewlines*/);
+          std::string decoded =
+            quotedUnescape(srcText, '\'', false /*allowNewlines*/);
 
-          if (tmp.length() != 1) {
+          if (decoded.length() != 1) {
             xformat("character literal must have 1 char");
           }
 
-          L2->charValue = tmp[0];
+          L2->charValue = decoded[0];
           break;
         }
 
